@@ -1,0 +1,108 @@
+{
+  "metadata": {
+    "title": "K-Culture Festival",
+    "description": "K-Culture Festival 公式サイト"
+  },
+  "nav": {
+    "title": "K-Culture Festival",
+    "categories": {
+      "about": {
+        "title": "フェスティバル紹介",
+        "items": {
+          "overview": "概要",
+          "schedule": "全体スケジュール"
+        }
+      },
+      "program": {
+        "title": "イベント案内",
+        "items": {
+          "stage": "ステージプログラム",
+          "experience": "体験プログラム",
+          "extra": "付帯プログラム"
+        }
+      },
+      "venue": {
+        "title": "会場案内",
+        "items": {
+          "map": "会場マップ",
+          "directions": "アクセス",
+          "shuttle": "シャトルバス"
+        }
+      },
+      "community": {
+        "title": "コミュニティ",
+        "items": {
+          "notice": "お知らせ",
+          "faq": "よくある質問"
+        }
+      }
+    },
+    "menu": "メニュー"
+  },
+  "home": {
+    "heading": "共通コンポーネント",
+    "description": "variant / size props で拡張できる再利用可能な UI コンポーネント集です。",
+    "buttonSection": "Button",
+    "badgeSection": "Badge",
+    "cardSection": "Card",
+    "cardTitle": "フェスティバル申込",
+    "cardDescription": "参加情報を入力してください。",
+    "formName": "お名前",
+    "formNamePlaceholder": "山田太郎",
+    "formEmail": "メールアドレス",
+    "cancel": "キャンセル",
+    "submit": "送信"
+  },
+  "pages": {
+    "overview": {
+      "title": "概要",
+      "description": "フェスティバルの趣旨と主な特徴を紹介します。"
+    },
+    "schedule": {
+      "title": "全体スケジュール",
+      "description": "フェスティバル全体の日程を一目で確認できます。"
+    },
+    "stage": {
+      "title": "ステージプログラム",
+      "description": "メインステージで行われる公演やイベントの日程です。"
+    },
+    "experience": {
+      "title": "体験プログラム",
+      "description": "直接参加できる体験プログラムをご案内します。"
+    },
+    "extra": {
+      "title": "付帯プログラム",
+      "description": "フェスティバルと合わせて楽しめる付帯プログラムです。"
+    },
+    "map": {
+      "title": "会場マップ",
+      "description": "会場のレイアウトと主要施設の位置をご案内します。"
+    },
+    "directions": {
+      "title": "アクセス",
+      "description": "会場までの様々な交通手段をご案内します。"
+    },
+    "shuttle": {
+      "title": "シャトルバス",
+      "description": "シャトルバスの運行時間と乗車場所をご案内します。"
+    },
+    "notice": {
+      "title": "お知らせ",
+      "description": "フェスティバルに関するお知らせをご確認ください。"
+    },
+    "faq": {
+      "title": "よくある質問",
+      "description": "フェスティバルに関するよくある質問と回答です。"
+    }
+  },
+  "notFound": {
+    "title": "ページが見つかりません",
+    "description": "お探しのページは削除されたか、URLが間違っています。",
+    "backHome": "ホームに戻る"
+  },
+  "error": {
+    "title": "エラーが発生しました",
+    "description": "一時的なエラーが発生しました。しばらくしてから再度お試しください。",
+    "retry": "再試行"
+  }
+}

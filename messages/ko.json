@@ -1,0 +1,108 @@
+{
+  "metadata": {
+    "title": "K-Culture Festival",
+    "description": "K-Culture Festival 공식 웹사이트"
+  },
+  "nav": {
+    "title": "K-Culture Festival",
+    "categories": {
+      "about": {
+        "title": "축제소개",
+        "items": {
+          "overview": "축제개요",
+          "schedule": "전체 일정표"
+        }
+      },
+      "program": {
+        "title": "행사안내",
+        "items": {
+          "stage": "무대 프로그램",
+          "experience": "체험 프로그램",
+          "extra": "부대프로그램"
+        }
+      },
+      "venue": {
+        "title": "행사장 안내",
+        "items": {
+          "map": "행사장 지도",
+          "directions": "오시는 길",
+          "shuttle": "셔틀버스"
+        }
+      },
+      "community": {
+        "title": "커뮤니티",
+        "items": {
+          "notice": "공지사항",
+          "faq": "FAQ"
+        }
+      }
+    },
+    "menu": "메뉴"
+  },
+  "home": {
+    "heading": "공용 컴포넌트",
+    "description": "variant / size props로 확장 가능한 재사용 UI 컴포넌트 모음입니다.",
+    "buttonSection": "Button",
+    "badgeSection": "Badge",
+    "cardSection": "Card",
+    "cardTitle": "축제 신청",
+    "cardDescription": "참가 정보를 입력해주세요.",
+    "formName": "이름",
+    "formNamePlaceholder": "홍길동",
+    "formEmail": "이메일",
+    "cancel": "취소",
+    "submit": "제출"
+  },
+  "pages": {
+    "overview": {
+      "title": "축제개요",
+      "description": "축제의 취지와 주요 특징을 소개합니다."
+    },
+    "schedule": {
+      "title": "전체 일정표",
+      "description": "축제 전체 일정을 한눈에 확인하세요."
+    },
+    "stage": {
+      "title": "무대 프로그램",
+      "description": "무대에서 진행되는 공연 및 행사 일정입니다."
+    },
+    "experience": {
+      "title": "체험 프로그램",
+      "description": "직접 참여할 수 있는 체험 프로그램을 안내합니다."
+    },
+    "extra": {
+      "title": "부대프로그램",
+      "description": "축제와 함께 즐길 수 있는 부대 프로그램입니다."
+    },
+    "map": {
+      "title": "행사장 지도",
+      "description": "행사장 배치와 주요 시설 위치를 안내합니다."
+    },
+    "directions": {
+      "title": "오시는 길",
+      "description": "행사장까지 오시는 다양한 교통 방법을 안내합니다."
+    },
+    "shuttle": {
+      "title": "셔틀버스",
+      "description": "셔틀버스 운행 시간과 탑승 장소를 안내합니다."
+    },
+    "notice": {
+      "title": "공지사항",
+      "description": "축제 관련 공지사항을 확인하세요."
+    },
+    "faq": {
+      "title": "자주 묻는 질문",
+      "description": "축제에 대해 자주 묻는 질문과 답변입니다."
+    }
+  },
+  "notFound": {
+    "title": "페이지를 찾을 수 없습니다",
+    "description": "요청하신 페이지가 삭제되었거나 주소가 잘못되었습니다.",
+    "backHome": "홈으로 이동"
+  },
+  "error": {
+    "title": "문제가 발생했습니다",
+    "description": "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+    "retry": "다시 시도"
+  }
+}

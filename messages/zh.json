@@ -1,0 +1,108 @@
+{
+  "metadata": {
+    "title": "K-Culture Festival",
+    "description": "K-Culture Festival 官方网站"
+  },
+  "nav": {
+    "title": "K-Culture Festival",
+    "categories": {
+      "about": {
+        "title": "活动介绍",
+        "items": {
+          "overview": "活动概况",
+          "schedule": "全部日程表"
+        }
+      },
+      "program": {
+        "title": "活动指南",
+        "items": {
+          "stage": "舞台节目",
+          "experience": "体验项目",
+          "extra": "附属活动"
+        }
+      },
+      "venue": {
+        "title": "场地指南",
+        "items": {
+          "map": "场地地图",
+          "directions": "交通指南",
+          "shuttle": "班车"
+        }
+      },
+      "community": {
+        "title": "社区",
+        "items": {
+          "notice": "公告事项",
+          "faq": "常见问题"
+        }
+      }
+    },
+    "menu": "菜单"
+  },
+  "home": {
+    "heading": "通用组件",
+    "description": "可通过 variant / size 属性灵活扩展的可复用 UI 组件集合。",
+    "buttonSection": "Button",
+    "badgeSection": "Badge",
+    "cardSection": "Card",
+    "cardTitle": "活动报名",
+    "cardDescription": "请填写参加信息。",
+    "formName": "姓名",
+    "formNamePlaceholder": "张三",
+    "formEmail": "邮箱",
+    "cancel": "取消",
+    "submit": "提交"
+  },
+  "pages": {
+    "overview": {
+      "title": "活动概况",
+      "description": "介绍本次活动的宗旨与主要特色。"
+    },
+    "schedule": {
+      "title": "全部日程表",
+      "description": "一览了解活动的完整日程安排。"
+    },
+    "stage": {
+      "title": "舞台节目",
+      "description": "在主舞台举行的演出与活动日程。"
+    },
+    "experience": {
+      "title": "体验项目",
+      "description": "可亲自参与的各类体验活动介绍。"
+    },
+    "extra": {
+      "title": "附属活动",
+      "description": "可与活动一起享受的附属节目。"
+    },
+    "map": {
+      "title": "场地地图",
+      "description": "介绍活动场地布局及主要设施位置。"
+    },
+    "directions": {
+      "title": "交通指南",
+      "description": "前往活动场地的多种交通方式介绍。"
+    },
+    "shuttle": {
+      "title": "班车",
+      "description": "班车运行时间及乘车地点介绍。"
+    },
+    "notice": {
+      "title": "公告事项",
+      "description": "查看与活动相关的最新公告。"
+    },
+    "faq": {
+      "title": "常见问题",
+      "description": "关于活动的常见问题解答。"
+    }
+  },
+  "notFound": {
+    "title": "找不到页面",
+    "description": "您请求的页面已被删除或地址有误。",
+    "backHome": "返回首页"
+  },
+  "error": {
+    "title": "出现问题",
+    "description": "发生临时错误，请稍后重试。",
+    "retry": "重试"
+  }
+}
