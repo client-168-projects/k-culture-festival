@@ -56,44 +56,148 @@
   "pages": {
     "overview": {
       "title": "概要",
-      "description": "フェスティバルの趣旨と主な特徴を紹介します。"
+      "description": "フェスティバルの趣旨と主な特徴を紹介します。",
+      "posterAlt": "フェスティバルポスター",
+      "infoTitle": "フェスティバル情報",
+      "nameLabel": "名称",
+      "name": "K-Culture Festival",
+      "periodLabel": "期間",
+      "period": "2026年9月12日（土）",
+      "placeLabel": "会場",
+      "place": "京畿未来教育パジュキャンパス",
+      "introTitle": "フェスティバル紹介",
+      "intro": "地域の青少年と市民が共につくるK-Cultureフェスティバルです。ステージ公演、体験プログラム、多彩な付帯イベントで一日中楽しめます。"
     },
     "schedule": {
       "title": "全体スケジュール",
-      "description": "フェスティバル全体の日程を一目で確認できます。"
+      "description": "フェスティバル全体の日程を一目で確認できます。",
+      "downloadLeaflet": "リーフレットをダウンロード",
+      "items": [
+        { "time": "10:00", "title": "開会式" },
+        { "time": "11:00", "title": "K-ダンス公演" },
+        { "time": "13:00", "title": "マジックショー <K-MAGIC>" },
+        { "time": "15:00", "title": "スペシャルステージ <K-POP Classy>" },
+        { "time": "17:00", "title": "閉会式・抽選会" }
+      ]
     },
     "stage": {
       "title": "ステージプログラム",
-      "description": "メインステージで行われる公演やイベントの日程です。"
+      "description": "メインステージで行われる公演やイベントの日程です。",
+      "items": [
+        { "title": "スペシャル公演 <K-バラード キム・テウ>" },
+        { "title": "スペシャル公演 <K-POP Classy>" },
+        { "title": "マジックショー <K-MAGIC キム・ミンヒョン>" },
+        { "title": "坡州青少年修練館 <K-ダンス>" },
+        { "title": "坡州青少年修練館 <K-ボーカル>" },
+        { "title": "公演 <多国籍ガールズグループ IRIS>" },
+        { "title": "公演 <ジュ・ファンギュ>" },
+        { "title": "公演 <新人I-DOL Bボーイズ>" },
+        { "title": "レクリエーション <MC ジョ・グォン>" }
+      ]
     },
     "experience": {
       "title": "体験プログラム",
-      "description": "直接参加できる体験プログラムをご案内します。"
+      "description": "直接参加できる体験プログラムをご案内します。",
+      "zoneTitle": "体験ゾーンのご案内",
+      "zoneDescription": "会場各所に設けられた体験ゾーンで、さまざまなK-Cultureコンテンツをお楽しみください。",
+      "durationLabel": "所要時間",
+      "capacityLabel": "定員",
+      "reserveCta": "事前予約はこちら",
+      "items": [
+        { "title": "K-クラフト体験", "duration": "30分", "capacity": "1回10名、計8回", "reservable": false },
+        { "title": "韓服フォトゾーン", "duration": "終日開催", "capacity": "定員なし", "reservable": false },
+        { "title": "うちわ作り", "duration": "20分", "capacity": "1回10名、計10回", "reservable": false },
+        { "title": "餅つき体験", "duration": "15分", "capacity": "1回8名、計12回", "reservable": false },
+        { "title": "伝統茶道体験", "duration": "20分", "capacity": "1回10名、計8回", "reservable": false },
+        { "title": "LEDスライム作り", "duration": "30分", "capacity": "1回10名、計8回", "reservable": false },
+        { "title": "カリグラフィー体験", "duration": "20分", "capacity": "1回10名、計8回", "reservable": false },
+        { "title": "ミニ鉢植え作り", "duration": "20分", "capacity": "1回10名、計8回", "reservable": false },
+        { "title": "ナプキンアート体験", "duration": "20分", "capacity": "1回10名、計8回", "reservable": false },
+        { "title": "ヘアスタイリング体験", "duration": "20分", "capacity": "1回6名、計10回", "reservable": false },
+        { "title": "K-スナッククッキングクラス", "duration": "40分", "capacity": "1回10名、計6回", "reservable": true },
+        { "title": "デザートクッキングクラス", "duration": "40分", "capacity": "1回10名、計6回", "reservable": true }
+      ]
     },
     "extra": {
       "title": "付帯プログラム",
-      "description": "フェスティバルと合わせて楽しめる付帯プログラムです。"
+      "description": "フェスティバルと合わせて楽しめる付帯プログラムです。",
+      "alwaysOn": "常時運営",
+      "items": [
+        { "title": "アーチェリー体験" },
+        { "title": "伝統遊びゾーン" },
+        { "title": "フォトブース" },
+        { "title": "バルーンアート" },
+        { "title": "フリーマーケット" },
+        { "title": "K-フード屋台" }
+      ]
     },
     "map": {
       "title": "会場マップ",
-      "description": "会場のレイアウトと主要施設の位置をご案内します。"
+      "description": "会場のレイアウトと主要施設の位置をご案内します。",
+      "mapAlt": "会場マップ",
+      "download": "会場マップをダウンロード"
     },
     "directions": {
       "title": "アクセス",
-      "description": "会場までの様々な交通手段をご案内します。"
+      "description": "会場までの様々な交通手段をご案内します。",
+      "mapAlt": "アクセスマップ",
+      "busTitle": "バスをご利用の場合",
+      "busRoutes": [
+        { "no": "2200（座席バス）", "route": "合井駅（60分）- 出版団地（20分）- 京畿未来教育キャンパス" },
+        { "no": "900（市内バス）", "route": "一山現代百貨店（80分）- 大化駅（80分）- 金村駅（20分）- 京畿未来教育キャンパス" },
+        { "no": "033（村バス）", "route": "金村駅（20分）- 文山第一高校 - 京畿未来教育キャンパス - ヘイリ - 炭県産業団地" },
+        { "no": "035（村バス）", "route": "金村駅（20分）- 金村ロータリー - 城東交差点 - 京畿未来教育キャンパス - 統一小学校" },
+        { "no": "075（村バス）", "route": "メクグムドン - 京畿未来教育キャンパス -坡州プレミアムアウトレット - 交河ウリ銀行" }
+      ],
+      "subwayTitle": "地下鉄をご利用の場合",
+      "subwayRoutes": [
+        { "no": "金村駅（坡州、京義中央線）", "route": "900, 033, 035 - 金村駅1番出口停留所" },
+        { "no": "大化駅（高陽、3号線）", "route": "900 - 大化駅5番出口停留所より乗車" },
+        { "no": "合井駅（ソウル、2・6号線）", "route": "2200 - 合井駅1番出口停留所より乗車" }
+      ],
+      "carTitle": "お車をご利用の場合",
+      "carText": [
+        "自由路（チャユロ）で城東ICを出て、案内標識に従って約1.6km直進（城東交差点を通過）した後、ヘイリ交差点で左折して約500m進んだ地点にあります。",
+        "ソウル外郭循環高速道路をご利用の場合、自由路分岐点から「文山・キンテックス」方面へ自由路を約27km直進すると城東ICに到着します。",
+        "カーナビで「京畿未来教育キャンパス」と検索すると簡単に見つけられます。"
+      ]
     },
     "shuttle": {
       "title": "シャトルバス",
-      "description": "シャトルバスの運行時間と乗車場所をご案内します。"
+      "description": "シャトルバスの運行時間と乗車場所をご案内します。",
+      "tbd": "シャトルバスの運行情報は追ってお知らせいたします。"
     },
     "notice": {
       "title": "お知らせ",
-      "description": "フェスティバルに関するお知らせをご確認ください。"
+      "description": "フェスティバルに関するお知らせをご確認ください。",
+      "items": [
+        { "date": "2026-08-01", "title": "K-Culture Festival 参加申込のご案内" },
+        { "date": "2026-08-10", "title": "体験プログラム事前予約開始のお知らせ" },
+        { "date": "2026-08-20", "title": "シャトルバス運行計画のお知らせ" },
+        { "date": "2026-08-25", "title": "雨天時の開催について" },
+        { "date": "2026-09-01", "title": "駐車場・交通規制のご案内" }
+      ]
     },
     "faq": {
       "title": "よくある質問",
-      "description": "フェスティバルに関するよくある質問と回答です。"
+      "description": "フェスティバルに関するよくある質問と回答です。",
+      "items": [
+        { "q": "入場料はかかりますか？", "a": "無料です。どなたでも自由にご参加いただけます。" },
+        { "q": "ペットを連れて行けますか？", "a": "安全のため、ペット同伴はご遠慮いただいております。" },
+        { "q": "雨天でも開催されますか？", "a": "雨天でも開催し、一部プログラムは屋内に変更される場合があります。" },
+        { "q": "駐車場はありますか？", "a": "会場内の駐車スペースには限りがあるため、公共交通機関のご利用をおすすめします。" },
+        { "q": "体験プログラムはどうやって申し込みますか？", "a": "体験プログラムページの事前予約ボタンからお申し込みいただけます。" }
+      ]
     }
+  },
+  "footer": {
+    "description": "地域の青少年と市民が共につくるK-Cultureフェスティバルです。",
+    "linksTitle": "クイックリンク",
+    "contactTitle": "お問い合わせ",
+    "address": "京畿未来教育パジュキャンパス",
+    "email": "info@kculturefestival.example",
+    "phone": "031-000-0000",
+    "rights": "K-Culture Festival. All rights reserved."
   },
   "notFound": {
     "title": "ページが見つかりません",

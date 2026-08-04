@@ -56,44 +56,148 @@
   "pages": {
     "overview": {
       "title": "Overview",
-      "description": "Learn about the purpose and highlights of the festival."
+      "description": "Learn about the purpose and highlights of the festival.",
+      "posterAlt": "Festival poster",
+      "infoTitle": "Festival Info",
+      "nameLabel": "Name",
+      "name": "K-Culture Festival",
+      "periodLabel": "Dates",
+      "period": "Saturday, September 12, 2026",
+      "placeLabel": "Venue",
+      "place": "Gyeonggi Future Education Paju Campus",
+      "introTitle": "About the Festival",
+      "intro": "A K-culture festival made together by local youth and residents. Enjoy a full day of stage performances, hands-on programs, and a wide range of side events."
     },
     "schedule": {
       "title": "Full Schedule",
-      "description": "Check the complete festival schedule at a glance."
+      "description": "Check the complete festival schedule at a glance.",
+      "downloadLeaflet": "Download Leaflet",
+      "items": [
+        { "time": "10:00", "title": "Opening Ceremony" },
+        { "time": "11:00", "title": "K-Dance Performance" },
+        { "time": "13:00", "title": "Magic Show <K-MAGIC>" },
+        { "time": "15:00", "title": "Special Stage <K-POP Classy>" },
+        { "time": "17:00", "title": "Closing Ceremony & Raffle" }
+      ]
     },
     "stage": {
       "title": "Stage Program",
-      "description": "Performances and events taking place on the main stage."
+      "description": "Performances and events taking place on the main stage.",
+      "items": [
+        { "title": "Special Stage <K-Ballad Kim Tae-woo>" },
+        { "title": "Special Stage <K-POP Classy>" },
+        { "title": "Magic Show <K-MAGIC Kim Min-hyung>" },
+        { "title": "Paju Youth Center <K-Dance>" },
+        { "title": "Paju Youth Center <K-Vocal>" },
+        { "title": "Performance <Multinational Girl Group IRIS>" },
+        { "title": "Performance <Ju Hwang-gyu>" },
+        { "title": "Performance <Rookie I-DOL B-Boys>" },
+        { "title": "Recreation <MC Jo Kwon>" }
+      ]
     },
     "experience": {
       "title": "Experience Program",
-      "description": "Hands-on programs you can join during the festival."
+      "description": "Hands-on programs you can join during the festival.",
+      "zoneTitle": "Experience Zone Guide",
+      "zoneDescription": "Enjoy a variety of K-culture content at the experience zones set up around the venue.",
+      "durationLabel": "Duration",
+      "capacityLabel": "Capacity",
+      "reserveCta": "Reserve a spot",
+      "items": [
+        { "title": "K-Craft Experience", "duration": "30 min", "capacity": "10 per session, 8 sessions", "reservable": false },
+        { "title": "Hanbok Photo Zone", "duration": "All day", "capacity": "No limit", "reservable": false },
+        { "title": "Fan Making", "duration": "20 min", "capacity": "10 per session, 10 sessions", "reservable": false },
+        { "title": "Rice Cake Pounding", "duration": "15 min", "capacity": "8 per session, 12 sessions", "reservable": false },
+        { "title": "Traditional Tea Ceremony", "duration": "20 min", "capacity": "10 per session, 8 sessions", "reservable": false },
+        { "title": "LED Slime Making", "duration": "30 min", "capacity": "10 per session, 8 sessions", "reservable": false },
+        { "title": "Calligraphy Experience", "duration": "20 min", "capacity": "10 per session, 8 sessions", "reservable": false },
+        { "title": "Mini Potted Plant Making", "duration": "20 min", "capacity": "10 per session, 8 sessions", "reservable": false },
+        { "title": "Napkin Art", "duration": "20 min", "capacity": "10 per session, 8 sessions", "reservable": false },
+        { "title": "Hair Styling Experience", "duration": "20 min", "capacity": "6 per session, 10 sessions", "reservable": false },
+        { "title": "K-Snack Cooking Class", "duration": "40 min", "capacity": "10 per session, 6 sessions", "reservable": true },
+        { "title": "Dessert Cooking Class", "duration": "40 min", "capacity": "10 per session, 6 sessions", "reservable": true }
+      ]
     },
     "extra": {
       "title": "Side Program",
-      "description": "Additional programs to enjoy alongside the festival."
+      "description": "Additional programs to enjoy alongside the festival.",
+      "alwaysOn": "Always Open",
+      "items": [
+        { "title": "Archery Experience" },
+        { "title": "Traditional Games Zone" },
+        { "title": "Photo Booth" },
+        { "title": "Balloon Artist" },
+        { "title": "Flea Market" },
+        { "title": "K-Food Snacks" }
+      ]
     },
     "map": {
       "title": "Venue Map",
-      "description": "Layout of the venue and locations of key facilities."
+      "description": "Layout of the venue and locations of key facilities.",
+      "mapAlt": "Venue map",
+      "download": "Download Venue Map"
     },
     "directions": {
       "title": "Directions",
-      "description": "Various ways to get to the festival venue."
+      "description": "Various ways to get to the festival venue.",
+      "mapAlt": "Directions map",
+      "busTitle": "By Bus",
+      "busRoutes": [
+        { "no": "2200 (Express Bus)", "route": "Hapjeong Station (60 min) - Publishing Complex (20 min) - Gyeonggi Future Education Campus" },
+        { "no": "900 (City Bus)", "route": "Ilsan Hyundai Dept. Store (80 min) - Daehwa Station (80 min) - Geumchon Station (20 min) - Gyeonggi Future Education Campus" },
+        { "no": "033 (Village Bus)", "route": "Geumchon Station (20 min) - Munsan Jeil High School - Gyeonggi Future Education Campus - Heyri - Tanhyeon Industrial Complex" },
+        { "no": "035 (Village Bus)", "route": "Geumchon Station (20 min) - Geumchon Rotary - Seongdong Intersection - Gyeonggi Future Education Campus - Tongil Elementary" },
+        { "no": "075 (Village Bus)", "route": "Maekgeum-dong - Gyeonggi Future Education Campus - Paju Premium Outlets - Gyoha Woori Bank" }
+      ],
+      "subwayTitle": "By Subway",
+      "subwayRoutes": [
+        { "no": "Geumchon Station (Paju, Gyeongui-Jungang Line)", "route": "900, 033, 035 - Geumchon Station Exit 1 stop" },
+        { "no": "Daehwa Station (Goyang, Line 3)", "route": "900 - Board at Daehwa Station Exit 5 stop" },
+        { "no": "Hapjeong Station (Seoul, Line 2/6)", "route": "2200 - Board at Hapjeong Station Exit 1 stop" }
+      ],
+      "carTitle": "By Car",
+      "carText": [
+        "Take Jayu-ro and exit at Seongdong IC, then follow the signs straight for about 1.6km (passing Seongdong intersection), turning left at Heyri intersection to arrive about 500m ahead.",
+        "Via the Seoul Ring Expressway, follow Jayu-ro toward 'Munsan, Kintex' for about 27km from the Jayu-ro junction to reach Seongdong IC.",
+        "Search for 'Gyeonggi Future Education Campus' in your navigation app to find it easily."
+      ]
     },
     "shuttle": {
       "title": "Shuttle Bus",
-      "description": "Shuttle bus schedule and boarding locations."
+      "description": "Shuttle bus schedule and boarding locations.",
+      "tbd": "Shuttle bus information will be announced later."
     },
     "notice": {
       "title": "Notice",
-      "description": "Check the latest announcements about the festival."
+      "description": "Check the latest announcements about the festival.",
+      "items": [
+        { "date": "2026-08-01", "title": "How to Register for K-Culture Festival" },
+        { "date": "2026-08-10", "title": "Experience Program Reservations Now Open" },
+        { "date": "2026-08-20", "title": "Shuttle Bus Schedule Announcement" },
+        { "date": "2026-08-25", "title": "Rain Policy Notice" },
+        { "date": "2026-09-01", "title": "Parking and Traffic Control Notice" }
+      ]
     },
     "faq": {
       "title": "FAQ",
-      "description": "Frequently asked questions about the festival."
+      "description": "Frequently asked questions about the festival.",
+      "items": [
+        { "q": "Is there an admission fee?", "a": "It's free. Everyone is welcome to attend." },
+        { "q": "Can I bring my pet?", "a": "For safety reasons, pets are not allowed." },
+        { "q": "Will it still happen if it rains?", "a": "Yes, the festival will go on; some programs may move indoors." },
+        { "q": "Is parking available?", "a": "On-site parking is limited, so public transit is recommended." },
+        { "q": "How do I sign up for experience programs?", "a": "Use the reservation button on the Experience Program page." }
+      ]
     }
+  },
+  "footer": {
+    "description": "A K-culture festival made together by local youth and residents.",
+    "linksTitle": "Quick Links",
+    "contactTitle": "Contact",
+    "address": "Gyeonggi Future Education Paju Campus",
+    "email": "info@kculturefestival.example",
+    "phone": "+82-31-000-0000",
+    "rights": "K-Culture Festival. All rights reserved."
   },
   "notFound": {
     "title": "Page not found",

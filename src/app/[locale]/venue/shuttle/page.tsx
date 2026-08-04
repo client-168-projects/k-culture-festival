@@ -1,7 +1,8 @@
+import { Bus } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { PagePlaceholder } from "@/components/page-placeholder";
+import { PageContainer, PageHeader } from "@/components/page-header";
 import { assertLocale } from "@/i18n/utils";
 
 export async function generateMetadata({
@@ -25,5 +26,14 @@ export default async function ShuttlePage({
 
   const t = await getTranslations("pages.shuttle");
 
-  return <PagePlaceholder title={t("title")} description={t("description")} />;
+  return (
+    <PageContainer>
+      <PageHeader title={t("title")} description={t("description")} />
+
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border bg-muted py-16 text-center">
+        <Bus className="size-8 text-muted-foreground" />
+        <p className="text-muted-foreground">{t("tbd")}</p>
+      </div>
+    </PageContainer>
+  );
 }

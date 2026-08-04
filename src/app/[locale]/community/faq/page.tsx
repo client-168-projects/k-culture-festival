@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { PagePlaceholder } from "@/components/page-placeholder";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { PageContainer, PageHeader } from "@/components/page-header";
 import { assertLocale } from "@/i18n/utils";
+
+type FaqItem = { q: string; a: string };
 
 export async function generateMetadata({
   params,
@@ -24,6 +32,20 @@ export default async function FaqPage({
   setRequestLocale(locale);
 
   const t = await getTranslations("pages.faq");
+  const items = t.raw("items") as FaqItem[];
 
-  return <PagePlaceholder title={t("title")} description={t("description")} />;
+  return (
+    <PageContainer>
+      <PageHeader title={t("title")} description={t("description")} />
+
+      <Accordion type="single" collapsible>
+        {items.map((item) => (
+          <AccordionItem key={item.q} value={item.q}>
+            <AccordionTrigger>{item.q}</AccordionTrigger>
+            <AccordionContent>{item.a}</AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </PageContainer>
+  );
 }

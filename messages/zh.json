@@ -56,44 +56,148 @@
   "pages": {
     "overview": {
       "title": "活动概况",
-      "description": "介绍本次活动的宗旨与主要特色。"
+      "description": "介绍本次活动的宗旨与主要特色。",
+      "posterAlt": "活动海报",
+      "infoTitle": "活动信息",
+      "nameLabel": "名称",
+      "name": "K-Culture Festival",
+      "periodLabel": "日期",
+      "period": "2026年9月12日（周六）",
+      "placeLabel": "地点",
+      "place": "京畿未来教育坡州校区",
+      "introTitle": "活动介绍",
+      "intro": "这是由当地青少年与市民共同打造的K-Culture活动。舞台演出、体验项目与丰富多彩的附属活动，让您享受充实的一整天。"
     },
     "schedule": {
       "title": "全部日程表",
-      "description": "一览了解活动的完整日程安排。"
+      "description": "一览了解活动的完整日程安排。",
+      "downloadLeaflet": "下载宣传册",
+      "items": [
+        { "time": "10:00", "title": "开幕式" },
+        { "time": "11:00", "title": "K-舞蹈演出" },
+        { "time": "13:00", "title": "魔术表演 <K-MAGIC>" },
+        { "time": "15:00", "title": "特别舞台 <K-POP Classy>" },
+        { "time": "17:00", "title": "闭幕式及抽奖" }
+      ]
     },
     "stage": {
       "title": "舞台节目",
-      "description": "在主舞台举行的演出与活动日程。"
+      "description": "在主舞台举行的演出与活动日程。",
+      "items": [
+        { "title": "特别公演 <K-Ballad 金泰宇>" },
+        { "title": "特别公演 <K-POP Classy>" },
+        { "title": "魔术表演 <K-MAGIC 金珉亨>" },
+        { "title": "坡州青少年修炼馆 <K-舞蹈>" },
+        { "title": "坡州青少年修炼馆 <K-声乐>" },
+        { "title": "演出 <多国籍女团 IRIS>" },
+        { "title": "演出 <朱晃奎>" },
+        { "title": "演出 <新人I-DOL男团>" },
+        { "title": "游戏互动 <MC 曹权>" }
+      ]
     },
     "experience": {
       "title": "体验项目",
-      "description": "可亲自参与的各类体验活动介绍。"
+      "description": "可亲自参与的各类体验活动介绍。",
+      "zoneTitle": "体验区介绍",
+      "zoneDescription": "在场地各处设置的体验区，尽情享受多样的K-Culture内容。",
+      "durationLabel": "所需时间",
+      "capacityLabel": "接待人数",
+      "reserveCta": "前往预约",
+      "items": [
+        { "title": "K-手工艺体验", "duration": "30分钟", "capacity": "每场10人，共8场", "reservable": false },
+        { "title": "韩服拍照区", "duration": "全天开放", "capacity": "不限人数", "reservable": false },
+        { "title": "制作扇子", "duration": "20分钟", "capacity": "每场10人，共10场", "reservable": false },
+        { "title": "打糕体验", "duration": "15分钟", "capacity": "每场8人，共12场", "reservable": false },
+        { "title": "传统茶道体验", "duration": "20分钟", "capacity": "每场10人，共8场", "reservable": false },
+        { "title": "LED史莱姆制作", "duration": "30分钟", "capacity": "每场10人，共8场", "reservable": false },
+        { "title": "书法体验", "duration": "20分钟", "capacity": "每场10人，共8场", "reservable": false },
+        { "title": "迷你盆栽制作", "duration": "20分钟", "capacity": "每场10人，共8场", "reservable": false },
+        { "title": "餐巾纸艺术体验", "duration": "20分钟", "capacity": "每场10人，共8场", "reservable": false },
+        { "title": "发型造型体验", "duration": "20分钟", "capacity": "每场6人，共10场", "reservable": false },
+        { "title": "K-小吃烹饪课", "duration": "40分钟", "capacity": "每场10人，共6场", "reservable": true },
+        { "title": "甜点烹饪课", "duration": "40分钟", "capacity": "每场10人，共6场", "reservable": true }
+      ]
     },
     "extra": {
       "title": "附属活动",
-      "description": "可与活动一起享受的附属节目。"
+      "description": "可与活动一起享受的附属节目。",
+      "alwaysOn": "全天开放",
+      "items": [
+        { "title": "射箭体验" },
+        { "title": "传统游戏区" },
+        { "title": "四格拍照" },
+        { "title": "气球艺人" },
+        { "title": "跳蚤市场" },
+        { "title": "K-美食小吃" }
+      ]
     },
     "map": {
       "title": "场地地图",
-      "description": "介绍活动场地布局及主要设施位置。"
+      "description": "介绍活动场地布局及主要设施位置。",
+      "mapAlt": "场地地图",
+      "download": "下载场地地图"
     },
     "directions": {
       "title": "交通指南",
-      "description": "前往活动场地的多种交通方式介绍。"
+      "description": "前往活动场地的多种交通方式介绍。",
+      "mapAlt": "交通地图",
+      "busTitle": "乘坐公交时",
+      "busRoutes": [
+        { "no": "2200（座席巴士）", "route": "合井站（60分钟）- 出版团地（20分钟）- 京畿未来教育校区" },
+        { "no": "900（市内巴士）", "route": "一山现代百货（80分钟）- 大化站（80分钟）- 金村站（20分钟）- 京畿未来教育校区" },
+        { "no": "033（乡村巴士）", "route": "金村站（20分钟）- 汶山第一高中 - 京畿未来教育校区 - Heyri - 炭岘产业园区" },
+        { "no": "035（乡村巴士）", "route": "金村站（20分钟）- 金村转盘 - 城东十字路口 - 京畿未来教育校区 - 统一小学" },
+        { "no": "075（乡村巴士）", "route": "麦琴洞 - 京畿未来教育校区 - 坡州名品折扣店 - 交河友利银行" }
+      ],
+      "subwayTitle": "乘坐地铁时",
+      "subwayRoutes": [
+        { "no": "金村站（坡州，京义中央线）", "route": "900, 033, 035 - 金村站1号出口站台" },
+        { "no": "大化站（高阳，3号线）", "route": "900 - 大化站5号出口站台乘车" },
+        { "no": "合井站（首尔，2·6号线）", "route": "2200 - 合井站1号出口站台乘车" }
+      ],
+      "carTitle": "自驾时",
+      "carText": [
+        "沿自由路行驶，在城东IC出口驶出后沿路标直行约1.6公里（经过城东十字路口），在Heyri十字路口左转后约500米即可到达。",
+        "经首尔外廓循环高速公路时，从自由路交汇处朝'汶山、Kintex'方向沿自由路直行约27公里即可到达城东IC。",
+        "在导航中搜索'京畿未来教育校区'即可轻松找到。"
+      ]
     },
     "shuttle": {
       "title": "班车",
-      "description": "班车运行时间及乘车地点介绍。"
+      "description": "班车运行时间及乘车地点介绍。",
+      "tbd": "班车运行信息将于近期公布。"
     },
     "notice": {
       "title": "公告事项",
-      "description": "查看与活动相关的最新公告。"
+      "description": "查看与活动相关的最新公告。",
+      "items": [
+        { "date": "2026-08-01", "title": "K-Culture Festival 参加报名指南" },
+        { "date": "2026-08-10", "title": "体验项目预约开放通知" },
+        { "date": "2026-08-20", "title": "班车运行计划公告" },
+        { "date": "2026-08-25", "title": "雨天活动进行说明" },
+        { "date": "2026-09-01", "title": "停车及交通管制通知" }
+      ]
     },
     "faq": {
       "title": "常见问题",
-      "description": "关于活动的常见问题解答。"
+      "description": "关于活动的常见问题解答。",
+      "items": [
+        { "q": "需要门票吗？", "a": "免费入场，欢迎所有人自由参加。" },
+        { "q": "可以携带宠物吗？", "a": "出于安全考虑，禁止携带宠物入场。" },
+        { "q": "下雨也会照常举行吗？", "a": "雨天也会照常举行，部分节目可能改为室内进行。" },
+        { "q": "有停车场吗？", "a": "场地内停车位有限，建议使用公共交通前往。" },
+        { "q": "体验项目如何预约？", "a": "可通过体验项目页面的预约按钮进行申请。" }
+      ]
     }
+  },
+  "footer": {
+    "description": "这是由当地青少年与市民共同打造的K-Culture活动。",
+    "linksTitle": "快速链接",
+    "contactTitle": "联系方式",
+    "address": "京畿未来教育坡州校区",
+    "email": "info@kculturefestival.example",
+    "phone": "031-000-0000",
+    "rights": "K-Culture Festival. All rights reserved."
   },
   "notFound": {
     "title": "找不到页面",
