@@ -191,13 +191,19 @@
     }
   },
   "footer": {
+    "brand": "坡州 K-Culture Festival",
     "description": "这是由当地青少年与市民共同打造的K-Culture活动。",
     "linksTitle": "快速链接",
-    "contactTitle": "联系方式",
-    "address": "京畿未来教育坡州校区",
-    "email": "info@kculturefestival.example",
-    "phone": "031-000-0000",
-    "rights": "K-Culture Festival. All rights reserved."
+    "infoTitle": "活动地点",
+    "venueLabel": "地点",
+    "venue": "京畿未来教育坡州校区",
+    "addressLabel": "地址",
+    "address": "韩国京畿道坡州市炭县面 Eoreumsil-ro 40 京畿未来教育坡州校区",
+    "organizerLabel": "主办·主管",
+    "organizerName": "京畿道终身教育振兴院",
+    "organizerLogoAlt": "京畿道终身教育振兴院标志",
+    "phone": "031-956-2497",
+    "rights": "K-Culture Festival. 版权所有"
   },
   "notFound": {
     "title": "找不到页面",

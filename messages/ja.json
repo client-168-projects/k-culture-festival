@@ -191,13 +191,19 @@
     }
   },
   "footer": {
+    "brand": "坡州（パジュ）K-Culture Festival",
     "description": "地域の青少年と市民が共につくるK-Cultureフェスティバルです。",
     "linksTitle": "クイックリンク",
-    "contactTitle": "お問い合わせ",
-    "address": "京畿未来教育パジュキャンパス",
-    "email": "info@kculturefestival.example",
-    "phone": "031-000-0000",
-    "rights": "K-Culture Festival. All rights reserved."
+    "infoTitle": "会場案内",
+    "venueLabel": "会場",
+    "venue": "京畿未来教育パジュキャンパス",
+    "addressLabel": "住所",
+    "address": "京畿道坡州市炭見面オルムシル路40 京畿未来教育パジュキャンパス",
+    "organizerLabel": "主催・主管",
+    "organizerName": "京畿道生涯教育振興院",
+    "organizerLogoAlt": "京畿道生涯教育振興院ロゴ",
+    "phone": "031-956-2497",
+    "rights": "K-Culture Festival. 無断複写・転載を禁じます"
   },
   "notFound": {
     "title": "ページが見つかりません",

@@ -90,7 +90,9 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-sans: var(--font-geist-sans);
+  --font-sans:
+    "Pretendard Variable", Pretendard, ui-sans-serif, system-ui,
+    -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono);
 
   /* Accessible type scale: festival site audience includes older visitors, so every step is bumped above the Tailwind default while staying within a normal reading range. */

@@ -191,13 +191,19 @@
     }
   },
   "footer": {
+    "brand": "파주 K-컬처 페스티벌",
     "description": "지역 청소년과 시민이 함께 만드는 K-컬처 축제입니다.",
     "linksTitle": "바로가기",
-    "contactTitle": "문의",
-    "address": "경기미래교육 파주캠퍼스",
-    "email": "info@kculturefestival.example",
-    "phone": "031-000-0000",
-    "rights": "K-Culture Festival. All rights reserved."
+    "infoTitle": "오시는 곳",
+    "venueLabel": "장소",
+    "venue": "경기미래교육 파주캠퍼스",
+    "addressLabel": "주소",
+    "address": "경기도 파주시 탄현면 얼음실로 40 경기미래교육 파주캠퍼스",
+    "organizerLabel": "주최·주관",
+    "organizerName": "경기도평생교육진흥원",
+    "organizerLogoAlt": "경기도평생교육진흥원 로고",
+    "phone": "031-956-2497",
+    "rights": "K-Culture Festival. ALL RIGHTS RESERVED"
   },
   "notFound": {
     "title": "페이지를 찾을 수 없습니다",

@@ -191,12 +191,18 @@
     }
   },
   "footer": {
+    "brand": "Paju K-Culture Festival",
     "description": "A K-culture festival made together by local youth and residents.",
     "linksTitle": "Quick Links",
-    "contactTitle": "Contact",
-    "address": "Gyeonggi Future Education Paju Campus",
-    "email": "info@kculturefestival.example",
-    "phone": "+82-31-000-0000",
+    "infoTitle": "Location",
+    "venueLabel": "Venue",
+    "venue": "Gyeonggi Future Education Paju Campus",
+    "addressLabel": "Address",
+    "address": "40 Eoreumsil-ro, Tanhyeon-myeon, Paju-si, Gyeonggi-do, South Korea",
+    "organizerLabel": "Organized by",
+    "organizerName": "Gyeonggi Do Provincial Institute for Lifelong Learning",
+    "organizerLogoAlt": "Gyeonggi Do Provincial Institute for Lifelong Learning logo",
+    "phone": "+82-31-956-2497",
     "rights": "K-Culture Festival. All rights reserved."
   },
   "notFound": {
