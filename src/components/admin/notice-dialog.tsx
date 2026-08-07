@@ -65,37 +65,47 @@ export function NoticeDialog({
   }
 
   async function handleAttachmentSelected(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
+    const files = Array.from(event.target.files ?? []);
     event.target.value = "";
-    if (!file) return;
+    if (files.length === 0) return;
 
     setAttachmentError(null);
 
-    if (attachments.length >= MAX_ATTACHMENTS_PER_NOTICE) {
+    const remainingSlots = MAX_ATTACHMENTS_PER_NOTICE - attachments.length;
+    if (remainingSlots <= 0) {
       setAttachmentError(`첨부파일은 최대 ${MAX_ATTACHMENTS_PER_NOTICE}개까지 첨부할 수 있습니다.`);
       return;
     }
 
-    setUploadingAttachment(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const res = await fetch("/api/admin/upload/attachment", {
-      method: "POST",
-      body: formData,
-    });
-    const body = await res.json().catch(() => null);
-    setUploadingAttachment(false);
-
-    if (!res.ok) {
-      setAttachmentError(body?.error ?? "첨부파일 업로드에 실패했습니다.");
-      return;
+    const filesToUpload = files.slice(0, remainingSlots);
+    if (files.length > remainingSlots) {
+      setAttachmentError(
+        `한 번에 최대 ${remainingSlots}개까지만 추가할 수 있어 나머지 파일은 제외했습니다.`,
+      );
     }
 
-    setAttachments((prev) => [
-      ...prev,
-      { file_name: body.name, file_url: body.url, file_size: body.size },
-    ]);
+    setUploadingAttachment(true);
+    for (const file of filesToUpload) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/admin/upload/attachment", {
+        method: "POST",
+        body: formData,
+      });
+      const body = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        setAttachmentError(body?.error ?? "첨부파일 업로드에 실패했습니다.");
+        break;
+      }
+
+      setAttachments((prev) => [
+        ...prev,
+        { file_name: body.name, file_url: body.url, file_size: body.size },
+      ]);
+    }
+    setUploadingAttachment(false);
   }
 
   async function handleRemoveAttachment(index: number) {
@@ -262,6 +272,7 @@ export function NoticeDialog({
               <input
                 ref={attachmentInputRef}
                 type="file"
+                multiple
                 accept={ALLOWED_ATTACHMENT_EXTENSIONS.map((ext) => `.${ext}`).join(",")}
                 className="hidden"
                 onChange={handleAttachmentSelected}

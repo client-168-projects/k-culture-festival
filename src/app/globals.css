@@ -182,3 +182,27 @@
   height: 0;
   pointer-events: none;
 }
+
+.tiptap-content [data-resize-handle] {
+  width: 10px;
+  height: 10px;
+  background: var(--color-primary);
+  border: 2px solid var(--color-background);
+  border-radius: 2px;
+  z-index: 10;
+}
+
+.tiptap-content [data-resize-handle="top-left"],
+.tiptap-content [data-resize-handle="bottom-right"] {
+  cursor: nwse-resize;
+}
+
+.tiptap-content [data-resize-handle="top-right"],
+.tiptap-content [data-resize-handle="bottom-left"] {
+  cursor: nesw-resize;
+}
+
+.tiptap-content [data-resize-state="true"] img {
+  outline: 1px dashed var(--color-primary);
+  outline-offset: 2px;
+}

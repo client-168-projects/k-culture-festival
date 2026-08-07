@@ -128,6 +128,8 @@ export function RichEditor({
     extensions: [
       StarterKit.configure({
         heading: { levels: [2, 3] },
+        link: false,
+        underline: false,
       }),
       Underline,
       TextStyle,
@@ -138,6 +140,13 @@ export function RichEditor({
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       TiptapImage.configure({
         HTMLAttributes: { class: "max-w-full rounded-md" },
+        resize: {
+          enabled: true,
+          directions: ["top-left", "top-right", "bottom-left", "bottom-right"],
+          minWidth: 60,
+          minHeight: 60,
+          alwaysPreserveAspectRatio: true,
+        },
       }),
       Link.configure({
         openOnClick: false,
