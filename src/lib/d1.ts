@@ -1,4 +1,5 @@
 const CF_API_BASE = "https://api.cloudflare.com/client/v4";
+const REQUEST_TIMEOUT_MS = 10_000;
 
 type D1QueryResult<T> = {
   results: T[];
@@ -48,18 +49,29 @@ export async function d1Query<T = Record<string, unknown>>(
 ): Promise<T[]> {
   const { accountId, databaseId, apiToken } = getConfig();
 
-  const res = await fetch(
-    `${CF_API_BASE}/accounts/${accountId}/d1/database/${databaseId}/query`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-        "Content-Type": "application/json",
+  let res: Response;
+  try {
+    res = await fetch(
+      `${CF_API_BASE}/accounts/${accountId}/d1/database/${databaseId}/query`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sql, params }),
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+        ...(options.noStore ? { cache: "no-store" as const } : {}),
       },
-      body: JSON.stringify({ sql, params }),
-      ...(options.noStore ? { cache: "no-store" as const } : {}),
-    },
-  );
+    );
+  } catch (error) {
+    if (error instanceof Error && error.name === "TimeoutError") {
+      throw new Error(
+        `D1 요청이 ${REQUEST_TIMEOUT_MS / 1000}초 안에 응답하지 않았습니다 (네트워크 확인 필요).`,
+      );
+    }
+    throw error;
+  }
 
   const json = (await res.json()) as D1ApiResponse<T>;
 
