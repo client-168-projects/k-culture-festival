@@ -1,15 +1,24 @@
 "use client";
 
+import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
 import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   Bold,
+  Highlighter,
   Italic,
   Link as LinkIcon,
   List,
   ListOrdered,
+  Palette,
   Quote,
   Strikethrough,
   Underline as UnderlineIcon,
@@ -17,7 +26,29 @@ import {
 import type { ComponentProps } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+
+const TEXT_COLORS = [
+  { label: "기본", value: "" },
+  { label: "빨강", value: "#dc2626" },
+  { label: "주황", value: "#ea580c" },
+  { label: "초록", value: "#16a34a" },
+  { label: "파랑", value: "#2563eb" },
+  { label: "보라", value: "#9333ea" },
+];
+
+const HIGHLIGHT_COLORS = [
+  { label: "노랑", value: "#fef08a" },
+  { label: "초록", value: "#bbf7d0" },
+  { label: "파랑", value: "#bfdbfe" },
+  { label: "분홍", value: "#fbcfe8" },
+];
 
 function ToolbarButton({
   active,
@@ -50,6 +81,10 @@ export function RichEditor({
         heading: { levels: [2, 3] },
       }),
       Underline,
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: true }),
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
       Link.configure({
         openOnClick: false,
         autolink: true,
@@ -140,6 +175,92 @@ export function RichEditor({
         >
           <LinkIcon className="size-4" />
         </ToolbarButton>
+
+        <div className="mx-1 h-6 w-px bg-border" />
+
+        <ToolbarButton
+          active={editor.isActive({ textAlign: "left" })}
+          onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          aria-label="왼쪽 정렬"
+        >
+          <AlignLeft className="size-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          active={editor.isActive({ textAlign: "center" })}
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          aria-label="가운데 정렬"
+        >
+          <AlignCenter className="size-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          active={editor.isActive({ textAlign: "right" })}
+          onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          aria-label="오른쪽 정렬"
+        >
+          <AlignRight className="size-4" />
+        </ToolbarButton>
+
+        <div className="mx-1 h-6 w-px bg-border" />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <ToolbarButton aria-label="글자 색상">
+              <Palette className="size-4" />
+            </ToolbarButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            {TEXT_COLORS.map((color) => (
+              <DropdownMenuItem
+                key={color.label}
+                onSelect={() => {
+                  if (color.value) {
+                    editor.chain().focus().setColor(color.value).run();
+                  } else {
+                    editor.chain().focus().unsetColor().run();
+                  }
+                }}
+              >
+                <span
+                  className="size-3.5 rounded-full border border-border"
+                  style={{ backgroundColor: color.value || "var(--color-foreground)" }}
+                />
+                {color.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <ToolbarButton
+              active={editor.isActive("highlight")}
+              aria-label="형광펜"
+            >
+              <Highlighter className="size-4" />
+            </ToolbarButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            {HIGHLIGHT_COLORS.map((color) => (
+              <DropdownMenuItem
+                key={color.label}
+                onSelect={() =>
+                  editor.chain().focus().toggleHighlight({ color: color.value }).run()
+                }
+              >
+                <span
+                  className="size-3.5 rounded-full border border-border"
+                  style={{ backgroundColor: color.value }}
+                />
+                {color.label}
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuItem
+              onSelect={() => editor.chain().focus().unsetHighlight().run()}
+            >
+              지우기
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <EditorContent editor={editor} />
     </div>

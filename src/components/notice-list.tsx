@@ -37,7 +37,7 @@ export function NoticeList({ notices }: { notices: Notice[] }) {
             </button>
             {open ? (
               <div
-                className="tiptap-content pb-4 text-muted-foreground"
+                className="tiptap-content pt-3 pb-4 text-muted-foreground"
                 dangerouslySetInnerHTML={{ __html: notice.content }}
               />
             ) : null}
