@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import {
   ALLOWED_ATTACHMENT_EXTENSIONS,
   MAX_ATTACHMENT_SIZE_BYTES,
@@ -49,6 +50,10 @@ export function NoticeDialog({
   const [error, setError] = useState<string | null>(null);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
   const [uploadingAttachment, setUploadingAttachment] = useState(false);
+  const [attachmentProgress, setAttachmentProgress] = useState<{
+    completed: number;
+    total: number;
+  } | null>(null);
   const [saving, setSaving] = useState(false);
   const attachmentInputRef = useRef<HTMLInputElement>(null);
 
@@ -85,7 +90,10 @@ export function NoticeDialog({
     }
 
     setUploadingAttachment(true);
-    for (const file of filesToUpload) {
+    setAttachmentProgress({ completed: 0, total: filesToUpload.length });
+
+    for (let i = 0; i < filesToUpload.length; i++) {
+      const file = filesToUpload[i];
       const formData = new FormData();
       formData.append("file", file);
 
@@ -104,8 +112,11 @@ export function NoticeDialog({
         ...prev,
         { file_name: body.name, file_url: body.url, file_size: body.size },
       ]);
+      setAttachmentProgress({ completed: i + 1, total: filesToUpload.length });
     }
+
     setUploadingAttachment(false);
+    setAttachmentProgress(null);
   }
 
   async function handleRemoveAttachment(index: number) {
@@ -275,6 +286,17 @@ export function NoticeDialog({
                 onChange={handleAttachmentSelected}
               />
             </div>
+            {attachmentProgress ? (
+              <div className="flex items-center gap-2">
+                <Progress
+                  value={(attachmentProgress.completed / attachmentProgress.total) * 100}
+                  className="flex-1"
+                />
+                <span className="shrink-0 font-mono text-sm text-muted-foreground">
+                  {attachmentProgress.completed}/{attachmentProgress.total}
+                </span>
+              </div>
+            ) : null}
             <p className="text-sm text-muted-foreground">
               {ALLOWED_ATTACHMENT_EXTENSIONS.join(", ")} 파일, 개당{" "}
               {MAX_ATTACHMENT_SIZE_BYTES / 1024 / 1024}MB까지, 최대{" "}

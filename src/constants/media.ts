@@ -17,4 +17,9 @@ export const ALLOWED_ATTACHMENT_EXTENSIONS = [
   "docx",
   "xls",
   "xlsx",
+  "png",
+  "jpg",
+  "jpeg",
+  "webp",
+  "gif",
 ];
