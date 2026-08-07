@@ -1,9 +1,9 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Download, FileText } from "lucide-react";
 import { useState } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn, formatFileSize } from "@/lib/utils";
 import type { Notice } from "@/types/notice";
 
 export function NoticeList({ notices }: { notices: Notice[] }) {
@@ -36,10 +36,39 @@ export function NoticeList({ notices }: { notices: Notice[] }) {
               </span>
             </button>
             {open ? (
-              <div
-                className="tiptap-content pt-3 pb-4 text-muted-foreground"
-                dangerouslySetInnerHTML={{ __html: notice.content }}
-              />
+              <div className="pt-3 pb-4">
+                <div
+                  className="tiptap-content text-muted-foreground"
+                  dangerouslySetInnerHTML={{ __html: notice.content }}
+                />
+                {notice.attachments.length > 0 ? (
+                  <ul className="mt-4 flex flex-col gap-2 border-t border-border pt-4">
+                    {notice.attachments.map((attachment) => (
+                      <li
+                        key={attachment.id}
+                        className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2"
+                      >
+                        <span className="flex min-w-0 items-center gap-2">
+                          <FileText className="size-4 shrink-0 text-muted-foreground" />
+                          <span className="truncate text-sm">
+                            {attachment.file_name}
+                          </span>
+                          <span className="shrink-0 text-sm text-muted-foreground">
+                            ({formatFileSize(attachment.file_size)})
+                          </span>
+                        </span>
+                        <a
+                          href={`${attachment.file_url}?download=${encodeURIComponent(attachment.file_name)}`}
+                          className="flex shrink-0 items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                        >
+                          <Download className="size-4" />
+                          다운로드
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
             ) : null}
           </li>
         );

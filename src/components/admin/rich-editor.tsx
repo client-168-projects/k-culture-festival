@@ -2,6 +2,7 @@
 
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
+import TiptapImage from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
@@ -14,6 +15,7 @@ import {
   AlignRight,
   Bold,
   Highlighter,
+  ImageIcon,
   Italic,
   Link as LinkIcon,
   List,
@@ -23,7 +25,7 @@ import {
   Strikethrough,
   Underline as UnderlineIcon,
 } from "lucide-react";
-import type { ComponentProps } from "react";
+import { type ChangeEvent, type ComponentProps, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +34,29 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ALLOWED_IMAGE_MIME_TYPES, MAX_IMAGE_SIZE_BYTES } from "@/constants/media";
 import { cn } from "@/lib/utils";
+
+async function uploadImage(file: File): Promise<string> {
+  if (!ALLOWED_IMAGE_MIME_TYPES.includes(file.type)) {
+    throw new Error("PNG, JPEG, WEBP, GIF 이미지만 업로드할 수 있습니다.");
+  }
+  if (file.size > MAX_IMAGE_SIZE_BYTES) {
+    throw new Error(`이미지는 ${MAX_IMAGE_SIZE_BYTES / 1024 / 1024}MB 이하만 업로드할 수 있습니다.`);
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await fetch("/api/admin/upload/image", {
+    method: "POST",
+    body: formData,
+  });
+  const body = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(body?.error ?? "이미지 업로드에 실패했습니다.");
+  }
+  return body.url as string;
+}
 
 const TEXT_COLORS = [
   { label: "기본", value: "" },
@@ -74,6 +98,10 @@ export function RichEditor({
   onChange: (html: string) => void;
   placeholder?: string;
 }) {
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -85,6 +113,9 @@ export function RichEditor({
       Color,
       Highlight.configure({ multicolor: true }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      TiptapImage.configure({
+        HTMLAttributes: { class: "max-w-full rounded-md" },
+      }),
       Link.configure({
         openOnClick: false,
         autolink: true,
@@ -97,11 +128,50 @@ export function RichEditor({
           "tiptap-content min-h-72 rounded-b-md px-3 py-2 text-base outline-none",
         "data-placeholder": placeholder ?? "",
       },
+      handlePaste: (view, event) => {
+        const file = Array.from(event.clipboardData?.items ?? [])
+          .find((item) => item.type.startsWith("image/"))
+          ?.getAsFile();
+        if (!file) return false;
+
+        event.preventDefault();
+        setImageError(null);
+        setUploadingImage(true);
+        uploadImage(file)
+          .then((url) => {
+            const node = view.state.schema.nodes.image.create({ src: url });
+            view.dispatch(view.state.tr.replaceSelectionWith(node));
+          })
+          .catch((error: Error) => setImageError(error.message))
+          .finally(() => setUploadingImage(false));
+        return true;
+      },
     },
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
   });
+
+  async function handleImageButtonClick() {
+    fileInputRef.current?.click();
+  }
+
+  async function handleFileSelected(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !editor) return;
+
+    setImageError(null);
+    setUploadingImage(true);
+    try {
+      const url = await uploadImage(file);
+      editor.chain().focus().setImage({ src: url }).run();
+    } catch (error) {
+      setImageError(error instanceof Error ? error.message : "이미지 업로드에 실패했습니다.");
+    } finally {
+      setUploadingImage(false);
+    }
+  }
 
   if (!editor) return null;
 
@@ -157,6 +227,20 @@ export function RichEditor({
         >
           <Quote className="size-4" />
         </ToolbarButton>
+        <ToolbarButton
+          onClick={handleImageButtonClick}
+          disabled={uploadingImage}
+          aria-label="이미지 삽입"
+        >
+          <ImageIcon className="size-4" />
+        </ToolbarButton>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={ALLOWED_IMAGE_MIME_TYPES.join(",")}
+          className="hidden"
+          onChange={handleFileSelected}
+        />
         <ToolbarButton
           active={editor.isActive("link")}
           onClick={() => {
@@ -262,6 +346,16 @@ export function RichEditor({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      {uploadingImage ? (
+        <p className="border-b border-input px-3 py-1.5 text-sm text-muted-foreground">
+          이미지 업로드 중...
+        </p>
+      ) : null}
+      {imageError ? (
+        <p className="border-b border-input px-3 py-1.5 text-sm text-destructive">
+          {imageError}
+        </p>
+      ) : null}
       <EditorContent editor={editor} />
     </div>
   );
