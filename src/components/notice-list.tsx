@@ -3,6 +3,7 @@
 import { ChevronDown, Download, FileText } from "lucide-react";
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { cn, formatFileSize } from "@/lib/utils";
 import type { Notice } from "@/types/notice";
 
@@ -46,24 +47,23 @@ export function NoticeList({ notices }: { notices: Notice[] }) {
                     {notice.attachments.map((attachment) => (
                       <li
                         key={attachment.id}
-                        className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2"
+                        className="flex items-center justify-between gap-3 rounded-md bg-muted px-3 py-2 text-xs"
                       >
                         <span className="flex min-w-0 items-center gap-2">
-                          <FileText className="size-4 shrink-0 text-muted-foreground" />
-                          <span className="truncate text-sm">
-                            {attachment.file_name}
-                          </span>
-                          <span className="shrink-0 text-sm text-muted-foreground">
+                          <FileText className="size-3.5 shrink-0 text-muted-foreground" />
+                          <span className="truncate">{attachment.file_name}</span>
+                          <span className="shrink-0 text-muted-foreground">
                             ({formatFileSize(attachment.file_size)})
                           </span>
                         </span>
-                        <a
-                          href={`${attachment.file_url}?download=${encodeURIComponent(attachment.file_name)}`}
-                          className="flex shrink-0 items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-                        >
-                          <Download className="size-4" />
-                          다운로드
-                        </a>
+                        <Button asChild variant="subtle" size="sm" className="shrink-0">
+                          <a
+                            href={`${attachment.file_url}?download=${encodeURIComponent(attachment.file_name)}`}
+                          >
+                            <Download className="size-3.5" />
+                            다운로드
+                          </a>
+                        </Button>
                       </li>
                     ))}
                   </ul>

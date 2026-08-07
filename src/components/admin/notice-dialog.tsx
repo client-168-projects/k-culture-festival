@@ -208,9 +208,6 @@ export function NoticeDialog({
               />
             ) : (
               <div className="min-h-72 rounded-md border border-input p-4">
-                <h2 className="mb-3 text-lg font-semibold">
-                  {title || "(제목 없음)"}
-                </h2>
                 <div
                   className="tiptap-content"
                   dangerouslySetInnerHTML={{
@@ -230,10 +227,10 @@ export function NoticeDialog({
                 {attachments.map((attachment, index) => (
                   <li
                     key={attachment.file_url}
-                    className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2 text-sm"
+                    className="flex items-center justify-between gap-3 rounded-md bg-muted px-3 py-2 text-xs"
                   >
                     <span className="flex min-w-0 items-center gap-2">
-                      <FileText className="size-4 shrink-0 text-muted-foreground" />
+                      <FileText className="size-3.5 shrink-0 text-muted-foreground" />
                       <span className="truncate">{attachment.file_name}</span>
                       <span className="shrink-0 text-muted-foreground">
                         ({formatFileSize(attachment.file_size)})
