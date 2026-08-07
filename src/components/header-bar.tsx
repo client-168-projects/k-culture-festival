@@ -1,9 +1,10 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import type { NavSection } from "@/config/nav";
@@ -24,7 +25,15 @@ export function HeaderBar({
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [columnOffsets, setColumnOffsets] = useState<number[]>([]);
+  const [scrolled, setScrolled] = useState(false);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useLayoutEffect(() => {
     if (!megaOpen) return;
@@ -43,17 +52,26 @@ export function HeaderBar({
 
   return (
     <header
-      className="relative flex items-center justify-between gap-2 border-b border-border px-4 py-2.5 sm:gap-4 sm:px-6 sm:py-3 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:justify-normal"
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between gap-2 border-b px-5 shadow-sm transition-all duration-300 sm:h-24 sm:gap-4 sm:px-10 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:justify-normal lg:px-16",
+        scrolled
+          ? "border-border bg-background/90 shadow-md backdrop-blur-lg"
+          : "border-border/60 bg-background/80 backdrop-blur-md",
+      )}
       onMouseLeave={() => {
         setMegaOpen(false);
         setActiveKey(null);
       }}
     >
-      <Link
-        href="/"
-        className="block min-w-0 truncate text-base font-semibold sm:text-lg"
-      >
-        {title}
+      <Link href="/" className="block min-w-0 shrink-0">
+        <Image
+          src="/assets/logo/kculture-festival-logo.png"
+          alt={title}
+          width={392}
+          height={307}
+          priority
+          className="h-16 w-auto sm:h-20"
+        />
       </Link>
 
       <nav className="hidden items-center gap-8 justify-self-center md:flex">
@@ -65,10 +83,8 @@ export function HeaderBar({
             }}
             type="button"
             className={cn(
-              "rounded-md px-4 py-2.5 text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-              megaOpen &&
-                activeKey === section.key &&
-                "bg-accent text-accent-foreground",
+              "group relative rounded-md px-4 py-2.5 text-lg font-medium text-foreground/80 transition-colors hover:text-foreground",
+              megaOpen && activeKey === section.key && "text-foreground",
             )}
             onMouseEnter={() => {
               setActiveKey(section.key);
@@ -84,6 +100,12 @@ export function HeaderBar({
             }}
           >
             {section.title}
+            <span
+              className={cn(
+                "absolute inset-x-4 bottom-1 h-0.5 origin-center scale-x-0 rounded-full bg-primary transition-transform duration-200 group-hover:scale-x-100",
+                megaOpen && activeKey === section.key && "scale-x-100",
+              )}
+            />
           </button>
         ))}
       </nav>
