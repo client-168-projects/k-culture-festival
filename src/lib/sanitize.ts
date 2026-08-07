@@ -10,6 +10,12 @@ const COLOR_VALUE = [
   /^inherit$/,
 ];
 const TEXT_ALIGN = [/^(left|center|right)$/];
+const FONT_SIZE = [/^\d{1,3}px$/];
+// 에디터 폰트 목록(기본/명조체/고정폭)에서 나오는 값만 허용한다.
+const FONT_FAMILY = [
+  /^serif$/,
+  /^var\(--font-geist-mono\),\s*monospace$/,
+];
 
 /** 에디터에 삽입되는 이미지는 우리 Supabase Storage 버킷에서 온 것만 허용한다 (임의 URL 임베드/추적픽셀 방지). */
 function isAllowedImageSrc(src: string): boolean {
@@ -53,6 +59,8 @@ function buildSanitizeOptions(): sanitizeHtml.IOptions {
         color: COLOR_VALUE,
         "background-color": COLOR_VALUE,
         "text-align": TEXT_ALIGN,
+        "font-size": FONT_SIZE,
+        "font-family": FONT_FAMILY,
       },
     },
     exclusiveFilter: (frame) =>

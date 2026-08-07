@@ -5,7 +5,7 @@ import Highlight from "@tiptap/extension-highlight";
 import TiptapImage from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
-import { TextStyle } from "@tiptap/extension-text-style";
+import { FontFamily, FontSize, TextStyle } from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -14,6 +14,7 @@ import {
   AlignLeft,
   AlignRight,
   Bold,
+  ChevronDown,
   Highlighter,
   ImageIcon,
   Italic,
@@ -23,6 +24,7 @@ import {
   Palette,
   Quote,
   Strikethrough,
+  Type,
   Underline as UnderlineIcon,
 } from "lucide-react";
 import { type ChangeEvent, type ComponentProps, useRef, useState } from "react";
@@ -74,8 +76,23 @@ const HIGHLIGHT_COLORS = [
   { label: "분홍", value: "#fbcfe8" },
 ];
 
+const FONT_SIZES = [
+  { label: "기본", value: "" },
+  { label: "작게", value: "14px" },
+  { label: "보통", value: "17px" },
+  { label: "크게", value: "20px" },
+  { label: "아주 크게", value: "26px" },
+];
+
+const FONT_FAMILIES = [
+  { label: "기본", value: "" },
+  { label: "명조체", value: "serif" },
+  { label: "고정폭", value: "var(--font-geist-mono), monospace" },
+];
+
 function ToolbarButton({
   active,
+  className,
   ...props
 }: ComponentProps<typeof Button> & { active?: boolean }) {
   return (
@@ -83,7 +100,11 @@ function ToolbarButton({
       type="button"
       variant="ghost"
       size="icon"
-      className={cn("size-8", active && "bg-accent text-accent-foreground")}
+      className={cn(
+        "size-8",
+        active && "bg-accent text-accent-foreground",
+        className,
+      )}
       {...props}
     />
   );
@@ -111,6 +132,8 @@ export function RichEditor({
       Underline,
       TextStyle,
       Color,
+      FontSize,
+      FontFamily,
       Highlight.configure({ multicolor: true }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       TiptapImage.configure({
@@ -283,6 +306,59 @@ export function RichEditor({
         >
           <AlignRight className="size-4" />
         </ToolbarButton>
+
+        <div className="mx-1 h-6 w-px bg-border" />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <ToolbarButton aria-label="글자 크기" className="w-auto gap-1 px-2">
+              <Type className="size-4" />
+              <ChevronDown className="size-3" />
+            </ToolbarButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            {FONT_SIZES.map((size) => (
+              <DropdownMenuItem
+                key={size.label}
+                onSelect={() => {
+                  if (size.value) {
+                    editor.chain().focus().setFontSize(size.value).run();
+                  } else {
+                    editor.chain().focus().unsetFontSize().run();
+                  }
+                }}
+              >
+                {size.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <ToolbarButton aria-label="글꼴" className="w-auto gap-1 px-2">
+              <span className="text-sm">가</span>
+              <ChevronDown className="size-3" />
+            </ToolbarButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            {FONT_FAMILIES.map((font) => (
+              <DropdownMenuItem
+                key={font.label}
+                style={font.value ? { fontFamily: font.value } : undefined}
+                onSelect={() => {
+                  if (font.value) {
+                    editor.chain().focus().setFontFamily(font.value).run();
+                  } else {
+                    editor.chain().focus().unsetFontFamily().run();
+                  }
+                }}
+              >
+                {font.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <div className="mx-1 h-6 w-px bg-border" />
 
