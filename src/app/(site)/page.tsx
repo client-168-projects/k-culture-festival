@@ -20,7 +20,7 @@ export default function Home() {
           공용 컴포넌트
         </h1>
         <p className="text-muted-foreground">
-          variant / size props로 확장 가능한 재사용 UI 컴포넌트 모음입니다.
+          variant / size props로 확장 가능한 재사용 UI 컴포넌트 모음입니다
         </p>
       </section>
 
