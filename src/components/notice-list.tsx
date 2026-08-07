@@ -43,11 +43,11 @@ export function NoticeList({ notices }: { notices: Notice[] }) {
                   dangerouslySetInnerHTML={{ __html: notice.content }}
                 />
                 {notice.attachments.length > 0 ? (
-                  <ul className="mt-4 flex flex-col gap-2 border-t border-border pt-4">
+                  <ul className="mt-4 flex flex-col gap-1 border-t border-border pt-4">
                     {notice.attachments.map((attachment) => (
                       <li
                         key={attachment.id}
-                        className="flex items-center justify-between gap-3 rounded-md bg-muted px-3 py-2 text-xs"
+                        className="flex items-center justify-between gap-3 rounded-md bg-muted px-2.5 py-1 text-xs"
                       >
                         <span className="flex min-w-0 items-center gap-2">
                           <FileText className="size-3.5 shrink-0 text-muted-foreground" />
@@ -56,7 +56,12 @@ export function NoticeList({ notices }: { notices: Notice[] }) {
                             ({formatFileSize(attachment.file_size)})
                           </span>
                         </span>
-                        <Button asChild variant="subtle" size="sm" className="shrink-0">
+                        <Button
+                          asChild
+                          variant="subtle"
+                          size="sm"
+                          className="h-6 shrink-0 gap-1 px-2"
+                        >
                           <a
                             href={`${attachment.file_url}?download=${encodeURIComponent(attachment.file_name)}`}
                           >

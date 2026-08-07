@@ -223,11 +223,11 @@ export function NoticeDialog({
           <div className="flex flex-col gap-1.5">
             <Label>첨부파일</Label>
             {attachments.length > 0 ? (
-              <ul className="flex flex-col gap-1.5">
+              <ul className="flex flex-col gap-1">
                 {attachments.map((attachment, index) => (
                   <li
                     key={attachment.file_url}
-                    className="flex items-center justify-between gap-3 rounded-md bg-muted px-3 py-2 text-xs"
+                    className="flex items-center justify-between gap-3 rounded-md bg-muted px-2.5 py-1 text-xs"
                   >
                     <span className="flex min-w-0 items-center gap-2">
                       <FileText className="size-3.5 shrink-0 text-muted-foreground" />
@@ -240,11 +240,11 @@ export function NoticeDialog({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="size-7 shrink-0"
+                      className="size-6 shrink-0"
                       aria-label="첨부파일 삭제"
                       onClick={() => handleRemoveAttachment(index)}
                     >
-                      <X className="size-4" />
+                      <X className="size-3.5" />
                     </Button>
                   </li>
                 ))}
