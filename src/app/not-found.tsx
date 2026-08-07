@@ -1,21 +1,23 @@
+import { FileQuestion } from "lucide-react";
 import Link from "next/link";
 
-import "./globals.css";
+import { Button } from "@/components/ui/button";
 
-export default function GlobalNotFound() {
+export default function NotFound() {
   return (
-    <html lang="ko">
-      <body className="flex min-h-screen flex-col items-center justify-center gap-2 bg-background px-4 text-center text-foreground antialiased sm:px-6">
-        <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-          404 - Page Not Found
-        </h1>
-        <p className="text-muted-foreground">
-          페이지를 찾을 수 없습니다.{" "}
-          <Link href="/" className="underline underline-offset-4">
-            홈으로 이동
-          </Link>
-        </p>
-      </body>
-    </html>
+    <main className="flex flex-1 flex-col items-center justify-center gap-4 px-4 py-16 text-center sm:px-6 sm:py-24">
+      <div className="flex size-12 items-center justify-center rounded-full bg-muted">
+        <FileQuestion className="size-6 text-muted-foreground" />
+      </div>
+      <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+        페이지를 찾을 수 없습니다
+      </h1>
+      <p className="max-w-sm text-muted-foreground">
+        요청하신 페이지가 삭제되었거나 주소가 잘못되었습니다.
+      </p>
+      <Button asChild>
+        <Link href="/">홈으로 이동</Link>
+      </Button>
+    </main>
   );
 }

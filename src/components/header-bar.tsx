@@ -1,24 +1,13 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { useLayoutEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
+import type { NavSection } from "@/config/nav";
 import { cn } from "@/lib/utils";
-
-export type NavItem = {
-  key: string;
-  title: string;
-  href: string;
-};
-
-export type NavSection = {
-  key: string;
-  title: string;
-  items: NavItem[];
-};
 
 export function HeaderBar({
   title,

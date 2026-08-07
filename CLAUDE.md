@@ -78,7 +78,7 @@ Business logic should never live inside pages.
 Use feature-based architecture.
 
 ```
-app/[locale]/
+app/
 features/
 components/
 components/ui/
@@ -86,8 +86,6 @@ hooks/
 stores/
 services/
 lib/
-i18n/
-messages/
 types/
 constants/
 styles/
@@ -400,43 +398,14 @@ appropriately.
 
 ---
 
-# Internationalization (i18n)
+# Language
 
-Stack: `next-intl`.
-
-Supported locales: `ko` (default), `en`, `zh`, `ja`.
-
-Routing
-
-- All routes live under `app/[locale]/`. Never add a page directly under `app/`.
-- Locale config lives in `src/i18n/routing.ts` (`locales`, `defaultLocale`, `localeNames`).
-- Default locale (`ko`) has no URL prefix (`localePrefix: "as-needed"`); other locales are prefixed (`/en`, `/zh`, `/ja`).
-- `src/middleware.ts` handles locale detection and rewriting. Never bypass it with custom redirect logic.
-
-Navigation
-
-- Always import `Link`, `redirect`, `usePathname`, `useRouter` from `@/i18n/navigation`.
-- Never import these from `next/navigation` or `next/link` directly — that drops the locale prefix.
-
-Translations
-
-- Message files live in `messages/{locale}.json`, one flat file per locale, grouped by namespace (`nav`, `home`, `notFound`, `error`, ...).
-- Never hardcode user-facing text in a component. Add a message key instead.
-- When adding a key, add it to all four locale files in the same change. Do not leave a locale behind.
-- Use `useTranslations(namespace)` in Client Components and plain function components.
-- Use `getTranslations({ locale, namespace })` in `generateMetadata` and other places without React context.
-- Every page under `app/[locale]/` must call `setRequestLocale(locale)` before rendering (enables static rendering per locale).
-
-Adding a new locale
-
-1. Add the code to `locales` in `src/i18n/routing.ts` and a label in `localeNames`.
-2. Add `messages/{locale}.json` with exactly the same keys as `messages/ko.json`.
-3. Add the locale to `generateStaticParams` coverage (automatic via `routing.locales`).
+This site is Korean-only. There is no i18n/locale infrastructure — do not reintroduce one (no `next-intl`, no `[locale]` route segment, no message/translation files). Write all user-facing text directly in components, in Korean.
 
 Fallback pages
 
-- `app/[locale]/loading.tsx`, `app/[locale]/not-found.tsx`, `app/[locale]/error.tsx` are localized and reuse the shared design system (`Skeleton`, `Card`, `Button`, etc.).
-- `app/not-found.tsx` and `app/global-error.tsx` are last-resort, unlocalized fallbacks that render their own `<html>/<body>` (no `[locale]` layout is available above them). Keep them dependency-free and hardcoded — they must work even if i18n/theme providers themselves fail.
+- `app/loading.tsx`, `app/not-found.tsx`, `app/error.tsx` reuse the shared design system (`Skeleton`, `Card`, `Button`, etc.) and render inside the root layout normally.
+- `app/global-error.tsx` is the one exception: it's a last-resort fallback that renders its own `<html>/<body>` (it replaces the root layout when the root layout itself throws). Keep it dependency-free and hardcoded — it must work even if the theme provider itself fails.
 
 ---
 
