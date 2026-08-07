@@ -78,10 +78,13 @@ Business logic should never live inside pages.
 Use feature-based architecture.
 
 ```
-app/
+app/(site)/       - public festival pages, wrapped with SiteHeader/SiteFooter
+app/admin/         - admin panel (login + sidebar-protected pages), no public chrome
+app/api/admin/     - admin-only route handlers (notices CRUD, auth)
 features/
 components/
 components/ui/
+components/admin/  - admin-only components (not reused by the public site)
 hooks/
 stores/
 services/
@@ -89,6 +92,8 @@ lib/
 types/
 constants/
 styles/
+db/                - D1 schema.sql
+scripts/           - one-off ops scripts (e.g. create-admin)
 ```
 
 Keep related files together.
@@ -437,6 +442,22 @@ Never fetch directly inside reusable UI components.
 Keep API implementations centralized.
 
 Handle errors consistently.
+
+---
+
+# Admin & Data (D1)
+
+Full setup/operations guide: see `DATABASE.md`.
+
+- D1 is accessed only through `src/lib/d1.ts` (Cloudflare REST API over `fetch`), never via a native Workers binding. This project deploys to both Cloudflare Pages and a plain Node.js host (Raspberry Pi via pm2); native bindings only work on Cloudflare, so REST API is the one approach that works identically everywhere.
+- Server Component pages call `getNotices()` (`src/lib/notices.ts`) or `d1Query()` directly — never fetch D1 from the client.
+- `d1Query` throws on failure. Read paths used during page render must catch and fall back to `[]` (see `getNotices`) so a missing/misconfigured D1 never breaks a build or crashes a page. Write paths (the `/api/admin/*` route handlers) must also catch D1 errors and return a clean JSON `{ error }` response — never let one bubble into Next's default error page.
+- Auth is a custom HMAC-signed session cookie (`src/lib/auth.ts`), verified in `src/proxy.ts` for every `/admin/*` and `/api/admin/*` request. It uses only Web Crypto (`crypto.subtle`) — no Node-only crypto, no auth library — so the same code runs on Cloudflare's edge runtime and on the Pi's Node.js.
+- Never use `bcrypt`/Node's `crypto` module for anything under `src/lib/auth.ts` or `src/proxy.ts` — it breaks portability across the two runtimes.
+- Passwords are never stored or logged in plaintext. Use `scripts/create-admin.mjs` to create/reset admin accounts (it hashes with the exact same PBKDF2 params as `src/lib/auth.ts`).
+- Any HTML saved from the rich editor must go through `sanitizeNoticeContent()` (`src/lib/sanitize.ts`) before it's written to D1. Content already in D1 is trusted and rendered with `dangerouslySetInnerHTML` — sanitize on write, not on read.
+- Admin CRUD is modal-only (`src/components/admin/notice-dialog.tsx`) — no per-item detail route. Don't add one without discussing it first; the public site is the only place notice content gets its own page-level view (and even there it's an inline expand, not a route).
+- Every mutation (`POST`/`PUT`/`DELETE` under `/api/admin/notices`) must call `revalidatePath` for both `/community/notice` and `/admin/notices` so the public page and the admin list stay in sync without a full rebuild.
 
 ---
 
