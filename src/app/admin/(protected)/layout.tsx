@@ -1,8 +1,16 @@
-import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { redirect } from "next/navigation";
 
-export default function AdminProtectedLayout({
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { getAdminSession } from "@/lib/auth";
+
+export default async function AdminProtectedLayout({
   children,
 }: LayoutProps<"/admin">) {
+  const session = await getAdminSession();
+  if (!session) {
+    redirect("/admin/login");
+  }
+
   return (
     <div className="flex min-h-screen">
       <AdminSidebar active="notices" />

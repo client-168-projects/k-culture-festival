@@ -1,11 +1,15 @@
-import { randomUUID } from "node:crypto";
-
 import { NextResponse } from "next/server";
 
 import { ALLOWED_IMAGE_MIME_TYPES, MAX_IMAGE_SIZE_BYTES } from "@/constants/media";
+import { getAdminSession } from "@/lib/auth";
 import { uploadToStorage } from "@/lib/supabase";
 
 export async function POST(request: Request) {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
+  }
+
   const formData = await request.formData().catch(() => null);
   const file = formData?.get("file");
 
@@ -28,7 +32,7 @@ export async function POST(request: Request) {
   }
 
   const ext = file.type.split("/")[1];
-  const path = `images/${randomUUID()}.${ext}`;
+  const path = `images/${crypto.randomUUID()}.${ext}`;
 
   try {
     const url = await uploadToStorage(path, file);

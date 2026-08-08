@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { MAX_ATTACHMENTS_PER_NOTICE } from "@/constants/media";
+import { getAdminSession } from "@/lib/auth";
 import { d1Query } from "@/lib/d1";
 import { sanitizeNoticeContent } from "@/lib/sanitize";
 
@@ -24,6 +25,11 @@ function parseAttachments(body: unknown): AttachmentInput[] {
 }
 
 export async function POST(request: Request) {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
+  }
+
   const body = await request.json().catch(() => null);
   const title = typeof body?.title === "string" ? body.title.trim() : "";
   const content = typeof body?.content === "string" ? body.content : "";
