@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { MAX_ATTACHMENTS_PER_NOTICE } from "@/constants/media";
+import { getAdminSession } from "@/lib/auth";
 import { d1Query } from "@/lib/d1";
 import { sanitizeNoticeContent } from "@/lib/sanitize";
 import { deleteFromStorage, storagePathFromPublicUrl } from "@/lib/supabase";
@@ -39,6 +40,11 @@ async function deleteAttachmentFiles(attachments: { file_url: string }[]) {
 }
 
 export async function PUT(request: Request, { params }: RouteParams) {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
+  }
+
   const { id } = await params;
   const noticeId = Number(id);
 
@@ -103,6 +109,11 @@ export async function PUT(request: Request, { params }: RouteParams) {
 }
 
 export async function DELETE(_request: Request, { params }: RouteParams) {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
+  }
+
   const { id } = await params;
   const noticeId = Number(id);
 

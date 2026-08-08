@@ -1,6 +1,8 @@
+import { cookies } from "next/headers";
+
 /**
  * Web Crypto API(crypto.subtle)만 사용한다 — Node.js(라즈베리파이 포함)와
- * Next.js Edge 런타임(proxy.ts) 양쪽에서 동일하게 동작하기 위해서다.
+ * Cloudflare Workers 양쪽에서 동일하게 동작하기 위해서다.
  * Node 전용 `crypto` 모듈이나 bcrypt 네이티브 바인딩은 의도적으로 쓰지 않는다.
  */
 
@@ -160,3 +162,15 @@ export async function verifySessionToken(
 
 export const SESSION_COOKIE_NAME = "admin_session";
 export { SESSION_COOKIE_MAX_AGE };
+
+/** 현재 요청의 admin 세션을 쿠키에서 읽어 검증한다. 각 보호된 페이지/라우트에서 직접 호출한다. */
+export async function getAdminSession(): Promise<SessionPayload | null> {
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  if (!secret) return null;
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  if (!token) return null;
+
+  return verifySessionToken(token, secret);
+}

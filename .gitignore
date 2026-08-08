@@ -47,4 +47,7 @@ next-env.d.ts
 *.sqlite3
 backup.sql
 
+# opennextjs-cloudflare build output
+.open-next/
+
 CLAUDE.md

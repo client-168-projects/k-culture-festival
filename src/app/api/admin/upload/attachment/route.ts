@@ -1,11 +1,15 @@
-import { randomUUID } from "node:crypto";
-
 import { NextResponse } from "next/server";
 
 import { ALLOWED_ATTACHMENT_EXTENSIONS, MAX_ATTACHMENT_SIZE_BYTES } from "@/constants/media";
+import { getAdminSession } from "@/lib/auth";
 import { deleteFromStorage, storagePathFromPublicUrl, uploadToStorage } from "@/lib/supabase";
 
 export async function POST(request: Request) {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
+  }
+
   const formData = await request.formData().catch(() => null);
   const file = formData?.get("file");
 
@@ -30,7 +34,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const path = `attachments/${randomUUID()}.${ext}`;
+  const path = `attachments/${crypto.randomUUID()}.${ext}`;
 
   try {
     const url = await uploadToStorage(path, file);
@@ -45,6 +49,11 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
+  }
+
   const body = await request.json().catch(() => null);
   const url = typeof body?.url === "string" ? body.url : "";
   const path = url ? storagePathFromPublicUrl(url) : null;
