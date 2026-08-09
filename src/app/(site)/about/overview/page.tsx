@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
-import { MediaPlaceholder } from "@/components/media-placeholder";
+import { ImageModal } from "@/components/image-modal";
 import { PageContainer, PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
+
+const POSTER_SRC = "/assets/poster/파주-k-컬처-페스티벌-포스터jpg.jpg";
 
 export const metadata: Metadata = {
   title: "축제개요",
@@ -23,8 +26,27 @@ export default function OverviewPage() {
         description="축제의 취지와 주요 특징을 소개합니다."
       />
 
-      <div className="grid gap-6 sm:grid-cols-[minmax(0,220px)_1fr]">
-        <MediaPlaceholder label="축제 포스터" className="aspect-3/4 w-full" />
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,360px)_1fr]">
+        <ImageModal
+          src={POSTER_SRC}
+          alt="파주 K-컬처 페스티벌 포스터"
+          width={485}
+          height={843}
+        >
+          <button
+            type="button"
+            className="relative mx-auto aspect-485/843 w-full max-w-xs cursor-zoom-in overflow-hidden rounded-xl border border-border bg-muted p-3 sm:mx-0 sm:max-w-none"
+          >
+            <Image
+              src={POSTER_SRC}
+              alt="파주 K-컬처 페스티벌 포스터"
+              fill
+              priority
+              className="object-contain"
+              sizes="(min-width: 640px) 360px, 100vw"
+            />
+          </button>
+        </ImageModal>
 
         <div className="flex flex-col gap-6">
           <Card>
