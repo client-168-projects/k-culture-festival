@@ -13,7 +13,7 @@ import {
 const VENUE_NAME = "경기미래교육 파주캠퍼스";
 const VENUE_LAT = 37.784985;
 const VENUE_LNG = 126.703487;
-const MAP_EMBED_SRC = `https://www.google.com/maps?q=${encodeURIComponent(VENUE_NAME)}&ll=${VENUE_LAT},${VENUE_LNG}&z=17&output=embed`;
+const MAP_EMBED_SRC = `https://www.google.com/maps?q=${encodeURIComponent(VENUE_NAME)}&ll=${VENUE_LAT},${VENUE_LNG}&z=14&output=embed`;
 const MAP_LINK_HREF =
   "https://www.google.com/maps/place/%EA%B2%BD%EA%B8%B0%EB%AF%B8%EB%9E%98%EA%B5%90%EC%9C%A1+%ED%8C%8C%EC%A3%BC%EC%BA%A0%ED%8D%BC%EC%8A%A4/@37.784985,126.703487,17z/data=!4m6!3m5!1s0x357c8d8c9c187319:0xbf4eb151274bf7d5!8m2!3d37.784985!4d126.703487!16s%2Fg%2F11j5jnrvk9";
 const NAVER_MAP_HREF = `https://map.naver.com/p/search/${encodeURIComponent(VENUE_NAME)}`;

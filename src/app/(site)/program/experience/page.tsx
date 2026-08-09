@@ -18,9 +18,9 @@ export default function ExperiencePage() {
         description="직접 참여할 수 있는 체험 프로그램을 안내합니다."
       />
 
-      <div className="grid gap-6 sm:grid-cols-[minmax(0,280px)_1fr] sm:items-center">
-        <MediaPlaceholder label="체험존 안내" className="aspect-video w-full" />
-        <div className="flex flex-col gap-2">
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,280px)] sm:items-start">
+        <MediaPlaceholder label="체험존 안내" className="aspect-16/10 w-full" />
+        <div className="flex flex-col gap-2 sm:pt-1">
           <h2 className="text-lg font-semibold">체험존 안내</h2>
           <p className="text-muted-foreground">
             행사장 곳곳에 마련된 체험존에서 다양한 K-컬처 콘텐츠를
