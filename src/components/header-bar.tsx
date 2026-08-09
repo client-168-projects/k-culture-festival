@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { Button } from "@/components/ui/button";
 import type { NavSection } from "@/config/nav";
@@ -147,8 +148,19 @@ export function HeaderBar({
         </div>
       ) : null}
 
+      {mobileOpen
+        ? createPortal(
+            <div
+              className="fixed inset-x-0 top-20 z-40 h-[calc(100vh-5rem)] bg-black/40 backdrop-blur-md sm:top-24 sm:h-[calc(100vh-6rem)] md:hidden"
+              aria-hidden="true"
+              onClick={() => setMobileOpen(false)}
+            />,
+            document.body,
+          )
+        : null}
+
       {mobileOpen ? (
-        <div className="animate-drop-down absolute inset-x-0 top-full max-h-[calc(100vh-4rem)] overflow-y-auto border-b border-border bg-background px-4 py-4 sm:px-6 md:hidden">
+        <div className="animate-drop-down absolute inset-x-0 top-full z-40 max-h-[calc(100vh-4rem)] overflow-y-auto border-b border-border bg-background px-4 py-4 sm:px-6 md:hidden">
           <div className="flex flex-col gap-6">
             {sections.map((section) => (
               <div key={section.key} className="flex flex-col gap-2">
