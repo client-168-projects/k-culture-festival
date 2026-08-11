@@ -1,4 +1,5 @@
-import { ArchPanel } from "./arch-panel";
+import { ArchPanel } from "@/components/arch-panel";
+
 import { Container } from "./container";
 import { FullscreenSection } from "./fullscreen-section";
 import { SectionHead } from "./section-head";
@@ -55,7 +56,10 @@ const PROGRAMS = [
 
 export function ExperienceSection() {
   return (
-    <FullscreenSection className="bg-brand-indigo-deep bg-[radial-gradient(circle_at_1px_1px,rgba(248,242,230,0.06)_1px,transparent_0)] bg-size-[22px_22px] text-brand-paper">
+    <FullscreenSection
+      id="experience"
+      className="bg-brand-indigo-deep bg-[radial-gradient(circle_at_1px_1px,rgba(248,242,230,0.06)_1px,transparent_0)] bg-size-[22px_22px] text-brand-paper"
+    >
       <Container>
         <SectionHead
           eyebrow="Experience"
@@ -68,7 +72,7 @@ export function ExperienceSection() {
           {PROGRAMS.map((program) => (
             <div
               key={program.title}
-              className="group overflow-hidden rounded-b-[14px] border border-brand-paper/16 bg-brand-paper/6 transition-all duration-200 hover:-translate-y-1 hover:border-brand-paper/30 hover:bg-brand-paper/10"
+              className="group overflow-hidden rounded-none border border-brand-paper/16 bg-brand-paper/6 transition-all duration-200 hover:-translate-y-1 hover:border-brand-paper/30 hover:bg-brand-paper/10"
             >
               <ArchPanel
                 tone={program.tone}
@@ -85,7 +89,7 @@ export function ExperienceSection() {
             </div>
           ))}
 
-          <div className="flex flex-col items-start justify-center rounded-[14px] border-[1.5px] border-dashed border-brand-paper/35 px-5.5 py-6.5 transition-colors duration-200 hover:border-brand-gold/60">
+          <div className="flex flex-col items-start justify-center rounded-none border-[1.5px] border-dashed border-brand-paper/35 px-5.5 py-6.5 transition-colors duration-200 hover:border-brand-gold/60">
             <div className="font-display text-[30px] text-brand-gold">
               +26
             </div>

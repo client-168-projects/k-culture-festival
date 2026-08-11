@@ -60,10 +60,10 @@ const subwayRoutes: Route[] = [
   { no: "합정역 (서울, 2·6호선)", route: "2200 - 합정역 1번출구 정류장 승차" },
 ];
 
-const carText = [
-  "자유로를 타고 성동IC에서 나와 약 1.6km를 이정표를 따라 직진(성동사거리를 지남)한 후 헤이리사거리에서 좌회전하여 약 500m 지점에 위치합니다.",
-  "서울외곽순환도로 이용 시 자유로분기점에서 '문산, 킨텍스' 방면으로 자유로를 따라 약 27km를 직진하시면 성동IC가 나옵니다.",
-  "내비게이션에 '경기미래교육캠퍼스'로 검색하시면 쉽게 찾을 수 있습니다.",
+const parkingText = [
+  "파주 K-컬처 페스티벌 행사장 주차장이 협소하여 주차가 어려울 수 있습니다. 방문객께서는 인근 통일동산 주차장을 이용해 주시기 바랍니다.",
+  "내비게이션에서 '통일동산 주차장'을 검색하시면 보다 쉽게 찾아오실 수 있습니다.",
+  "축제 기간 동안 통일동산 주차장 ↔ 파주 K-컬처 페스티벌 행사장(경기미래교육 파주캠퍼스)을 오가는 셔틀버스를 상시 운행합니다.",
 ];
 
 function RouteList({ routes }: { routes: Route[] }) {
@@ -84,101 +84,104 @@ function RouteList({ routes }: { routes: Route[] }) {
 
 export default function DirectionsPage() {
   return (
-    <PageContainer className="max-w-4xl">
-      <PageHeader
-        title="오시는 길"
-        description="행사장까지 오시는 다양한 교통 방법을 안내합니다."
-      />
+    <PageContainer className="max-w-6xl">
+      <PageHeader title="오시는 길" />
 
-      <div className="flex flex-col gap-2">
-        <div className="aspect-video w-full overflow-hidden rounded-xl border border-border">
-          <iframe
-            src={MAP_EMBED_SRC}
-            title="경기미래교육 파주캠퍼스 위치 지도"
-            className="size-full"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
-        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-          <Button variant="outline" size="sm" className="w-full sm:w-auto" asChild>
-            <a href={MAP_LINK_HREF} target="_blank" rel="noopener noreferrer">
-              <Image
-                src="/assets/logo/maps/google-maps.png"
-                alt=""
-                width={16}
-                height={16}
-                className="shrink-0"
-              />
-              <span className="truncate">Google 지도에서 크게 보기</span>
-            </a>
-          </Button>
-
-          <div className="flex flex-col gap-2 sm:flex-row">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+        <div className="flex flex-col gap-2">
+          <div className="h-100 w-full overflow-hidden rounded-xl border border-border sm:h-120 lg:h-140">
+            <iframe
+              src={MAP_EMBED_SRC}
+              title="경기미래교육 파주캠퍼스 위치 지도"
+              className="size-full"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <Button variant="outline" size="sm" className="w-full sm:w-auto" asChild>
-              <a
-                href={NAVER_MAP_HREF}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={MAP_LINK_HREF} target="_blank" rel="noopener noreferrer">
                 <Image
-                  src="/assets/logo/maps/naver-map.png"
+                  src="/assets/logo/maps/google-maps.png"
                   alt=""
                   width={16}
                   height={16}
                   className="shrink-0"
                 />
-                <span className="truncate">네이버 지도에서 찾기</span>
+                <span className="truncate">Google 지도에서 크게 보기</span>
               </a>
             </Button>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto" asChild>
-              <a
-                href={KAKAO_MAP_HREF}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src="/assets/logo/maps/kakao-map.png"
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="shrink-0 rounded-xs"
-                />
-                <span className="truncate">다음 지도에서 찾기</span>
-              </a>
-            </Button>
+
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button variant="outline" size="sm" className="w-full sm:w-auto" asChild>
+                <a
+                  href={NAVER_MAP_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/assets/logo/maps/naver-map.png"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="shrink-0"
+                  />
+                  <span className="truncate">네이버 지도에서 찾기</span>
+                </a>
+              </Button>
+              <Button variant="outline" size="sm" className="w-full sm:w-auto" asChild>
+                <a
+                  href={KAKAO_MAP_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/assets/logo/maps/kakao-map.png"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="shrink-0 rounded-xs"
+                  />
+                  <span className="truncate">다음 지도에서 찾기</span>
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
+
+        <div className="flex flex-col gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>대중교통(버스) 이용 시</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RouteList routes={busRoutes} />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>대중교통(지하철) 이용 시</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RouteList routes={subwayRoutes} />
+            </CardContent>
+          </Card>
+
+          <Card className="border-brand-cobalt/25">
+            <CardHeader>
+              <CardTitle className="text-brand-cobalt">
+                주차 및 셔틀버스 안내
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-2 text-sm text-muted-foreground">
+              {parkingText.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>대중교통(버스) 이용 시</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RouteList routes={busRoutes} />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>대중교통(지하철) 이용 시</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RouteList routes={subwayRoutes} />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>자차 이용 시</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2 text-sm text-muted-foreground">
-          {carText.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </CardContent>
-      </Card>
     </PageContainer>
   );
 }

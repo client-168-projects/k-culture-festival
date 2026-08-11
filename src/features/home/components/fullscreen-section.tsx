@@ -11,7 +11,7 @@ export function FullscreenSection({
   return (
     <section
       className={cn(
-        "relative flex min-h-dvh flex-col justify-center overflow-hidden py-16 sm:py-20",
+        "relative flex min-h-dvh scroll-mt-13.5 flex-col justify-center overflow-hidden py-16 sm:py-20",
         className,
       )}
       {...props}

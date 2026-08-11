@@ -1,9 +1,9 @@
 import { MapPin } from "lucide-react";
 
+import { ArchPanel } from "@/components/arch-panel";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import { ArchPanel } from "./arch-panel";
 import { Container } from "./container";
 import { FullscreenSection } from "./fullscreen-section";
 import { SectionHead } from "./section-head";
@@ -34,7 +34,10 @@ const LINEUP = [
 
 export function MainStageSection() {
   return (
-    <FullscreenSection className="bg-brand-paper bg-[radial-gradient(circle_at_1px_1px,rgba(33,27,18,0.06)_1px,transparent_0)] bg-size-[22px_22px] text-brand-ink">
+    <FullscreenSection
+      id="main-stage"
+      className="bg-brand-paper bg-[radial-gradient(circle_at_1px_1px,rgba(33,27,18,0.06)_1px,transparent_0)] bg-size-[22px_22px] text-brand-ink"
+    >
       <Container>
         <SectionHead
           eyebrow="Main Stage"
@@ -46,7 +49,7 @@ export function MainStageSection() {
           {LINEUP.map((item) => (
             <div
               key={item.name}
-              className="group overflow-hidden rounded-b-2xl border border-brand-ink/14 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+              className="group overflow-hidden rounded-none border border-brand-ink/14 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
             >
               <ArchPanel
                 tone={item.tone}

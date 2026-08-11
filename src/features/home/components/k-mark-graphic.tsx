@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { ArchPanel } from "./arch-panel";
+import { ArchPanel } from "@/components/arch-panel";
 
 const ASSETS = {
   bibimbap: "/assets/main/left-top/bibimbap.png",

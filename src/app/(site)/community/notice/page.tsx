@@ -15,10 +15,7 @@ export default async function NoticePage() {
 
   return (
     <PageContainer>
-      <PageHeader
-        title="공지사항"
-        description="축제 관련 공지사항을 확인하세요."
-      />
+      <PageHeader title="공지사항" />
 
       <Card>
         <CardContent>

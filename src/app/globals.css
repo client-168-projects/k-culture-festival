@@ -63,6 +63,9 @@
   --brand-indigo-mist: #c9cbe0;
   --brand-purple: #3b2c74;
   --brand-purple-deep: #241a4d;
+  --brand-cobalt: #394a9f;
+  --brand-cobalt-deep: #2c3a80;
+  --brand-tangerine: #e8792a;
   --arch-radius: 190px;
 }
 
@@ -106,6 +109,9 @@
   --color-brand-indigo-mist: var(--brand-indigo-mist);
   --color-brand-purple: var(--brand-purple);
   --color-brand-purple-deep: var(--brand-purple-deep);
+  --color-brand-cobalt: var(--brand-cobalt);
+  --color-brand-cobalt-deep: var(--brand-cobalt-deep);
+  --color-brand-tangerine: var(--brand-tangerine);
   --radius-arch: var(--arch-radius);
 
   --font-display: var(--font-black-han-sans);

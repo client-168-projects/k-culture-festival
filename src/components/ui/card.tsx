@@ -4,12 +4,14 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
-  "flex flex-col gap-6 rounded-xl py-6 text-card-foreground",
+  "flex flex-col gap-6 rounded-none py-6 text-card-foreground",
   {
     variants: {
       variant: {
         default: "border border-border bg-card shadow-sm",
         borderless: "bg-card",
+        accent:
+          "border border-brand-cobalt/25 bg-card shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-cobalt/50 hover:shadow-md",
       },
     },
     defaultVariants: {

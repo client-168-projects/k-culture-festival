@@ -1,6 +1,7 @@
 import { Truck, TreePine, UtensilsCrossed } from "lucide-react";
 
-import { ArchPanel } from "./arch-panel";
+import { ArchPanel } from "@/components/arch-panel";
+
 import { Container } from "./container";
 import { FullscreenSection } from "./fullscreen-section";
 
@@ -12,7 +13,7 @@ const FOOD_ZONES = [
 
 export function KFoodSection() {
   return (
-    <FullscreenSection className="bg-brand-paper text-brand-ink">
+    <FullscreenSection id="kfood" className="bg-brand-paper text-brand-ink">
       <Container className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
         <ArchPanel tone="vermillion" className="aspect-square lg:aspect-[1/1.05]">
           <svg viewBox="0 0 64 64" fill="none" className="h-[52%] w-[52%]">
@@ -48,7 +49,7 @@ export function KFoodSection() {
             {FOOD_ZONES.map(({ icon: Icon, label }) => (
               <div
                 key={label}
-                className="flex items-center gap-3 rounded-xl border border-brand-ink/14 bg-white px-4 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-vermillion/30 hover:shadow-sm sm:flex-col sm:items-start sm:gap-4 sm:py-5"
+                className="flex items-center gap-3 rounded-none border border-brand-ink/14 bg-white px-4 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-vermillion/30 hover:shadow-sm sm:flex-col sm:items-start sm:gap-4 sm:py-5"
               >
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-vermillion/10 text-brand-vermillion">
                   <Icon className="size-5" />

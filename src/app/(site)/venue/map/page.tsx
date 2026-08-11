@@ -12,10 +12,7 @@ export const metadata: Metadata = {
 export default function MapPage() {
   return (
     <PageContainer className="max-w-4xl">
-      <PageHeader
-        title="행사장 지도"
-        description="행사장 배치와 주요 시설 위치를 안내합니다."
-      />
+      <PageHeader title="행사장 지도" />
 
       <MediaPlaceholder label="행사장 지도" className="aspect-video w-full" />
 

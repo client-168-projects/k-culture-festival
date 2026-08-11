@@ -20,10 +20,7 @@ const items = [
 export default function SchedulePage() {
   return (
     <PageContainer>
-      <PageHeader
-        title="전체 일정표"
-        description="축제 전체 일정을 한눈에 확인하세요."
-      />
+      <PageHeader title="전체 일정표" />
 
       <Card>
         <CardContent>

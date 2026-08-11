@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -132,25 +131,29 @@ export function ExperienceProgramList({
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {visiblePrograms.map((item) => (
-            <Card key={item.title} className="h-full min-h-52 gap-3">
-              <CardHeader>
-                <CardTitle className="line-clamp-2 text-base">
+            <Card
+              key={item.title}
+              variant="accent"
+              className="gap-2 py-5"
+            >
+              <CardHeader className="px-4 sm:px-5">
+                <CardTitle className="line-clamp-2 font-heading text-lg font-bold text-brand-cobalt">
                   {item.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-1 flex-col gap-1 text-sm text-muted-foreground">
-                <span>참여 인원 {item.capacity}</span>
-                <span>진행 회차 {item.sessions}</span>
-              </CardContent>
-              {item.applicationUrl ? (
-                <CardFooter className="mt-auto">
-                  <Button asChild size="sm" variant="default" className="w-full">
+              <CardContent className="flex items-end justify-between gap-3 px-4 sm:px-5">
+                <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+                  <span>참여 인원 {item.capacity}</span>
+                  <span>진행 회차 {item.sessions}</span>
+                </div>
+                {item.applicationUrl ? (
+                  <Button asChild size="sm" className="h-12 shrink-0 rounded-sm bg-brand-cobalt hover:bg-brand-cobalt-deep">
                     <a href={toAbsoluteUrl(item.applicationUrl)} target="_blank" rel="noreferrer">
                       사전신청하러 가기
                     </a>
                   </Button>
-                </CardFooter>
-              ) : null}
+                ) : null}
+              </CardContent>
             </Card>
           ))}
         </div>

@@ -15,17 +15,25 @@ export function ExtraProgramList({ programs }: { programs: ExtraProgram[] }) {
             <img
               src={item.imageUrl}
               alt={item.title}
-              className="aspect-square w-full rounded-xl border border-border object-cover"
+              className="aspect-square w-full rounded-none border border-border object-cover"
             />
           ) : (
-            <MediaPlaceholder label={item.title} className="aspect-square" />
+            <MediaPlaceholder
+              label={item.title}
+              className="aspect-square rounded-none"
+            />
           )}
           <div className="flex items-center gap-2">
-            <Badge variant="secondary">
+            <Badge variant={item.schedule.type === "event" ? "default" : "secondary"}>
               {formatExtraProgramSchedule(item.schedule)}
             </Badge>
             <p className="text-base">{item.title}</p>
           </div>
+          {item.note ? (
+            <p className="text-sm whitespace-pre-line text-muted-foreground">
+              {item.note}
+            </p>
+          ) : null}
         </div>
       ))}
     </div>

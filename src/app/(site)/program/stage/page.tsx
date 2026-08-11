@@ -12,10 +12,7 @@ export const metadata: Metadata = {
 export default function StagePage() {
   return (
     <PageContainer className="max-w-5xl">
-      <PageHeader
-        title="무대 프로그램"
-        description="무대에서 진행되는 공연 및 행사 일정입니다."
-      />
+      <PageHeader title="무대 프로그램" />
 
       <StageProgramList programs={stagePrograms} />
     </PageContainer>

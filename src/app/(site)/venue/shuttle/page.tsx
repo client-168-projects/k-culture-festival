@@ -11,10 +11,7 @@ export const metadata: Metadata = {
 export default function ShuttlePage() {
   return (
     <PageContainer>
-      <PageHeader
-        title="셔틀버스"
-        description="셔틀버스 운행 시간과 탑승 장소를 안내합니다."
-      />
+      <PageHeader title="셔틀버스" />
 
       <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border bg-muted py-16 text-center">
         <Bus className="size-8 text-muted-foreground" />
