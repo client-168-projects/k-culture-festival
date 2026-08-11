@@ -1,6 +1,20 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@font-face {
+  font-family: "SchoolSafetyWave";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimMulgyeolR.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SchoolSafetyWave";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimMulgyeolB.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
 
 :root {
   --radius: 0.625rem;
@@ -32,36 +46,24 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-}
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 18%);
-  --ring: oklch(0.556 0 0);
+  /* Brand palette (파주 K-컬처 페스티벌 아이덴티티) — fixed festival colors, reused
+     across marketing sections/pages. */
+  --brand-paper: #f8f2e6;
+  --brand-paper-deep: #e8dcc1;
+  --brand-ink: #211b12;
+  --brand-ink-soft: #5b5340;
+  --brand-indigo: #1f2c64;
+  --brand-indigo-deep: #141b43;
+  --brand-vermillion: #c43a2c;
+  --brand-vermillion-deep: #992b20;
+  --brand-jade: #0e6f63;
+  --brand-jade-deep: #0a5049;
+  --brand-gold: #d6a23c;
+  --brand-indigo-mist: #c9cbe0;
+  --brand-purple: #3b2c74;
+  --brand-purple-deep: #241a4d;
+  --arch-radius: 190px;
 }
 
 @theme inline {
@@ -90,6 +92,24 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
+  --color-brand-paper: var(--brand-paper);
+  --color-brand-paper-deep: var(--brand-paper-deep);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-ink-soft: var(--brand-ink-soft);
+  --color-brand-indigo: var(--brand-indigo);
+  --color-brand-indigo-deep: var(--brand-indigo-deep);
+  --color-brand-vermillion: var(--brand-vermillion);
+  --color-brand-vermillion-deep: var(--brand-vermillion-deep);
+  --color-brand-jade: var(--brand-jade);
+  --color-brand-jade-deep: var(--brand-jade-deep);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-indigo-mist: var(--brand-indigo-mist);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-purple-deep: var(--brand-purple-deep);
+  --radius-arch: var(--arch-radius);
+
+  --font-display: var(--font-black-han-sans);
+  --font-heading: "SchoolSafetyWave", var(--font-black-han-sans);
   --font-sans:
     "Pretendard Variable", Pretendard, ui-sans-serif, system-ui,
     -apple-system, sans-serif;
@@ -135,6 +155,15 @@
 }
 
 /* Tiptap 에디터 및 공지사항 렌더링 콘텐츠 공용 스타일 (Tailwind preflight가 지운 목록/제목 기본값 복원) */
+/* 히어로 타이틀 등 포스터 스타일 타이틀에 쓰는 골드 레이어 그림자 (브랜드 골드 토큰 기반) */
+.text-shadow-poster {
+  text-shadow:
+    1px 1px 0 var(--brand-gold),
+    2px 2px 0 var(--brand-gold),
+    3px 3px 0 var(--brand-gold),
+    4px 4px 0 var(--brand-gold);
+}
+
 .tiptap-content {
   display: flex;
   flex-direction: column;

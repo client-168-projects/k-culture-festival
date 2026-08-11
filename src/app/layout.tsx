@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
-
-import { ThemeProvider } from "@/components/theme-provider";
+import { Black_Han_Sans, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const blackHanSans = Black_Han_Sans({
+  variable: "--font-black-han-sans",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -19,8 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="ko"
-      className={`${geistMono.variable} h-full antialiased`}
-      suppressHydrationWarning
+      className={`${geistMono.variable} ${blackHanSans.variable} h-full antialiased`}
     >
       <head>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
@@ -29,16 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
         />
       </head>
-      <body className="flex min-h-full flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-      </body>
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }
