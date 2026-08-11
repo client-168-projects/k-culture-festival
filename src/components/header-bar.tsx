@@ -5,10 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { Button } from "@/components/ui/button";
 import type { NavSection } from "@/config/nav";
 import { cn } from "@/lib/utils";
+import { setNavHidden } from "@/stores/nav-visibility";
 
 export function HeaderBar({
   title,
@@ -19,17 +21,24 @@ export function HeaderBar({
   title: string;
   sections: NavSection[];
   menuLabel: string;
-  children: ReactNode;
+  children?: ReactNode;
 }) {
   const [megaOpen, setMegaOpen] = useState(false);
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [columnOffsets, setColumnOffsets] = useState<number[]>([]);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      setHidden(y > lastScrollY.current && y > 120);
+      lastScrollY.current = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -50,10 +59,17 @@ export function HeaderBar({
     return () => window.removeEventListener("resize", measure);
   }, [megaOpen]);
 
+  const isHidden = hidden && !megaOpen && !mobileOpen;
+
+  useEffect(() => {
+    setNavHidden(isHidden);
+  }, [isHidden]);
+
   return (
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between gap-2 border-b px-5 shadow-sm transition-all duration-300 sm:h-24 sm:gap-4 sm:px-10 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:justify-normal lg:px-16",
+        isHidden ? "-translate-y-full" : "translate-y-0",
         scrolled
           ? "border-border bg-background/90 shadow-md backdrop-blur-lg"
           : "border-border/60 bg-background/80 backdrop-blur-md",
@@ -125,7 +141,7 @@ export function HeaderBar({
       </div>
 
       {megaOpen ? (
-        <div className="animate-drop-down absolute inset-x-0 top-full z-40 hidden h-40 border-b border-border bg-popover shadow-md md:block">
+        <div className="animate-drop-down absolute inset-x-0 top-full z-[45] hidden h-40 border-b border-border bg-popover shadow-md md:block">
           {sections.map((section, index) => (
             <div
               key={section.key}
@@ -147,8 +163,19 @@ export function HeaderBar({
         </div>
       ) : null}
 
+      {mobileOpen
+        ? createPortal(
+            <div
+              className="fixed inset-x-0 top-20 z-[45] h-[calc(100vh-5rem)] bg-black/40 backdrop-blur-md sm:top-24 sm:h-[calc(100vh-6rem)] md:hidden"
+              aria-hidden="true"
+              onClick={() => setMobileOpen(false)}
+            />,
+            document.body,
+          )
+        : null}
+
       {mobileOpen ? (
-        <div className="animate-drop-down absolute inset-x-0 top-full max-h-[calc(100vh-4rem)] overflow-y-auto border-b border-border bg-background px-4 py-4 sm:px-6 md:hidden">
+        <div className="animate-drop-down absolute inset-x-0 top-full z-[45] max-h-[calc(100vh-4rem)] overflow-y-auto border-b border-border bg-background px-4 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.35)] sm:px-6 md:hidden">
           <div className="flex flex-col gap-6">
             {sections.map((section) => (
               <div key={section.key} className="flex flex-col gap-2">

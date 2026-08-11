@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
-import { MediaPlaceholder } from "@/components/media-placeholder";
+import { ImageModal } from "@/components/image-modal";
 import { PageContainer, PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
+
+const POSTER_SRC = "/assets/poster/파주-k-컬처-페스티벌-포스터jpg.jpg";
 
 export const metadata: Metadata = {
   title: "축제개요",
@@ -18,19 +21,35 @@ const info = [
 export default function OverviewPage() {
   return (
     <PageContainer>
-      <PageHeader
-        title="축제개요"
-        description="축제의 취지와 주요 특징을 소개합니다."
-      />
+      <PageHeader title="축제개요" />
 
-      <div className="grid gap-6 sm:grid-cols-[minmax(0,220px)_1fr]">
-        <MediaPlaceholder label="축제 포스터" className="aspect-3/4 w-full" />
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,360px)_1fr]">
+        <ImageModal
+          src={POSTER_SRC}
+          alt="파주 K-컬처 페스티벌 포스터"
+          width={485}
+          height={843}
+        >
+          <button
+            type="button"
+            className="relative mx-auto aspect-485/843 w-full max-w-xs cursor-zoom-in overflow-hidden border border-border bg-muted p-3 sm:mx-0 sm:max-w-none"
+          >
+            <Image
+              src={POSTER_SRC}
+              alt="파주 K-컬처 페스티벌 포스터"
+              fill
+              priority
+              className="object-contain"
+              sizes="(min-width: 640px) 360px, 100vw"
+            />
+          </button>
+        </ImageModal>
 
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardContent className="flex flex-col gap-3">
+        <div className="flex h-full flex-col gap-8">
+          <Card variant="borderless">
+            <CardContent className="flex flex-col gap-4">
               <h2 className="text-lg font-semibold">축제 정보</h2>
-              <dl className="flex flex-col gap-2">
+              <dl className="flex flex-col gap-3">
                 {info.map((item) => (
                   <div key={item.label} className="flex gap-3 text-base">
                     <dt className="w-16 shrink-0 text-muted-foreground">
@@ -43,14 +62,20 @@ export default function OverviewPage() {
             </CardContent>
           </Card>
 
-          <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-semibold">축제 소개</h2>
-            <p className="text-muted-foreground">
-              지역 청소년과 시민이 함께 만드는 K-컬처 축제입니다. 무대 공연,
-              체험 프로그램, 다양한 부대 행사를 통해 하루 종일 즐길 거리로
-              가득한 축제 현장을 만나보세요.
-            </p>
-          </div>
+          <Card variant="borderless" className="flex-1">
+            <CardContent className="flex h-full flex-col justify-center gap-5">
+              <h2 className="text-lg font-semibold">축제 소개</h2>
+              <p className="leading-loose text-muted-foreground">
+                &apos;파주 K-컬처 페스티벌&apos;은 다양한 K-콘텐츠 촬영명소로
+                알려진 경기미래교육 파주캠퍼스(구 파주 영어마을)에서 진행하는
+                K-컬처 종합문화예술축제입니다.
+              </p>
+              <p className="leading-loose text-muted-foreground">
+                K-팝 가수의 공연, K-문화를 경험할 수 있는 다채로운 체험
+                프로그램과 먹거리를 한번에 즐길 수 있습니다.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </PageContainer>
