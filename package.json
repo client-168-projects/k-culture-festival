@@ -9,9 +9,7 @@
     "lint": "eslint",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "cf:deploy": "opennextjs-cloudflare build && wrangler deploy",
-    "cf:maintenance:on": "wrangler deploy --config wrangler.maintenance.jsonc",
-    "cf:maintenance:off": "npm run cf:deploy"
+    "cf:deploy": "opennextjs-cloudflare build && wrangler deploy"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",
