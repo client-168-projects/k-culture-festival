@@ -233,22 +233,22 @@ export function ExperienceSection() {
         </p>
 
         {/* 하단 스트립 */}
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-6">
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-2 sm:gap-6">
           <Image
             src="/assets/images/main/emoji-left-2.png"
             alt=""
             width={40}
             height={40}
-            className="h-16 w-auto"
+            className="h-9 w-auto sm:h-16"
           />
           <Image
             src="/assets/images/main/emoji-left.png"
             alt=""
             width={40}
             height={40}
-            className="h-16 w-auto"
+            className="h-9 w-auto sm:h-16"
           />
-          <p className="font-handwriting text-xl">
+          <p className="font-handwriting text-sm sm:text-xl">
             보고, 만들고, 즐기는{" "}
             <span className="text-brand-gold">K-Culture!</span>
           </p>
@@ -257,14 +257,14 @@ export function ExperienceSection() {
             alt=""
             width={40}
             height={40}
-            className="h-16 w-auto"
+            className="h-9 w-auto sm:h-16"
           />
           <Image
             src="/assets/images/main/emoji-right-2.png"
             alt=""
             width={40}
             height={40}
-            className="h-16 w-auto"
+            className="h-9 w-auto sm:h-16"
           />
         </div>
       </Container>

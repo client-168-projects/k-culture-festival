@@ -78,13 +78,21 @@ export function MainStageSection() {
                   flatCorner="bottom"
                   className="h-56 w-full sm:h-64"
                 >
-                  <Image
-                    src={SPECIAL_IMAGES[item.name]}
-                    alt={item.name}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-contain object-bottom"
-                  />
+                  <div
+                    className={cn(
+                      "absolute inset-0",
+                      item.name === "CLASS:y" &&
+                        "inset-x-[14%] top-[12%] bottom-0 sm:inset-0",
+                    )}
+                  >
+                    <Image
+                      src={SPECIAL_IMAGES[item.name]}
+                      alt={item.name}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-contain object-bottom"
+                    />
+                  </div>
                 </ArchPanel>
                 <div className="border border-brand-ink/14 bg-white px-5 pt-4.5 pb-5.5 shadow-sm">
                   <span className="text-xs font-bold tracking-[0.08em] text-brand-vermillion">
@@ -134,12 +142,12 @@ export function MainStageSection() {
           </div>
         </div>
 
-        <div className="relative mt-12 flex flex-wrap items-center justify-between gap-5 overflow-hidden rounded-2xl bg-brand-jade px-6 py-10 text-brand-paper sm:mt-14 sm:px-8 sm:py-12">
+        <div className="relative mt-12 flex flex-col flex-wrap items-center justify-between gap-5 overflow-hidden rounded-2xl bg-brand-jade px-6 py-10 text-center text-brand-paper sm:mt-14 sm:flex-row sm:px-8 sm:py-12 sm:text-left">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,white_1.4px,transparent_1.4px)] bg-size-[16px_16px] opacity-[0.12]"
           />
-          <div className="relative flex items-center gap-4">
+          <div className="relative flex flex-col items-center gap-4 sm:flex-row">
             <span className="hidden size-12 shrink-0 items-center justify-center rounded-full bg-brand-paper/15 sm:flex">
               <Music2 className="size-6" />
             </span>
