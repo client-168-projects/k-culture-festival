@@ -44,14 +44,14 @@ export function ExtraProgramSection() {
           />
         </div>
 
-        <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-8 sm:mt-14 sm:flex sm:flex-wrap sm:items-start sm:justify-between sm:gap-4">
+        <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-8 sm:mt-14 sm:flex sm:flex-wrap sm:items-start sm:justify-between sm:gap-6">
           {extraPrograms.map((item, index) => {
             const isEvent = item.schedule.type === "event";
             return (
               <div
                 key={item.title}
                 className={cn(
-                  "group relative bg-white p-2.5 pb-4 shadow-[0_10px_24px_-10px_rgba(33,27,18,0.28),0_2px_4px_rgba(0,0,0,0.06)] transition-transform duration-300 ease-out sm:max-w-48 sm:flex-1 sm:basis-36 hover:z-10 hover:-translate-y-1.5 hover:scale-105 hover:rotate-0",
+                  "group relative bg-white p-3 pb-5 shadow-[0_10px_24px_-10px_rgba(33,27,18,0.28),0_2px_4px_rgba(0,0,0,0.06)] transition-transform duration-300 ease-out sm:max-w-64 sm:flex-1 sm:basis-52 hover:z-10 hover:-translate-y-1.5 hover:scale-105 hover:rotate-0",
                   ROTATION[index % ROTATION.length],
                 )}
               >
@@ -69,7 +69,7 @@ export function ExtraProgramSection() {
                       src={item.imageUrl}
                       alt={item.title}
                       fill
-                      sizes="(min-width: 640px) 12rem, 50vw"
+                      sizes="(min-width: 640px) 16rem, 50vw"
                       className="object-cover"
                     />
                   ) : (
