@@ -152,15 +152,6 @@ export function ExperienceSection() {
                 {featured.title}
               </h3>
               <InfoRow capacity={featured.capacity} sessions={featured.sessions} />
-              <div className="mt-0.5 border-t border-dashed border-brand-paper/20 pt-2">
-                <Link
-                  href="/program/experience"
-                  className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-gold hover:underline"
-                >
-                  자세히 보기
-                  <ArrowRight className="size-4" />
-                </Link>
-              </div>
             </div>
           </div>
 
