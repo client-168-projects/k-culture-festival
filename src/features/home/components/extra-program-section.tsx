@@ -107,7 +107,7 @@ export function ExtraProgramSection() {
       </Container>
 
       <div className="mt-12 bg-brand-vermillion px-6 py-10 text-center text-brand-paper sm:mt-14 sm:py-12">
-        <h2 className="font-heading text-[clamp(1.625rem,4vw,2.125rem)] leading-snug">
+        <h2 className="font-heading text-lg leading-snug whitespace-nowrap sm:text-2xl lg:text-3xl">
           2026. 9. 12.(토), 파주에서 만나요
         </h2>
         <p className="mt-2 text-sm opacity-85">
