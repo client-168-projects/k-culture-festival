@@ -1,5 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Black_Han_Sans, Geist_Mono } from "next/font/google";
+
+import { SITE_THEME_COLOR } from "@/constants/site";
+import { rootMetadata } from "@/lib/metadata";
 
 import "./globals.css";
 
@@ -14,9 +17,10 @@ const blackHanSans = Black_Han_Sans({
   weight: "400",
 });
 
-export const metadata: Metadata = {
-  title: "K-Culture Festival",
-  description: "K-Culture Festival 공식 웹사이트",
+export const metadata: Metadata = rootMetadata;
+
+export const viewport: Viewport = {
+  themeColor: SITE_THEME_COLOR,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

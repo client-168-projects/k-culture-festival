@@ -7,7 +7,7 @@ import { SectionNav } from "@/features/home/components/section-nav";
 export default function Home() {
   return (
     <main>
-      <div className="flex min-h-[calc(100vh-5rem-3.375rem)] flex-col sm:min-h-[calc(100vh-6rem-3.375rem)]">
+      <div className="flex min-h-[calc(100vh-4rem-3.375rem)] flex-col sm:min-h-[calc(100vh-6rem-3.375rem)]">
         <HeroSection />
       </div>
       <SectionNav />

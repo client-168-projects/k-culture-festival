@@ -4,11 +4,13 @@ import { ExperienceProgramList } from "@/components/experience-program-list";
 import { MediaPlaceholder } from "@/components/media-placeholder";
 import { PageContainer, PageHeader } from "@/components/page-header";
 import { experiencePrograms } from "@/data/experience-programs";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "체험 프로그램",
-  description: "직접 참여할 수 있는 체험 프로그램을 안내합니다.",
-};
+  description: "파주 K-컬처 페스티벌에서 직접 참여할 수 있는 체험 프로그램을 안내합니다.",
+  path: "/program/experience",
+});
 
 export default function ExperiencePage() {
   return (

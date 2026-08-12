@@ -4,11 +4,13 @@ import Image from "next/image";
 
 import { PageContainer, PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "셔틀버스",
-  description: "셔틀버스 운행 시간과 탑승 장소를 안내합니다.",
-};
+  description: "파주 K-컬처 페스티벌 셔틀버스 운행 시간과 탑승 장소를 안내합니다.",
+  path: "/venue/shuttle",
+});
 
 const SHUTTLE_IMAGE_URL = "/assets/images/shuttle-info.png";
 

@@ -110,7 +110,7 @@ export function ExtraProgramSection() {
         <h2 className="font-heading text-lg leading-snug whitespace-nowrap sm:text-2xl lg:text-3xl">
           2026. 9. 12.(토), 파주에서 만나요
         </h2>
-        <p className="mt-2 text-sm opacity-85">
+        <p className="mt-2 text-xs opacity-85 sm:text-sm">
           경기미래교육 파주캠퍼스 · 무료 체험 프로그램 사전 신청 가능
         </p>
       </div>

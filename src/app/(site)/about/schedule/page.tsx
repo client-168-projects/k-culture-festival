@@ -4,11 +4,13 @@ import Image from "next/image";
 
 import { PageContainer, PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "전체 일정표",
-  description: "축제 전체 일정을 한눈에 확인하세요.",
-};
+  description: "파주 K-컬처 페스티벌의 전체 일정을 한눈에 확인하세요.",
+  path: "/about/schedule",
+});
 
 const SCHEDULE_IMAGE_URL = "/assets/images/main/festival-schedule.png";
 

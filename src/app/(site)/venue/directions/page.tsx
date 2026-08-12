@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { createPageMetadata } from "@/lib/metadata";
 
 const VENUE_NAME = "경기미래교육 파주캠퍼스";
 const VENUE_LAT = 37.784985;
@@ -19,10 +20,11 @@ const MAP_LINK_HREF =
 const NAVER_MAP_HREF = `https://map.naver.com/p/search/${encodeURIComponent(VENUE_NAME)}`;
 const KAKAO_MAP_HREF = `https://map.kakao.com/link/search/${encodeURIComponent(VENUE_NAME)}`;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "오시는 길",
-  description: "행사장까지 오시는 다양한 교통 방법을 안내합니다.",
-};
+  description: "파주 K-컬처 페스티벌 행사장까지 오시는 대중교통, 주차, 셔틀버스 등 다양한 교통 방법을 안내합니다.",
+  path: "/venue/directions",
+});
 
 type Route = { no: string; route: string };
 

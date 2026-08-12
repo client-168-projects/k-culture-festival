@@ -4,13 +4,16 @@ import Image from "next/image";
 import { ImageModal } from "@/components/image-modal";
 import { PageContainer, PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
+import { createPageMetadata } from "@/lib/metadata";
 
 const POSTER_SRC = "/assets/poster/파주-k-컬처-페스티벌-포스터jpg.jpg";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "축제개요",
-  description: "축제의 취지와 주요 특징을 소개합니다.",
-};
+  description:
+    "파주 K-컬처 페스티벌의 취지와 주요 특징을 소개합니다. 일시, 장소 등 축제 정보를 확인하세요.",
+  path: "/about/overview",
+});
 
 const info = [
   { label: "명칭", value: "K-컬처 페스티벌" },

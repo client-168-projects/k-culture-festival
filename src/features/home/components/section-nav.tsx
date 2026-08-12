@@ -43,7 +43,7 @@ export function SectionNav() {
       aria-label="섹션 바로가기"
       className={cn(
         "sticky z-40 overflow-hidden bg-brand-indigo py-4 transition-[top] duration-300",
-        navHidden ? "top-0" : "top-20 sm:top-24",
+        navHidden ? "top-0" : "top-16 sm:top-24",
       )}
     >
       <Container className="flex flex-wrap justify-center gap-x-9 gap-y-1.5">
