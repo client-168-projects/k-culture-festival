@@ -1,4 +1,4 @@
-import { ArrowRight, Music2 } from "lucide-react";
+import { Music2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -27,6 +27,11 @@ const specialLineup = stagePrograms
 
 const restLineup = stagePrograms.filter(
   (item) => item.category !== "특별공연",
+);
+
+const totalArtistCount = stagePrograms.reduce(
+  (sum, item) => sum + (item.memberCount ?? 1),
+  0,
 );
 
 const LINEUP_ROWS: { name: string; tone?: ArchTone }[][] = [
@@ -96,11 +101,11 @@ export function MainStageSection() {
             ))}
           </div>
 
-          <div className="flex h-full flex-col justify-between px-2 py-4 sm:px-4">
+          <div className="flex h-full flex-col justify-center px-2 py-4 sm:px-4">
             <div className="flex items-center justify-center gap-4 text-brand-vermillion">
               <span className="h-px flex-1 bg-brand-vermillion/30" />
               <span className="text-lg font-bold tracking-[0.2em]">
-                {stagePrograms.length} ARTISTS
+                {totalArtistCount} ARTISTS
               </span>
               <span className="h-px flex-1 bg-brand-vermillion/30" />
             </div>
@@ -126,17 +131,6 @@ export function MainStageSection() {
                 </div>
               ))}
             </div>
-
-            <Button
-              asChild
-              variant="outline"
-              className="mt-8 h-auto w-full gap-2 rounded-full border-2 border-brand-vermillion bg-transparent px-6 py-4 text-lg font-bold text-brand-vermillion hover:bg-brand-vermillion/10 hover:text-brand-vermillion"
-            >
-              <Link href="/program/stage">
-                전체 라인업 보기
-                <ArrowRight className="size-5" />
-              </Link>
-            </Button>
           </div>
         </div>
 

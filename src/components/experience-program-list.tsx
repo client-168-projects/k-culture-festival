@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDownAZ, ArrowUpAZ, Search } from "lucide-react";
+import { ArrowDownAZ, ArrowRight, ArrowUpAZ, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { EXPERIENCE_CATEGORY_STYLE } from "@/constants/experience-category";
 import type { ExperienceProgram } from "@/data/experience-programs";
 import { cn, toAbsoluteUrl } from "@/lib/utils";
 
@@ -41,7 +42,7 @@ export function ExperienceProgramList({
   programs: ExperienceProgram[];
 }) {
   const [search, setSearch] = useState("");
-  const [alwaysOnlyOn, setAlwaysOnlyOn] = useState(false);
+  const [applicationOnly, setApplicationOnly] = useState(false);
   const [sortOrder, setSortOrder] = useState<SortOrder>("none");
 
   const visiblePrograms = useMemo(() => {
@@ -52,8 +53,8 @@ export function ExperienceProgramList({
       result = result.filter((p) => p.title.toLowerCase().includes(keyword));
     }
 
-    if (alwaysOnlyOn) {
-      result = result.filter((p) => p.sessions.startsWith("상시"));
+    if (applicationOnly) {
+      result = result.filter((p) => !!p.applicationUrl);
     }
 
     if (sortOrder !== "none") {
@@ -68,7 +69,7 @@ export function ExperienceProgramList({
     }
 
     return result;
-  }, [programs, search, alwaysOnlyOn, sortOrder]);
+  }, [programs, search, applicationOnly, sortOrder]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -91,11 +92,11 @@ export function ExperienceProgramList({
         <div className="flex items-center gap-2">
           <Button
             type="button"
-            variant={alwaysOnlyOn ? "default" : "outline"}
+            variant={applicationOnly ? "default" : "outline"}
             size="sm"
-            onClick={() => setAlwaysOnlyOn((prev) => !prev)}
+            onClick={() => setApplicationOnly((prev) => !prev)}
           >
-            상시 운영만 보기
+            사전신청 프로그램만 보기
           </Button>
 
           <DropdownMenu>
@@ -134,25 +135,56 @@ export function ExperienceProgramList({
             <Card
               key={item.title}
               variant="accent"
-              className="gap-2 py-5"
+              className="flex h-full flex-col gap-2 py-5"
             >
-              <CardHeader className="px-4 sm:px-5">
-                <CardTitle className="line-clamp-2 font-heading text-lg font-bold text-brand-cobalt">
+              <CardHeader className="gap-2 px-4 sm:px-5">
+                <div className="flex items-start justify-between gap-2">
+                  {item.category ? (
+                    <span
+                      className={cn(
+                        "inline-block w-fit rounded-full px-2.5 py-1 text-xs font-bold",
+                        EXPERIENCE_CATEGORY_STYLE[item.category] ??
+                          "bg-brand-paper text-brand-ink",
+                      )}
+                    >
+                      {item.category}
+                    </span>
+                  ) : null}
+                  {item.note ? (
+                    <span className="text-right text-xs text-muted-foreground/80">
+                      ※ {item.note}
+                    </span>
+                  ) : null}
+                </div>
+                <CardTitle className="line-clamp-2 min-h-14 font-heading text-lg leading-snug font-bold text-brand-cobalt">
                   {item.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex items-end justify-between gap-3 px-4 sm:px-5">
-                <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-                  <span>참여 인원 {item.capacity}</span>
-                  <span>진행 회차 {item.sessions}</span>
+              <CardContent className="flex flex-1 flex-col justify-end px-4 sm:px-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+                    <span>참여 인원 {item.capacity}</span>
+                    <span>진행 회차 {item.sessions}</span>
+                  </div>
+                  <div className="flex min-h-9 shrink-0 items-center">
+                    {item.applicationUrl ? (
+                      <Button
+                        asChild
+                        size="sm"
+                        className="shrink-0 rounded-sm bg-brand-cobalt hover:bg-brand-cobalt-deep"
+                      >
+                        <a
+                          href={toAbsoluteUrl(item.applicationUrl)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          사전신청 준비중
+                          <ArrowRight className="size-4" />
+                        </a>
+                      </Button>
+                    ) : null}
+                  </div>
                 </div>
-                {item.applicationUrl ? (
-                  <Button asChild size="sm" className="h-12 shrink-0 rounded-sm bg-brand-cobalt hover:bg-brand-cobalt-deep">
-                    <a href={toAbsoluteUrl(item.applicationUrl)} target="_blank" rel="noreferrer">
-                      사전신청하러 가기
-                    </a>
-                  </Button>
-                ) : null}
               </CardContent>
             </Card>
           ))}

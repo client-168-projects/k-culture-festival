@@ -8,6 +8,8 @@ export type StageProgram = {
   imageHeight: number;
   /** 카드에 추가로 노출되는 한 줄 안내 (선택) */
   note?: string;
+  /** 카드 하나에 여러 명이 묶여 있을 때(예: "릴재우 & 오투") 실제 인원 수. 기본값 1 */
+  memberCount?: number;
 };
 
 const IMAGE_BASE = "/assets/images/features";
@@ -34,16 +36,8 @@ export const stagePrograms: StageProgram[] = [
     genre: "K-매직",
     name: "김민형 마술사",
     image: `${IMAGE_BASE}/김민형.jpg`,
-    imageWidth: 768,
+    imageWidth: 714,
     imageHeight: 1024,
-  },
-  {
-    category: "청소년 무대",
-    genre: "K-댄스",
-    name: "뉴벤트",
-    image: `${IMAGE_BASE}/뉴벤트.jpg`,
-    imageWidth: 1153,
-    imageHeight: 767,
   },
   {
     category: "공연",
@@ -55,6 +49,14 @@ export const stagePrograms: StageProgram[] = [
   },
   {
     category: "공연",
+    genre: "신인 아이돌",
+    name: "비보이즈",
+    image: `${IMAGE_BASE}/비보이즈.jpg`,
+    imageWidth: 984,
+    imageHeight: 810,
+  },
+  {
+    category: "공연",
     genre: "싱어송라이터",
     name: "주황규",
     image: `${IMAGE_BASE}/주황규.jpg`,
@@ -62,33 +64,26 @@ export const stagePrograms: StageProgram[] = [
     imageHeight: 1512,
   },
   {
-    category: "공연",
-    genre: "신인 아이돌",
-    name: "비보이즈",
-    image: `${IMAGE_BASE}/비보이즈.jpg`,
-    imageWidth: 1215,
-    imageHeight: 810,
+    category: "파주시청소년수련원",
+    genre: "K-댄스",
+    name: "뉴벤트",
+    image: `${IMAGE_BASE}/뉴벤트.jpg`,
+    imageWidth: 1153,
+    imageHeight: 767,
   },
   {
-    category: "공연",
+    category: "파주시청소년수련원",
     genre: "가수",
-    name: "릴재우",
-    image: `${IMAGE_BASE}/릴재우.png`,
-    imageWidth: 945,
-    imageHeight: 945,
-  },
-  {
-    category: "공연",
-    genre: "가수",
-    name: "오투",
-    image: `${IMAGE_BASE}/오투.jpg`,
-    imageWidth: 1080,
-    imageHeight: 1616,
+    name: "릴재우 & 오투",
+    image: `${IMAGE_BASE}/릴재우-오투.png`,
+    imageWidth: 1600,
+    imageHeight: 1000,
+    memberCount: 2,
   },
   {
     category: "레크레이션",
     genre: "MC",
-    name: "조권",
+    name: "MC조권",
     image: `${IMAGE_BASE}/mc조권.jpg`,
     imageWidth: 1600,
     imageHeight: 1600,

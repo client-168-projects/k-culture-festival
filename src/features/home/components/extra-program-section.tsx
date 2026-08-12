@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { MediaPlaceholder } from "@/components/media-placeholder";
 import { extraPrograms } from "@/data/extra-programs";
 import { cn } from "@/lib/utils";
@@ -62,10 +64,20 @@ export function ExtraProgramSection() {
                 />
 
                 <div className="relative aspect-square w-full overflow-hidden">
-                  <MediaPlaceholder
-                    label={item.title}
-                    className="size-full rounded-none"
-                  />
+                  {item.imageUrl ? (
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.title}
+                      fill
+                      sizes="(min-width: 640px) 12rem, 50vw"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <MediaPlaceholder
+                      label={item.title}
+                      className="size-full rounded-none"
+                    />
+                  )}
                 </div>
 
                 <div className="pt-3 text-left">
@@ -83,7 +95,7 @@ export function ExtraProgramSection() {
                     {shortTag(item.schedule)}
                   </span>
                   {item.note ? (
-                    <p className="mt-2 text-[10.8px] leading-relaxed whitespace-pre-line text-brand-ink-soft/70">
+                    <p className="mt-2 text-xs leading-relaxed whitespace-pre-line text-brand-ink-soft/70">
                       {item.note}
                     </p>
                   ) : null}

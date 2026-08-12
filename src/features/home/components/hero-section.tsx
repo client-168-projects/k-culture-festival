@@ -1,5 +1,6 @@
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
@@ -46,17 +47,20 @@ export function HeroSection() {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
-              <Button className="h-auto gap-2.5 rounded-full bg-brand-vermillion px-7 py-4 text-lg font-bold text-brand-paper shadow-md shadow-brand-vermillion/25 transition-all hover:-translate-y-0.5 hover:bg-brand-vermillion-deep hover:shadow-lg">
+              <Button className="h-auto gap-2.5 rounded-full bg-brand-vermillion px-7 py-4 text-lg font-bold text-brand-paper shadow-md shadow-brand-vermillion/25">
                 <MapPin className="size-5" />
                 경기미래교육 파주캠퍼스
               </Button>
 
               <Button
+                asChild
                 variant="outline"
                 className="h-auto gap-2.5 rounded-full border-2 border-brand-vermillion bg-transparent px-7 py-4 text-lg font-bold text-brand-vermillion transition-all hover:-translate-y-0.5 hover:bg-brand-vermillion/10 hover:text-brand-vermillion"
               >
-                오시는 길
-                <ArrowRight className="size-5" />
+                <Link href="/venue/directions">
+                  오시는 길
+                  <ArrowRight className="size-5" />
+                </Link>
               </Button>
             </div>
           </div>

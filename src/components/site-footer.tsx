@@ -16,41 +16,33 @@ export function SiteFooter() {
             <span className="text-lg font-bold">파주 K-컬처 페스티벌</span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-muted-foreground">
-                주최
-              </span>
-              <span className="flex items-center rounded-lg border border-border bg-white px-3 py-2">
-                <Image
-                  src="/assets/logo/gyungi-logo.png"
-                  alt="경기도 로고"
-                  width={172}
-                  height={106}
-                  className="h-8 w-auto sm:h-9"
-                />
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-muted-foreground">
-                주관
-              </span>
-              <a
-                href="https://www.gill.or.kr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center rounded-lg border border-border bg-white px-3 py-2 transition-opacity hover:opacity-80"
-              >
-                <Image
-                  src="/assets/logo/gyungi-institute-lifelong-learning-logo.png"
-                  alt="경기도평생교육진흥원 로고"
-                  width={288}
-                  height={80}
-                  className="h-8 w-auto sm:h-9"
-                />
-              </a>
-            </div>
+          <div className="flex flex-nowrap items-center justify-center gap-3 lg:justify-start">
+            <span className="text-xs font-medium text-muted-foreground">
+              주최·주관
+            </span>
+            <span className="flex items-center rounded-lg border border-border bg-white px-3 py-2">
+              <Image
+                src="/assets/logo/gyungi-logo.png"
+                alt="경기도 로고"
+                width={172}
+                height={106}
+                className="h-8 w-auto sm:h-9"
+              />
+            </span>
+            <a
+              href="https://www.gill.or.kr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center rounded-lg border border-border bg-white px-3 py-2 transition-opacity hover:opacity-80"
+            >
+              <Image
+                src="/assets/logo/gyungi-institute-lifelong-learning-logo.png"
+                alt="경기도평생교육진흥원 로고"
+                width={288}
+                height={80}
+                className="h-8 w-auto sm:h-9"
+              />
+            </a>
           </div>
         </div>
 

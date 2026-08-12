@@ -2,6 +2,7 @@ import { ArrowRight, Clock, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { EXPERIENCE_CATEGORY_STYLE } from "@/constants/experience-category";
 import { experiencePrograms } from "@/data/experience-programs";
 import { cn } from "@/lib/utils";
 
@@ -10,7 +11,7 @@ import { FullscreenSection } from "./fullscreen-section";
 import { SectionHead } from "./section-head";
 
 const HIGHLIGHT_ORDER = [
-  "전통 부채 꾸미기",
+  "컬러 비즈 액막이 명태 만들기",
   "키캡키링 만들기",
   "나만의 LED-K응원봉 만들기",
   "자개 스티커 손거울 만들기",
@@ -29,20 +30,13 @@ const REST_POSITION = [
   "lg:col-start-3 lg:row-start-2",
 ];
 
-const CATEGORY_STYLE: Record<string, string> = {
-  "공예·만들기": "bg-brand-purple text-brand-paper",
-  전통문화: "bg-brand-gold text-brand-ink",
-  "음식·간식": "bg-brand-vermillion text-brand-paper",
-  "K-POP": "bg-brand-indigo text-brand-paper",
-};
-
 function CategoryBadge({ category }: { category?: string }) {
   if (!category) return null;
   return (
     <span
       className={cn(
         "absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-bold",
-        CATEGORY_STYLE[category] ?? "bg-brand-paper text-brand-ink",
+        EXPERIENCE_CATEGORY_STYLE[category] ?? "bg-brand-paper text-brand-ink",
       )}
     >
       {category}
@@ -54,6 +48,14 @@ function NumberBadge({ n }: { n: number }) {
   return (
     <span className="absolute bottom-3 left-3 flex size-7 items-center justify-center rounded-md bg-brand-ink/70 text-xs font-bold text-brand-paper backdrop-blur-sm">
       {String(n).padStart(2, "0")}
+    </span>
+  );
+}
+
+function AiImageNotice() {
+  return (
+    <span className="absolute right-2 bottom-2 rounded-sm bg-brand-ink/60 px-1.5 py-0.5 text-[10px] text-brand-paper/90 backdrop-blur-sm">
+      예시이미지
     </span>
   );
 }
@@ -143,6 +145,7 @@ export function ExperienceSection() {
               />
               <CategoryBadge category={featured.category} />
               <NumberBadge n={1} />
+              <AiImageNotice />
             </div>
             <div className="flex flex-col gap-2 px-5 py-4">
               <h3 className="font-display text-2xl leading-snug">
@@ -180,6 +183,7 @@ export function ExperienceSection() {
                 />
                 <CategoryBadge category={item.category} />
                 <NumberBadge n={index + 2} />
+                <AiImageNotice />
               </div>
               <div className="px-4 py-2.5">
                 <h3 className="font-display text-lg leading-snug">
@@ -232,6 +236,10 @@ export function ExperienceSection() {
             </div>
           </div>
         </div>
+
+        <p className="mt-3 text-center text-xs text-brand-indigo-mist/70">
+          이해를 돕기 위한 AI 생성 예시 이미지이며, 실제와 다를 수 있습니다.
+        </p>
 
         {/* 하단 스트립 */}
         <div className="mt-5 flex flex-wrap items-center justify-center gap-6">

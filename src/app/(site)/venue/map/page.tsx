@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
+import { Construction } from "lucide-react";
 
-import { MediaPlaceholder } from "@/components/media-placeholder";
 import { PageContainer, PageHeader } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "행사장 지도",
@@ -14,11 +13,12 @@ export default function MapPage() {
     <PageContainer className="max-w-4xl">
       <PageHeader title="행사장 지도" />
 
-      <MediaPlaceholder label="행사장 지도" className="aspect-video w-full" />
-
-      <Button variant="outline" className="self-start">
-        행사장 지도 다운로드
-      </Button>
+      <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-card py-20 text-center">
+        <Construction className="size-8 text-muted-foreground" />
+        <p className="text-lg font-semibold text-foreground">
+          준비중입니다
+        </p>
+      </div>
     </PageContainer>
   );
 }

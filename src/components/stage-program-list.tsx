@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const CATEGORY_STYLE: Record<string, string> = {
   특별공연: "bg-brand-vermillion text-brand-paper",
-  "청소년 무대": "bg-brand-purple text-brand-paper",
+  파주시청소년수련원: "bg-brand-indigo text-brand-paper",
   공연: "bg-brand-indigo text-brand-paper",
   레크레이션: "bg-brand-gold text-brand-ink",
 };
@@ -22,8 +22,17 @@ export function StageProgramList({
       {programs.map((item, index) => (
         <div
           key={`${item.name}-${index}`}
-          className="group flex flex-col border border-border bg-card transition-all duration-200 ease-out hover:-translate-y-0.75 hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.12)]"
+          className="group relative flex flex-col border border-border bg-card transition-all duration-200 ease-out hover:-translate-y-0.75 hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.12)]"
         >
+          <span
+            className={cn(
+              "absolute -top-3 left-1/2 z-10 -translate-x-1/2 rounded-full px-2.5 py-1 text-xs font-bold shadow-sm",
+              CATEGORY_STYLE[item.category] ?? "bg-foreground text-background",
+            )}
+          >
+            {item.category}
+          </span>
+
           <ImageModal
             src={item.image}
             alt={item.name}
@@ -32,24 +41,15 @@ export function StageProgramList({
           >
             <button
               type="button"
-              className="relative aspect-16/10 w-full cursor-zoom-in overflow-hidden bg-card"
+              className="relative aspect-4/5 w-full cursor-zoom-in overflow-hidden bg-card"
             >
               <Image
                 src={item.image}
                 alt={item.name}
                 fill
                 sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                className="object-contain transition-transform duration-200 ease-out group-hover:scale-[1.03]"
+                className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
               />
-              <span
-                className={cn(
-                  "absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-bold",
-                  CATEGORY_STYLE[item.category] ??
-                    "bg-foreground text-background",
-                )}
-              >
-                {item.category}
-              </span>
             </button>
           </ImageModal>
 
