@@ -13,7 +13,7 @@ const items = [
   { time: "10:00", title: "개회식" },
   { time: "11:00", title: "K-댄스 공연" },
   { time: "13:00", title: "마술공연 <K-MAGIC>" },
-  { time: "15:00", title: "특별공연 <K-POP Classy>" },
+  { time: "15:00", title: "특별공연 <K-POP Class:y>" },
   { time: "17:00", title: "폐회식 및 경품 추첨" },
 ];
 

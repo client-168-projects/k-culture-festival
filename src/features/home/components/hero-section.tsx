@@ -10,8 +10,8 @@ export function HeroSection() {
   return (
     <header className="flex flex-1 flex-col bg-brand-paper bg-[radial-gradient(circle_at_1px_1px,rgba(33,27,18,0.07)_1px,transparent_0)] bg-size-[22px_22px] py-10 text-brand-ink sm:py-12">
       <Container className="flex max-w-300 flex-1 flex-col px-0 sm:px-0">
-        <div className="-mr-5 mb-6 flex items-center justify-end gap-2.5 sm:-mr-8 sm:mb-8">
-          <span className="text-sm font-bold text-brand-ink-soft">
+        <div className="mb-6 flex items-center justify-end gap-2.5 px-5 sm:mb-8 sm:px-8">
+          <span className="text-xs font-bold text-brand-ink-soft sm:text-sm">
             <span className="font-medium text-brand-ink-soft/70">주최</span>{" "}
             경기도
             <span className="mx-2 text-brand-ink-soft/40">·</span>
@@ -21,14 +21,14 @@ export function HeroSection() {
         </div>
 
         <div className="grid flex-1 grid-cols-1 items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-24 xl:gap-32">
-          <div className="flex flex-col items-start text-left">
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <h1 className="text-shadow-poster mb-7 font-heading text-[clamp(3rem,6.5vw,7rem)] leading-[0.98] text-brand-indigo">
               <span className="block">파주</span>
               <span className="block">K-컬처</span>
               <span className="block">페스티벌</span>
             </h1>
 
-            <div className="relative mb-4 ml-12 h-10 w-64 opacity-40 sm:h-12 sm:w-80">
+            <div className="relative mb-4 mx-auto h-10 w-64 opacity-40 sm:h-12 sm:w-80 lg:mx-0 lg:ml-12">
               <Image
                 src="/assets/images/divider-image.png"
                 alt=""
@@ -45,7 +45,7 @@ export function HeroSection() {
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               <Button className="h-auto gap-2.5 rounded-full bg-brand-vermillion px-7 py-4 text-lg font-bold text-brand-paper shadow-md shadow-brand-vermillion/25 transition-all hover:-translate-y-0.5 hover:bg-brand-vermillion-deep hover:shadow-lg">
                 <MapPin className="size-5" />
                 경기미래교육 파주캠퍼스

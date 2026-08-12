@@ -1,36 +1,47 @@
-import { MapPin } from "lucide-react";
+import { ArrowRight, Music2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-import { ArchPanel } from "@/components/arch-panel";
+import { ArchPanel, type ArchTone } from "@/components/arch-panel";
 import { Button } from "@/components/ui/button";
+import { stagePrograms } from "@/data/stage-programs";
 import { cn } from "@/lib/utils";
 
 import { Container } from "./container";
 import { FullscreenSection } from "./fullscreen-section";
 import { SectionHead } from "./section-head";
 
-const LINEUP = [
-  {
-    tone: "indigo",
-    tag: "HEADLINER",
-    name: "김태우",
-    role: "메인 무대 공연",
-    feat: true,
-  },
-  {
-    tone: "vermillion",
-    tag: "HEADLINER",
-    name: "CLASSy",
-    role: "메인 무대 공연",
-    feat: true,
-  },
-  {
-    tone: "jade",
-    tag: "GUEST",
-    name: "마술사 김민형",
-    role: "Eris · 비보이즈 · 주황규",
-    feat: false,
-  },
-] as const;
+const SPECIAL_TONES: ArchTone[] = ["indigo", "vermillion", "jade"];
+
+/** 메인 무대 카드용 인물 누끼 이미지 — 아치 패널 하단 기준으로 채워진다 */
+const SPECIAL_IMAGES: Record<string, string> = {
+  김태우: "/assets/images/main/김태우-메인.png",
+  "CLASS:y": "/assets/images/main/클라씨-메인.png",
+  "김민형 마술사": "/assets/images/main/김민형-메인.png",
+};
+
+const specialLineup = stagePrograms
+  .filter((item) => item.category === "특별공연")
+  .slice(0, 3)
+  .map((item, index) => ({ ...item, tone: SPECIAL_TONES[index] }));
+
+const restLineup = stagePrograms.filter(
+  (item) => item.category !== "특별공연",
+);
+
+const LINEUP_ROWS: { name: string; tone?: ArchTone }[][] = [
+  specialLineup.map(({ name, tone }) => ({ name, tone })),
+  restLineup.slice(0, 4).map(({ name }) => ({ name })),
+  restLineup.slice(4).map(({ name }) => ({ name })),
+];
+
+const TONE_TEXT: Record<ArchTone, string> = {
+  indigo: "text-brand-indigo",
+  "indigo-deep": "text-brand-indigo-deep",
+  vermillion: "text-brand-vermillion",
+  jade: "text-brand-jade",
+  purple: "text-brand-purple",
+};
 
 export function MainStageSection() {
   return (
@@ -45,60 +56,112 @@ export function MainStageSection() {
           description="축제의 중심이 될 무대, 다채로운 라인업을 만나보세요."
         />
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {LINEUP.map((item) => (
-            <div
-              key={item.name}
-              className="group overflow-hidden rounded-none border border-brand-ink/14 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
-            >
-              <ArchPanel
-                tone={item.tone}
-                className={cn(
-                  "w-full transition-transform duration-200 group-hover:scale-[1.03]",
-                  item.feat ? "h-40 sm:h-44" : "h-28 sm:h-32",
-                )}
-              />
-              <div className="px-5 pt-4.5 pb-5.5">
-                <span className="text-xs font-bold tracking-[0.08em] text-brand-vermillion">
-                  {item.tag}
-                </span>
-                <div
-                  className={cn(
-                    "mt-1.5 font-display",
-                    item.feat ? "text-[28px]" : "text-2xl",
-                  )}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr] lg:gap-8">
+          <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {specialLineup.map((item) => (
+              <div
+                key={item.name}
+                className="group relative overflow-hidden transition-all duration-200 hover:z-10 hover:-translate-y-1 hover:scale-[1.03]"
+              >
+                {/* 유리 반사 효과 — 호버 시 대각선으로 슥 지나감 */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 z-20 translate-x-[-150%] skew-x-[-20deg] bg-linear-to-r from-transparent via-white/50 to-transparent group-hover:translate-x-[150%] group-hover:transition-transform group-hover:duration-700 group-hover:ease-out"
+                />
+                <ArchPanel
+                  tone={item.tone}
+                  flatCorner="bottom"
+                  className="h-56 w-full sm:h-64"
                 >
-                  {item.name}
-                </div>
-                <div className="mt-1 text-sm text-brand-ink-soft">
-                  {item.role}
+                  <Image
+                    src={SPECIAL_IMAGES[item.name]}
+                    alt={item.name}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-contain object-bottom"
+                  />
+                </ArchPanel>
+                <div className="border border-brand-ink/14 bg-white px-5 pt-4.5 pb-5.5 shadow-sm">
+                  <span className="text-xs font-bold tracking-[0.08em] text-brand-vermillion">
+                    {item.category}
+                  </span>
+                  <div className="mt-1.5 font-display text-[28px]">
+                    {item.name}
+                  </div>
+                  <div className="mt-1 text-sm text-brand-ink-soft">
+                    {item.genre}
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+
+          <div className="flex h-full flex-col justify-between px-2 py-4 sm:px-4">
+            <div className="flex items-center justify-center gap-4 text-brand-vermillion">
+              <span className="h-px flex-1 bg-brand-vermillion/30" />
+              <span className="text-lg font-bold tracking-[0.2em]">
+                {stagePrograms.length} ARTISTS
+              </span>
+              <span className="h-px flex-1 bg-brand-vermillion/30" />
             </div>
-          ))}
+
+            <div className="mt-8 flex flex-col divide-y divide-dashed divide-brand-ink/15">
+              {LINEUP_ROWS.map((row, index) => (
+                <div
+                  key={index}
+                  className="flex flex-wrap justify-center gap-x-7 gap-y-4 py-6 first:pt-0 last:pb-0"
+                >
+                  {row.map((artist) => (
+                    <span
+                      key={artist.name}
+                      className={cn(
+                        "font-display",
+                        index === 0 ? "text-2xl sm:text-4xl" : "text-lg sm:text-2xl",
+                        artist.tone ? TONE_TEXT[artist.tone] : "text-brand-ink",
+                      )}
+                    >
+                      {artist.name}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <Button
+              asChild
+              variant="outline"
+              className="mt-8 h-auto w-full gap-2 rounded-full border-2 border-brand-vermillion bg-transparent px-6 py-4 text-lg font-bold text-brand-vermillion hover:bg-brand-vermillion/10 hover:text-brand-vermillion"
+            >
+              <Link href="/program/stage">
+                전체 라인업 보기
+                <ArrowRight className="size-5" />
+              </Link>
+            </Button>
+          </div>
         </div>
 
-        <div className="relative mt-6 flex flex-wrap items-center justify-between gap-5 overflow-hidden rounded-2xl bg-brand-jade px-6 py-6 text-brand-paper sm:px-8 sm:py-7">
+        <div className="relative mt-12 flex flex-wrap items-center justify-between gap-5 overflow-hidden rounded-2xl bg-brand-jade px-6 py-10 text-brand-paper sm:mt-14 sm:px-8 sm:py-12">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,white_1.4px,transparent_1.4px)] bg-size-[16px_16px] opacity-[0.12]"
           />
           <div className="relative flex items-center gap-4">
             <span className="hidden size-12 shrink-0 items-center justify-center rounded-full bg-brand-paper/15 sm:flex">
-              <MapPin className="size-6" />
+              <Music2 className="size-6" />
             </span>
             <div>
-              <div className="font-display text-2xl">K-전통놀이</div>
+              <div className="font-display text-2xl">무대 프로그램</div>
               <div className="mt-1 text-sm opacity-85">
-                전통 놀이 체험 부스에서 즐기는 우리 문화
+                9월 12일 하루 종일 이어지는 공연 라인업을 확인해보세요
               </div>
             </div>
           </div>
           <Button
+            asChild
             variant="outline"
-            className="relative h-auto rounded-[10px] border-[1.5px] border-brand-paper bg-transparent px-6 py-3.5 text-base font-bold text-brand-paper hover:bg-brand-paper/10"
+            className="relative h-auto rounded-[10px] border-[1.5px] border-brand-paper bg-transparent px-6 py-3.5 text-base font-bold text-brand-paper hover:bg-brand-paper/10 hover:text-brand-paper"
           >
-            부스 위치 보기
+            <Link href="/program/stage">무대 프로그램 보기</Link>
           </Button>
         </div>
       </Container>

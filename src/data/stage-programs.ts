@@ -24,7 +24,7 @@ export const stagePrograms: StageProgram[] = [
   {
     category: "특별공연",
     genre: "K-POP",
-    name: "CLASSy",
+    name: "CLASS:y",
     image: `${IMAGE_BASE}/클라씨.jpg`,
     imageWidth: 1600,
     imageHeight: 900,

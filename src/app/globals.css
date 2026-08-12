@@ -16,6 +16,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "KyoboHandwriting2025lyb";
+  src: url("/fonts/KyoboHandwriting2025lyb.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   --radius: 0.625rem;
 
@@ -120,6 +127,7 @@
     "Pretendard Variable", Pretendard, ui-sans-serif, system-ui,
     -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono);
+  --font-handwriting: "KyoboHandwriting2025lyb", cursive;
 
   /* Accessible type scale: festival site audience includes older visitors, so every step is bumped above the Tailwind default while staying within a normal reading range. */
   --text-xs: 0.8125rem;

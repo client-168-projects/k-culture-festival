@@ -10,7 +10,7 @@ import { Container } from "./container";
 const SECTIONS = [
   { id: "main-stage", label: "메인 무대" },
   { id: "experience", label: "체험 프로그램" },
-  { id: "kfood", label: "K-푸드" },
+  { id: "extra-program", label: "부대 프로그램" },
 ] as const;
 
 /** 파란 정보 바를 재활용한 섹션 이동 네브바. 클릭 시 부드럽게 스크롤하고, 현재 보이는 섹션의 라벨을 강조한다. */

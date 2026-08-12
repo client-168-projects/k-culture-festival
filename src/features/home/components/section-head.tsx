@@ -29,7 +29,7 @@ export function SectionHead({
       </h2>
       <p
         className={cn(
-          "text-lg",
+          "text-base sm:text-lg",
           invert ? "text-brand-indigo-mist" : "text-brand-ink-soft",
         )}
       >
