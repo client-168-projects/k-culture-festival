@@ -16,7 +16,7 @@ export function HeroSection() {
         aria-hidden="true"
         width={1536}
         height={1024}
-        className="pointer-events-none absolute bottom-0 left-0 -z-10 hidden h-auto w-105 opacity-50 sm:block md:w-140 lg:w-180 xl:w-215"
+        className="pointer-events-none absolute bottom-0 left-0 -z-10 hidden h-auto w-88 opacity-50 sm:block md:w-120 lg:w-155 xl:w-185"
       />
       <Image
         src="/assets/images/main/background-right-bottom.png"
