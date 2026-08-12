@@ -3,6 +3,14 @@ import Image from "next/image";
 
 import { ImageModal } from "@/components/image-modal";
 import type { StageProgram } from "@/data/stage-programs";
+import { cn } from "@/lib/utils";
+
+const CATEGORY_STYLE: Record<string, string> = {
+  특별공연: "bg-brand-vermillion text-brand-paper",
+  "청소년 무대": "bg-brand-purple text-brand-paper",
+  공연: "bg-brand-indigo text-brand-paper",
+  레크레이션: "bg-brand-gold text-brand-ink",
+};
 
 export function StageProgramList({
   programs,
@@ -33,14 +41,20 @@ export function StageProgramList({
                 sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 className="object-contain transition-transform duration-200 ease-out group-hover:scale-[1.03]"
               />
+              <span
+                className={cn(
+                  "absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-bold",
+                  CATEGORY_STYLE[item.category] ??
+                    "bg-foreground text-background",
+                )}
+              >
+                {item.category}
+              </span>
             </button>
           </ImageModal>
 
           <div className="flex flex-col gap-1.5 px-4 py-4 sm:px-5">
-            <span className="text-xs font-bold tracking-[0.14em] text-muted-foreground uppercase">
-              {item.category}
-            </span>
-            <span className="font-heading text-xs font-medium tracking-wide text-muted-foreground">
+            <span className="font-heading text-sm font-bold tracking-wide text-brand-vermillion">
               {item.genre}
             </span>
             <span className="font-sans text-lg font-black tracking-tight">
