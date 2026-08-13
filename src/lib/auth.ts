@@ -6,7 +6,8 @@ import { cookies } from "next/headers";
  * Node 전용 `crypto` 모듈이나 bcrypt 네이티브 바인딩은 의도적으로 쓰지 않는다.
  */
 
-const PBKDF2_ITERATIONS = 210_000;
+/** Cloudflare Workers의 Web Crypto PBKDF2는 반복 횟수 100,000이 상한이라 그 값을 그대로 쓴다. */
+const PBKDF2_ITERATIONS = 100_000;
 const SESSION_COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7일
 
 export type SessionPayload = {
