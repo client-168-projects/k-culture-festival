@@ -11,7 +11,7 @@ const TONE_GRADIENTS = {
   purple: "bg-linear-to-br from-brand-purple to-brand-purple-deep",
 } as const;
 
-type ArchTone = keyof typeof TONE_GRADIENTS;
+export type ArchTone = keyof typeof TONE_GRADIENTS;
 
 /** 포스터의 4분할 아치 그래픽을 재해석한 시그니처 장식 패널. 히어로/무대/체험/K-푸드 섹션에서 공용으로 사용. */
 export function ArchPanel({

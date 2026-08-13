@@ -16,6 +16,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "KyoboHandwriting2025lyb";
+  src: url("/fonts/KyoboHandwriting2025lyb.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   --radius: 0.625rem;
 
@@ -63,6 +70,9 @@
   --brand-indigo-mist: #c9cbe0;
   --brand-purple: #3b2c74;
   --brand-purple-deep: #241a4d;
+  --brand-cobalt: #394a9f;
+  --brand-cobalt-deep: #2c3a80;
+  --brand-tangerine: #e8792a;
   --arch-radius: 190px;
 }
 
@@ -106,6 +116,9 @@
   --color-brand-indigo-mist: var(--brand-indigo-mist);
   --color-brand-purple: var(--brand-purple);
   --color-brand-purple-deep: var(--brand-purple-deep);
+  --color-brand-cobalt: var(--brand-cobalt);
+  --color-brand-cobalt-deep: var(--brand-cobalt-deep);
+  --color-brand-tangerine: var(--brand-tangerine);
   --radius-arch: var(--arch-radius);
 
   --font-display: var(--font-black-han-sans);
@@ -114,6 +127,7 @@
     "Pretendard Variable", Pretendard, ui-sans-serif, system-ui,
     -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono);
+  --font-handwriting: "KyoboHandwriting2025lyb", cursive;
 
   /* Accessible type scale: festival site audience includes older visitors, so every step is bumped above the Tailwind default while staying within a normal reading range. */
   --text-xs: 0.8125rem;

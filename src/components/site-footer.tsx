@@ -13,50 +13,32 @@ export function SiteFooter() {
       <div className="mx-auto flex w-full max-w-300 flex-col gap-8 px-4 py-10 sm:px-6 sm:py-12 lg:flex-row lg:justify-between lg:gap-16">
         <div className="flex flex-col gap-4 border-b border-border pb-8 lg:max-w-xs lg:border-b-0 lg:pb-0">
           <div className="flex flex-col gap-2">
-            <span className="text-lg font-bold">파주 K-컬처 페스티벌</span>
+            <span className="text-sm font-semibold text-muted-foreground">
+              파주 K-컬처 페스티벌
+            </span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-muted-foreground">
-                주최
-              </span>
-              <span className="flex items-center rounded-lg border border-border bg-white px-3 py-2">
-                <Image
-                  src="/assets/logo/gyungi-logo.png"
-                  alt="경기도 로고"
-                  width={172}
-                  height={106}
-                  className="h-8 w-auto sm:h-9"
-                />
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-muted-foreground">
-                주관
-              </span>
-              <a
-                href="https://www.gill.or.kr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center rounded-lg border border-border bg-white px-3 py-2 transition-opacity hover:opacity-80"
-              >
-                <Image
-                  src="/assets/logo/gyungi-institute-lifelong-learning-logo.png"
-                  alt="경기도평생교육진흥원 로고"
-                  width={288}
-                  height={80}
-                  className="h-8 w-auto sm:h-9"
-                />
-              </a>
-            </div>
+          <div className="flex flex-nowrap items-center justify-start gap-3">
+            <a
+              href="https://www.gill.or.kr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center rounded-lg border border-border bg-white px-3 py-2 transition-opacity hover:opacity-80"
+            >
+              <Image
+                src="/assets/logo/gyungi-institute-lifelong-learning-logo.png"
+                alt="경기도평생교육진흥원 로고"
+                width={288}
+                height={80}
+                className="h-8 w-auto sm:h-9"
+              />
+            </a>
           </div>
         </div>
 
         <div className="flex flex-col gap-3 border-b border-border pb-8 lg:border-b-0 lg:pb-0">
-          <span className="flex items-center gap-1.5 text-lg font-bold">
-            <MapPin className="size-4 text-primary" />
+          <span className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+            <MapPin className="size-4 text-muted-foreground" />
             오시는 곳
           </span>
           <dl className="flex flex-col gap-2 text-sm text-muted-foreground">
@@ -72,14 +54,14 @@ export function SiteFooter() {
 
           <a
             href={`tel:${PHONE_HREF}`}
-            className="hidden items-center gap-1.5 text-sm font-semibold text-primary hover:underline sm:flex"
+            className="hidden items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground sm:flex"
           >
             <Phone className="size-3.5" />
             {PHONE}
           </a>
           <a
             href={`tel:${PHONE_HREF}`}
-            className="flex items-center justify-center gap-2 rounded-md border border-border py-2.5 text-sm font-semibold text-primary sm:hidden"
+            className="flex items-center justify-center gap-2 rounded-md border border-border py-2.5 text-sm font-medium text-muted-foreground sm:hidden"
           >
             <Phone className="size-4" />
             전화하기
@@ -87,7 +69,9 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <span className="text-lg font-bold">바로가기</span>
+          <span className="text-sm font-semibold text-muted-foreground">
+            바로가기
+          </span>
           <nav className="grid grid-cols-2 gap-x-6 gap-y-2 sm:flex sm:flex-col sm:gap-1.5">
             {navSections.map((section) => (
               <Link

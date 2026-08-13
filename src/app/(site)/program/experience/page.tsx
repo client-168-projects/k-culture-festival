@@ -1,32 +1,55 @@
+import { Download } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { ExperienceProgramList } from "@/components/experience-program-list";
-import { MediaPlaceholder } from "@/components/media-placeholder";
+import { ImageModal } from "@/components/image-modal";
 import { PageContainer, PageHeader } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
 import { experiencePrograms } from "@/data/experience-programs";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "체험 프로그램",
-  description: "직접 참여할 수 있는 체험 프로그램을 안내합니다.",
-};
+  description: "파주 K-컬처 페스티벌에서 직접 참여할 수 있는 체험 프로그램을 안내합니다.",
+  path: "/program/experience",
+});
+
+const EXPERIENCE_TABLE_IMAGE_URL = "/assets/images/체험프로그램%20테이블.png";
 
 export default function ExperiencePage() {
   return (
     <PageContainer className="max-w-5xl">
-      <PageHeader
-        title="체험 프로그램"
-        description="직접 참여할 수 있는 체험 프로그램을 안내합니다."
-      />
+      <PageHeader title="체험 프로그램" />
 
-      <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,280px)] sm:items-start">
-        <MediaPlaceholder label="체험존 안내" className="aspect-16/10 w-full" />
-        <div className="flex flex-col gap-2 sm:pt-1">
-          <h2 className="text-lg font-semibold">체험존 안내</h2>
-          <p className="text-muted-foreground">
-            행사장 곳곳에 마련된 체험존에서 다양한 K-컬처 콘텐츠를
-            즐겨보세요.
-          </p>
-        </div>
+      <div className="flex flex-col gap-3">
+        <ImageModal
+          src={EXPERIENCE_TABLE_IMAGE_URL}
+          alt="체험존 안내"
+          width={1301}
+          height={1278}
+        >
+          <button
+            type="button"
+            className="relative mx-auto w-full max-w-4xl cursor-zoom-in overflow-hidden border border-border"
+          >
+            <Image
+              src={EXPERIENCE_TABLE_IMAGE_URL}
+              alt="체험존 안내"
+              width={1301}
+              height={1278}
+              sizes="56rem"
+              className="h-auto w-full"
+            />
+          </button>
+        </ImageModal>
+
+        <Button asChild variant="outline" className="mx-auto self-center">
+          <a href={EXPERIENCE_TABLE_IMAGE_URL} download>
+            <Download className="size-4" />
+            이미지 다운로드
+          </a>
+        </Button>
       </div>
 
       <ExperienceProgramList programs={experiencePrograms} />

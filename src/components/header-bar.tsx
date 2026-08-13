@@ -68,7 +68,7 @@ export function HeaderBar({
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between gap-2 border-b px-5 shadow-sm transition-all duration-300 sm:h-24 sm:gap-4 sm:px-10 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:justify-normal lg:px-16",
+        "fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between gap-2 border-b px-5 shadow-sm transition-all duration-300 sm:h-24 sm:gap-4 sm:px-10 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:justify-normal lg:px-16",
         isHidden ? "-translate-y-full" : "translate-y-0",
         scrolled
           ? "border-border bg-background/90 shadow-md backdrop-blur-lg"
@@ -81,12 +81,12 @@ export function HeaderBar({
     >
       <Link href="/" className="block min-w-0 shrink-0">
         <Image
-          src="/assets/logo/kculture-festival-logo.png"
+          src="/assets/logo/kculture-festival-logo2.png"
           alt={title}
           width={392}
           height={307}
           priority
-          className="h-16 w-auto sm:h-20"
+          className="h-10 w-auto sm:h-14"
         />
       </Link>
 
@@ -131,12 +131,12 @@ export function HeaderBar({
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="size-11 md:hidden"
           aria-label={menuLabel}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((prev) => !prev)}
         >
-          {mobileOpen ? <X className="size-4" /> : <Menu className="size-4" />}
+          {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </Button>
       </div>
 
@@ -166,7 +166,7 @@ export function HeaderBar({
       {mobileOpen
         ? createPortal(
             <div
-              className="fixed inset-x-0 top-20 z-[45] h-[calc(100vh-5rem)] bg-black/40 backdrop-blur-md sm:top-24 sm:h-[calc(100vh-6rem)] md:hidden"
+              className="fixed inset-x-0 top-16 z-[45] h-[calc(100vh-4rem)] bg-black/40 backdrop-blur-md sm:top-24 sm:h-[calc(100vh-6rem)] md:hidden"
               aria-hidden="true"
               onClick={() => setMobileOpen(false)}
             />,
