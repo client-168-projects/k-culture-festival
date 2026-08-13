@@ -72,4 +72,10 @@ export const rootMetadata: Metadata = {
     index: true,
     follow: true,
   },
+  verification: {
+    google: "DM5VBfbAc_2hml_vUw8y120A8v9T63mA8itNBi6yUHA",
+    other: {
+      "naver-site-verification": "2fd186a62d9289fb2159c09d517c7af5da824895",
+    },
+  },
 };
