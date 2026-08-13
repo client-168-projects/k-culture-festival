@@ -81,12 +81,12 @@ export function HeaderBar({
     >
       <Link href="/" className="block min-w-0 shrink-0">
         <Image
-          src="/assets/logo/kculture-festival-logo.png"
+          src="/assets/logo/kculture-festival-logo2.png"
           alt={title}
           width={392}
           height={307}
           priority
-          className="h-10 w-auto sm:h-20"
+          className="h-10 w-auto sm:h-14"
         />
       </Link>
 

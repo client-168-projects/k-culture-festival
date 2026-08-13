@@ -28,24 +28,29 @@ export function HeroSection() {
       />
 
       <Container className="flex max-w-352.5 flex-1 flex-col px-0 sm:px-0">
-        <div className="mb-6 flex items-center justify-end gap-2.5 px-5 sm:mb-8 sm:px-8">
-          <span className="text-xs font-bold text-brand-ink-soft sm:text-sm">
-            <span className="font-medium text-brand-ink-soft/70">주최</span>{" "}
-            경기도
-            <span className="mx-2 text-brand-ink-soft/40">·</span>
-            <span className="font-medium text-brand-ink-soft/70">주관</span>{" "}
-            경기도평생교육진흥원
-          </span>
-        </div>
-
         <div className="-mt-4 grid flex-1 grid-cols-1 items-center gap-10 sm:-mt-6 lg:-mt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 xl:gap-16">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <div className="mb-7 flex items-center justify-end gap-4 sm:gap-6 lg:justify-start">
-              <h1 className="text-shadow-poster font-heading text-[clamp(3.5rem,7.2vw,8.5rem)] leading-[0.98] text-brand-indigo">
+              <h1 className="sr-only">파주 K-컬처 페스티벌</h1>
+
+              <div className="relative h-48 w-60 shrink-0 sm:h-64 sm:w-80 lg:hidden">
+                <Image
+                  src="/assets/logo/kculture-festival-logo.png"
+                  alt=""
+                  fill
+                  sizes="320px"
+                  className="object-contain object-right"
+                />
+              </div>
+
+              <div
+                aria-hidden="true"
+                className="text-shadow-poster hidden font-heading text-[clamp(3.5rem,7.2vw,8.5rem)] leading-[0.98] text-brand-indigo lg:block"
+              >
                 <span className="block">파주</span>
                 <span className="block">K-컬처</span>
                 <span className="block">페스티벌</span>
-              </h1>
+              </div>
 
               <div className="relative h-44 w-44 shrink-0 sm:h-64 sm:w-64 lg:hidden">
                 <Image

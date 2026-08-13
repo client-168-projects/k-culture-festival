@@ -14,8 +14,8 @@ const HIGHLIGHT_ORDER = [
   "컬러 비즈 액막이 명태 만들기",
   "키캡키링 만들기",
   "나만의 LED-K응원봉 만들기",
-  "자개 스티커 손거울 만들기",
-  "달고나 만들기",
+  "자개 스티커 사각함 만들기",
+  "달고나 체험",
 ];
 
 const highlights = HIGHLIGHT_ORDER.map(
@@ -169,7 +169,7 @@ export function ExperienceSection() {
                   src={item.imageUrl!}
                   alt={item.title}
                   fill
-                  sizes="(min-width: 1024px) 20vw, 50vw"
+                  sizes="(min-width: 1024px) 20vw, 100vw"
                   className="object-cover transition-transform duration-200 group-hover:scale-105"
                 />
                 <CategoryBadge category={item.category} />

@@ -19,6 +19,10 @@ export default function SchedulePage() {
     <PageContainer>
       <PageHeader title="전체 일정표" />
 
+      <p className="text-right text-sm text-muted-foreground">
+        *현장 상황에 따라 변동될 수 있습니다
+      </p>
+
       <div className="relative w-full overflow-hidden rounded-lg border border-border">
         <Image
           src={SCHEDULE_IMAGE_URL}

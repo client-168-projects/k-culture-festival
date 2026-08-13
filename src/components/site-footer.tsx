@@ -19,18 +19,6 @@ export function SiteFooter() {
           </div>
 
           <div className="flex flex-nowrap items-center justify-start gap-3">
-            <span className="text-xs font-medium text-muted-foreground">
-              주최·주관
-            </span>
-            <span className="flex items-center rounded-lg border border-border bg-white px-3 py-2">
-              <Image
-                src="/assets/logo/gyungi-logo.png"
-                alt="경기도 로고"
-                width={172}
-                height={106}
-                className="h-8 w-auto sm:h-9"
-              />
-            </span>
             <a
               href="https://www.gill.or.kr"
               target="_blank"

@@ -23,6 +23,8 @@ import { cn, toAbsoluteUrl } from "@/lib/utils";
 
 type SortOrder = "none" | "asc" | "desc";
 
+const APPLICATION_PENDING_NOTE = "사전 신청 준비중";
+
 const SORT_LABELS: Record<SortOrder, string> = {
   none: "기본순",
   asc: "진행 회차 적은순",
@@ -54,7 +56,9 @@ export function ExperienceProgramList({
     }
 
     if (applicationOnly) {
-      result = result.filter((p) => !!p.applicationUrl);
+      result = result.filter(
+        (p) => !!p.applicationUrl || p.note === APPLICATION_PENDING_NOTE,
+      );
     }
 
     if (sortOrder !== "none") {
@@ -150,7 +154,7 @@ export function ExperienceProgramList({
                       {item.category}
                     </span>
                   ) : null}
-                  {item.note ? (
+                  {item.note && item.note !== APPLICATION_PENDING_NOTE ? (
                     <span className="text-right text-xs text-muted-foreground/80">
                       ※ {item.note}
                     </span>
@@ -178,9 +182,18 @@ export function ExperienceProgramList({
                           target="_blank"
                           rel="noreferrer"
                         >
-                          사전신청 준비중
+                          사전신청하러 가기
                           <ArrowRight className="size-4" />
                         </a>
+                      </Button>
+                    ) : item.note === APPLICATION_PENDING_NOTE ? (
+                      <Button
+                        type="button"
+                        size="sm"
+                        aria-disabled="true"
+                        className="pointer-events-none shrink-0 cursor-default rounded-sm bg-brand-cobalt hover:bg-brand-cobalt"
+                      >
+                        사전신청 준비중
                       </Button>
                     ) : null}
                   </div>

@@ -17,6 +17,10 @@ export default function ExtraPage() {
       <PageHeader title="부대프로그램" />
 
       <ExtraProgramList programs={extraPrograms} />
+
+      <p className="mt-4 text-xs text-muted-foreground">
+        * 이해를 돕기 위한 AI 생성 예시 이미지이며, 실제와 다를 수 있습니다.
+      </p>
     </PageContainer>
   );
 }

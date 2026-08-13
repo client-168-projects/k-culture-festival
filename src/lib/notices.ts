@@ -25,3 +25,29 @@ export async function getNotices(): Promise<Notice[]> {
     return [];
   }
 }
+
+/**
+ * 공지사항 상세 조회. 존재하지 않거나 D1 조회에 실패하면 null을 반환한다 (호출부에서 notFound() 처리).
+ */
+export async function getNoticeById(id: number): Promise<Notice | null> {
+  try {
+    const [notices, attachments] = await Promise.all([
+      d1Query<Omit<Notice, "attachments">>(
+        "SELECT id, title, content, created_at, updated_at FROM notices WHERE id = ?",
+        [id],
+      ),
+      d1Query<NoticeAttachment>(
+        "SELECT id, notice_id, file_name, file_url, file_size, created_at FROM notice_attachments WHERE notice_id = ? ORDER BY created_at ASC",
+        [id],
+      ),
+    ]);
+
+    const notice = notices[0];
+    if (!notice) return null;
+
+    return { ...notice, attachments };
+  } catch (error) {
+    console.error("공지사항 상세 조회 실패:", error);
+    return null;
+  }
+}

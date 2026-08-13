@@ -111,7 +111,7 @@ export function ExtraProgramSection() {
           2026. 9. 12.(토), 파주에서 만나요
         </h2>
         <p className="mt-2 text-xs opacity-85 sm:text-sm">
-          경기미래교육 파주캠퍼스 · 무료 체험 프로그램 사전 신청 가능
+          경기미래교육파주캠퍼스
         </p>
       </div>
     </FullscreenSection>

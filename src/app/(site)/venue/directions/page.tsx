@@ -63,11 +63,12 @@ const subwayRoutes: Route[] = [
 ];
 
 const parkingText = [
-  "파주 K-컬처 페스티벌 행사장 주차장이 협소하여 주차가 어려울 수 있습니다.",
-  "방문객께서는 인근 통일동산 주차장을 이용해 주시기 바랍니다.",
+  "파주 K-컬처 페스티벌 행사장 주차장이 협소하여 주차가 어려울 수 있습니다. 방문객께서는 인근 통일동산 주차장을 이용해 주시기 바랍니다.",
   "내비게이션에서 '통일동산 주차장'을 검색하시면 보다 쉽게 찾아오실 수 있습니다.",
-  "축제 기간 동안 통일동산 주차장 ↔ 파주 K-컬처 페스티벌 행사장(경기미래교육 파주캠퍼스)을 오가는 셔틀버스를 상시 운행합니다.",
+  "축제 기간 동안 '통일동산 주차장' ↔ '파주 K-컬처 페스티벌 행사장'(경기미래교육 파주캠퍼스)을 오가는 셔틀버스를 상시 운행합니다.",
 ];
+
+const PARKING_ADDRESS = "경기도 파주시 탄현면 성동리 646(통일동산 공영주차장)";
 
 function RouteList({ routes }: { routes: Route[] }) {
   return (
@@ -177,10 +178,13 @@ export default function DirectionsPage() {
                 주차 및 셔틀버스 안내
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-2 text-sm text-muted-foreground">
-              {parkingText.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
+            <CardContent className="flex flex-col gap-3 text-sm text-muted-foreground">
+              <p>{parkingText[0]}</p>
+              <p>{parkingText[1]}</p>
+              <p className="text-base font-bold text-foreground">
+                주소: {PARKING_ADDRESS}
+              </p>
+              <p>{parkingText[2]}</p>
             </CardContent>
           </Card>
         </div>

@@ -16,7 +16,7 @@ const SPECIAL_TONES: ArchTone[] = ["indigo", "vermillion", "jade"];
 /** 메인 무대 카드용 인물 누끼 이미지 — 아치 패널 하단 기준으로 채워진다 */
 const SPECIAL_IMAGES: Record<string, string> = {
   김태우: "/assets/images/main/김태우-메인.png",
-  "CLASS:y": "/assets/images/main/클라씨-메인.png",
+  Classy: "/assets/images/main/클라씨-메인.png",
   "김민형 마술사": "/assets/images/main/김민형-메인.png",
 };
 
@@ -81,7 +81,7 @@ export function MainStageSection() {
                   <div
                     className={cn(
                       "absolute inset-0",
-                      item.name === "CLASS:y" &&
+                      item.name === "Classy" &&
                         "inset-x-[14%] top-[12%] bottom-0 sm:inset-0",
                     )}
                   >
