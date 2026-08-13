@@ -16,6 +16,7 @@ export function HeroSection() {
         aria-hidden="true"
         width={1536}
         height={1024}
+        priority
         className="pointer-events-none absolute bottom-0 left-0 -z-10 hidden h-auto w-88 opacity-50 sm:block md:w-120 lg:w-155 xl:w-185"
       />
       <Image
@@ -24,6 +25,7 @@ export function HeroSection() {
         aria-hidden="true"
         width={1536}
         height={1024}
+        priority
         className="pointer-events-none absolute right-0 bottom-0 -z-10 hidden h-auto w-130 opacity-90 sm:block md:w-175 lg:w-225 xl:w-270"
       />
 
@@ -38,6 +40,7 @@ export function HeroSection() {
                   src="/assets/logo/kculture-festival-logo.png"
                   alt=""
                   fill
+                  priority
                   sizes="320px"
                   className="object-contain object-right"
                 />
@@ -57,6 +60,7 @@ export function HeroSection() {
                   src="/assets/images/k-shape-main-image.png"
                   alt=""
                   fill
+                  priority
                   sizes="256px"
                   className="object-contain"
                 />
@@ -68,6 +72,7 @@ export function HeroSection() {
                 src="/assets/images/divider-image.png"
                 alt=""
                 fill
+                priority
                 sizes="480px"
                 className="object-cover"
               />

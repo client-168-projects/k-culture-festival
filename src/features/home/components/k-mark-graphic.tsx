@@ -41,6 +41,7 @@ export function KMarkGraphic() {
               src={ASSETS.bibimbap}
               alt=""
               fill
+              priority
               sizes="400px"
               className="object-contain"
             />
@@ -50,6 +51,7 @@ export function KMarkGraphic() {
               src={ASSETS.norigae}
               alt=""
               fill
+              priority
               sizes="400px"
               className="object-contain object-top"
             />
@@ -82,6 +84,7 @@ export function KMarkGraphic() {
                 src={ASSETS.patternLattice}
                 alt=""
                 fill
+                priority
                 sizes="400px"
                 className="object-contain"
               />
@@ -91,6 +94,7 @@ export function KMarkGraphic() {
                 src={ASSETS.patternLattice}
                 alt=""
                 fill
+                priority
                 sizes="400px"
                 className="object-contain"
               />
@@ -100,6 +104,7 @@ export function KMarkGraphic() {
                 src={ASSETS.patternKnot}
                 alt=""
                 fill
+                priority
                 sizes="400px"
                 className="object-contain"
               />
@@ -109,6 +114,7 @@ export function KMarkGraphic() {
                 src={ASSETS.patternKnot}
                 alt=""
                 fill
+                priority
                 sizes="400px"
                 className="object-contain"
               />
@@ -124,6 +130,7 @@ export function KMarkGraphic() {
             src={ASSETS.patternedBg}
             alt=""
             fill
+            priority
             sizes="400px"
             className="object-cover opacity-90"
           />
@@ -132,6 +139,7 @@ export function KMarkGraphic() {
               src={ASSETS.hat}
               alt=""
               fill
+              priority
               sizes="400px"
               className="object-contain object-bottom"
             />
@@ -141,6 +149,7 @@ export function KMarkGraphic() {
               src={ASSETS.patternSingle}
               alt=""
               fill
+              priority
               sizes="400px"
               className="object-contain"
             />
@@ -150,6 +159,7 @@ export function KMarkGraphic() {
               src={ASSETS.cloud1}
               alt=""
               fill
+              priority
               sizes="400px"
               className="object-contain"
             />
@@ -159,6 +169,7 @@ export function KMarkGraphic() {
               src={ASSETS.cloud2}
               alt=""
               fill
+              priority
               sizes="400px"
               className="object-contain"
             />
@@ -182,6 +193,7 @@ export function KMarkGraphic() {
                 src={ASSETS.house}
                 alt=""
                 fill
+                priority
                 sizes="400px"
                 className="object-contain"
               />
@@ -191,6 +203,7 @@ export function KMarkGraphic() {
                 src={ASSETS.bell}
                 alt=""
                 fill
+                priority
                 sizes="400px"
                 className="object-contain"
               />
@@ -200,6 +213,7 @@ export function KMarkGraphic() {
                 src={ASSETS.mountain}
                 alt=""
                 fill
+                priority
                 sizes="400px"
                 className="object-cover object-bottom"
               />
