@@ -1,7 +1,7 @@
 export const SITE_NAME = "K-컬처 페스티벌";
 export const SITE_URL = "https://kculturepaju.com";
 export const SITE_DESCRIPTION =
-  "2026년 9월 12일 경기미래교육 파주캠퍼스에서 열리는 K-컬처 페스티벌 공식 웹사이트입니다. 무대 프로그램, 체험 프로그램, 오시는 길, 셔틀버스 등 축제 정보를 확인하세요.";
+  "2026년 9월 12일 경기미래교육 파주캠퍼스 K-컬처 페스티벌 공식 웹사이트. 무대·체험 프로그램, 오시는 길, 셔틀버스 정보를 확인하세요.";
 export const SITE_KEYWORDS = [
   "K-컬처 페스티벌",
   "파주 축제",
