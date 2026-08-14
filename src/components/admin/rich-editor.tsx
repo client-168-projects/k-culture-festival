@@ -37,14 +37,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ALLOWED_IMAGE_MIME_TYPES, MAX_IMAGE_SIZE_BYTES } from "@/constants/media";
-import { cn } from "@/lib/utils";
+import { cn, formatFileSize } from "@/lib/utils";
 
 async function uploadImage(file: File): Promise<string> {
   if (!ALLOWED_IMAGE_MIME_TYPES.includes(file.type)) {
     throw new Error("PNG, JPEG, WEBP, GIF 이미지만 업로드할 수 있습니다.");
   }
   if (file.size > MAX_IMAGE_SIZE_BYTES) {
-    throw new Error(`이미지는 ${MAX_IMAGE_SIZE_BYTES / 1024 / 1024}MB 이하만 업로드할 수 있습니다.`);
+    throw new Error(`이미지는 ${formatFileSize(MAX_IMAGE_SIZE_BYTES)} 이하만 업로드할 수 있습니다.`);
   }
 
   const formData = new FormData();

@@ -1,9 +1,9 @@
 "use client";
 
 import { FileText, Paperclip, X } from "lucide-react";
+import dynamic from "next/dynamic";
 import { type ChangeEvent, useRef, useState } from "react";
 
-import { RichEditor } from "@/components/admin/rich-editor";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,6 +23,16 @@ import {
 } from "@/constants/media";
 import { cn, formatFileSize } from "@/lib/utils";
 import type { Notice } from "@/types/notice";
+
+const RichEditor = dynamic(
+  () => import("@/components/admin/rich-editor").then((mod) => mod.RichEditor),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="min-h-72 rounded-md border border-input" aria-hidden />
+    ),
+  },
+);
 
 type Props = {
   open: boolean;
@@ -92,27 +102,53 @@ export function NoticeDialog({
     setUploadingAttachment(true);
     setAttachmentProgress({ completed: 0, total: filesToUpload.length });
 
-    for (let i = 0; i < filesToUpload.length; i++) {
-      const file = filesToUpload[i];
-      const formData = new FormData();
-      formData.append("file", file);
+    const results = await Promise.allSettled(
+      filesToUpload.map(async (file) => {
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
 
-      const res = await fetch("/api/admin/upload/attachment", {
-        method: "POST",
-        body: formData,
-      });
-      const body = await res.json().catch(() => null);
+          const res = await fetch("/api/admin/upload/attachment", {
+            method: "POST",
+            body: formData,
+          });
+          const body = await res.json().catch(() => null);
 
-      if (!res.ok) {
-        setAttachmentError(body?.error ?? "첨부파일 업로드에 실패했습니다.");
-        break;
+          if (!res.ok) {
+            throw new Error(body?.error ?? "첨부파일 업로드에 실패했습니다.");
+          }
+
+          return {
+            file_name: body.name,
+            file_url: body.url,
+            file_size: body.size,
+          } as AttachmentDraft;
+        } finally {
+          setAttachmentProgress((prev) =>
+            prev ? { completed: prev.completed + 1, total: prev.total } : prev,
+          );
+        }
+      }),
+    );
+
+    const uploaded: AttachmentDraft[] = [];
+    let firstError: string | null = null;
+    for (const result of results) {
+      if (result.status === "fulfilled") {
+        uploaded.push(result.value);
+      } else if (!firstError) {
+        firstError =
+          result.reason instanceof Error
+            ? result.reason.message
+            : "첨부파일 업로드에 실패했습니다.";
       }
+    }
 
-      setAttachments((prev) => [
-        ...prev,
-        { file_name: body.name, file_url: body.url, file_size: body.size },
-      ]);
-      setAttachmentProgress({ completed: i + 1, total: filesToUpload.length });
+    if (uploaded.length > 0) {
+      setAttachments((prev) => [...prev, ...uploaded]);
+    }
+    if (firstError) {
+      setAttachmentError(firstError);
     }
 
     setUploadingAttachment(false);
@@ -299,7 +335,7 @@ export function NoticeDialog({
             ) : null}
             <p className="text-sm text-muted-foreground">
               {ALLOWED_ATTACHMENT_EXTENSIONS.join(", ")} 파일, 개당{" "}
-              {MAX_ATTACHMENT_SIZE_BYTES / 1024 / 1024}MB까지, 최대{" "}
+              {formatFileSize(MAX_ATTACHMENT_SIZE_BYTES)}까지, 최대{" "}
               {MAX_ATTACHMENTS_PER_NOTICE}개
             </p>
             {attachmentError ? (

@@ -1,34 +1,14 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-import { MAX_ATTACHMENTS_PER_NOTICE } from "@/constants/media";
-import { getAdminSession } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { d1Query } from "@/lib/d1";
+import { parseAttachments } from "@/lib/notices";
 import { sanitizeNoticeContent } from "@/lib/sanitize";
 
-type AttachmentInput = { file_name: string; file_url: string; file_size: number };
-
-function parseAttachments(body: unknown): AttachmentInput[] {
-  const raw = (body as { attachments?: unknown })?.attachments;
-  if (!Array.isArray(raw)) return [];
-
-  return raw
-    .filter(
-      (a): a is AttachmentInput =>
-        typeof a === "object" &&
-        a !== null &&
-        typeof (a as AttachmentInput).file_name === "string" &&
-        typeof (a as AttachmentInput).file_url === "string" &&
-        typeof (a as AttachmentInput).file_size === "number",
-    )
-    .slice(0, MAX_ATTACHMENTS_PER_NOTICE);
-}
-
 export async function POST(request: Request) {
-  const session = await getAdminSession();
-  if (!session) {
-    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
-  }
+  const session = await requireAdmin();
+  if (session instanceof NextResponse) return session;
 
   const body = await request.json().catch(() => null);
   const title = typeof body?.title === "string" ? body.title.trim() : "";
@@ -52,14 +32,16 @@ export async function POST(request: Request) {
     );
     const noticeId = rows[0]?.id;
 
-    for (const attachment of attachments) {
-      await d1Query(
-        `INSERT INTO notice_attachments (notice_id, file_name, file_url, file_size)
-         VALUES (?, ?, ?, ?)`,
-        [noticeId, attachment.file_name, attachment.file_url, attachment.file_size],
-        { noStore: true },
-      );
-    }
+    await Promise.all(
+      attachments.map((attachment) =>
+        d1Query(
+          `INSERT INTO notice_attachments (notice_id, file_name, file_url, file_size)
+           VALUES (?, ?, ?, ?)`,
+          [noticeId, attachment.file_name, attachment.file_url, attachment.file_size],
+          { noStore: true },
+        ),
+      ),
+    );
 
     revalidatePath("/community/notice");
     revalidatePath("/admin/notices");

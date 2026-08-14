@@ -1,49 +1,32 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
-import { MAX_ATTACHMENTS_PER_NOTICE } from "@/constants/media";
-import { getAdminSession } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { d1Query } from "@/lib/d1";
+import { parseAttachments } from "@/lib/notices";
 import { sanitizeNoticeContent } from "@/lib/sanitize";
 import { deleteFromStorage, storagePathFromPublicUrl } from "@/lib/supabase";
 import type { NoticeAttachment } from "@/types/notice";
 
 type RouteParams = { params: Promise<{ id: string }> };
-type AttachmentInput = { file_name: string; file_url: string; file_size: number };
-
-function parseAttachments(body: unknown): AttachmentInput[] {
-  const raw = (body as { attachments?: unknown })?.attachments;
-  if (!Array.isArray(raw)) return [];
-
-  return raw
-    .filter(
-      (a): a is AttachmentInput =>
-        typeof a === "object" &&
-        a !== null &&
-        typeof (a as AttachmentInput).file_name === "string" &&
-        typeof (a as AttachmentInput).file_url === "string" &&
-        typeof (a as AttachmentInput).file_size === "number",
-    )
-    .slice(0, MAX_ATTACHMENTS_PER_NOTICE);
-}
 
 async function deleteAttachmentFiles(attachments: { file_url: string }[]) {
-  for (const attachment of attachments) {
-    const path = storagePathFromPublicUrl(attachment.file_url);
-    if (!path) continue;
-    try {
-      await deleteFromStorage(path);
-    } catch (error) {
-      console.error("첨부파일 스토리지 삭제 실패:", error);
-    }
-  }
+  await Promise.all(
+    attachments.map(async (attachment) => {
+      const path = storagePathFromPublicUrl(attachment.file_url);
+      if (!path) return;
+      try {
+        await deleteFromStorage(path);
+      } catch (error) {
+        console.error("첨부파일 스토리지 삭제 실패:", error);
+      }
+    }),
+  );
 }
 
 export async function PUT(request: Request, { params }: RouteParams) {
-  const session = await getAdminSession();
-  if (!session) {
-    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
-  }
+  const session = await requireAdmin();
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
   const noticeId = Number(id);
@@ -65,13 +48,21 @@ export async function PUT(request: Request, { params }: RouteParams) {
   }
 
   try {
-    await d1Query(
+    const updated = await d1Query<{ id: number }>(
       `UPDATE notices
        SET title = ?, content = ?, updated_at = datetime('now')
-       WHERE id = ?`,
+       WHERE id = ?
+       RETURNING id`,
       [title, sanitizeNoticeContent(content), noticeId],
       { noStore: true },
     );
+
+    if (!updated[0]) {
+      return NextResponse.json(
+        { error: "존재하지 않는 공지사항입니다." },
+        { status: 404 },
+      );
+    }
 
     const existing = await d1Query<NoticeAttachment>(
       "SELECT id, notice_id, file_name, file_url, file_size, created_at FROM notice_attachments WHERE notice_id = ?",
@@ -86,14 +77,16 @@ export async function PUT(request: Request, { params }: RouteParams) {
     await d1Query("DELETE FROM notice_attachments WHERE notice_id = ?", [noticeId], {
       noStore: true,
     });
-    for (const attachment of attachments) {
-      await d1Query(
-        `INSERT INTO notice_attachments (notice_id, file_name, file_url, file_size)
-         VALUES (?, ?, ?, ?)`,
-        [noticeId, attachment.file_name, attachment.file_url, attachment.file_size],
-        { noStore: true },
-      );
-    }
+    await Promise.all(
+      attachments.map((attachment) =>
+        d1Query(
+          `INSERT INTO notice_attachments (notice_id, file_name, file_url, file_size)
+           VALUES (?, ?, ?, ?)`,
+          [noticeId, attachment.file_name, attachment.file_url, attachment.file_size],
+          { noStore: true },
+        ),
+      ),
+    );
   } catch (error) {
     console.error("공지사항 수정 실패:", error);
     return NextResponse.json(
@@ -109,10 +102,8 @@ export async function PUT(request: Request, { params }: RouteParams) {
 }
 
 export async function DELETE(_request: Request, { params }: RouteParams) {
-  const session = await getAdminSession();
-  if (!session) {
-    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
-  }
+  const session = await requireAdmin();
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
   const noticeId = Number(id);
