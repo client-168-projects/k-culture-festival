@@ -198,7 +198,9 @@ export function KMarkGraphic() {
                 className="object-contain"
               />
             </div>
-            <div className="absolute top-[27%] left-[26%] h-[14%] w-[9%]">
+            <div
+              className="absolute top-[27%] left-[26%] h-[14%] w-[9%] origin-[50%_8%] animate-bell-sway"
+            >
               <Image
                 src={ASSETS.bell}
                 alt=""

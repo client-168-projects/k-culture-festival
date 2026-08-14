@@ -12,7 +12,7 @@ export const metadata: Metadata = createPageMetadata({
   path: "/about/schedule",
 });
 
-const SCHEDULE_IMAGE_URL = "/assets/images/main/festival-schedule.png";
+const SCHEDULE_IMAGE_URL = "/assets/images/main/festival-schedule.webp";
 
 export default function SchedulePage() {
   return (

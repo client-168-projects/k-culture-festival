@@ -146,6 +146,7 @@
   --text-3xl--line-height: 2.375rem;
 
   --animate-drop-down: drop-down 180ms ease-out;
+  --animate-bell-sway: bell-sway 4.5s ease-in-out infinite;
 
   @keyframes drop-down {
     from {
@@ -155,6 +156,23 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* K 모형 종 장식 — 바람에 살랑이는 루프 (앵커: 종 위쪽, 감쇠 없이 등각 반복) */
+  @keyframes bell-sway {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(6deg);
+    }
+    50% {
+      transform: rotate(0deg);
+    }
+    75% {
+      transform: rotate(-6deg);
     }
   }
 }
