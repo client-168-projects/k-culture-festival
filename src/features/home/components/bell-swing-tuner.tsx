@@ -8,9 +8,19 @@ import { cn } from "@/lib/utils";
 
 import { ASSETS } from "./k-mark-graphic";
 
-type BellParams = {
-  anchorX: number;
-  anchorY: number;
+type Mode = "wind" | "damped";
+
+type RangeDef = { min: number; max: number; step: number; unit: string; label: string };
+
+type AnchorParams = { anchorX: number; anchorY: number };
+
+type WindParams = {
+  maxAngle: number;
+  period: number;
+  smoothness: number;
+};
+
+type DampedParams = {
   maxAngle: number;
   frequency: number;
   damping: number;
@@ -19,9 +29,28 @@ type BellParams = {
   smoothness: number;
 };
 
-const DEFAULTS: BellParams = {
-  anchorX: 50,
-  anchorY: 8,
+const ANCHOR_DEFAULTS: AnchorParams = { anchorX: 50, anchorY: 8 };
+
+const ANCHOR_RANGES: Record<keyof AnchorParams, RangeDef> = {
+  anchorX: { min: 0, max: 100, step: 1, unit: "%", label: "앵커 X (좌우)" },
+  anchorY: { min: 0, max: 100, step: 1, unit: "%", label: "앵커 Y (상하)" },
+};
+
+// 바람에 살랑이는 연출: 감쇠 없이 같은 각도로 좌우를 부드럽게 반복
+const WIND_DEFAULTS: WindParams = {
+  maxAngle: 6,
+  period: 4.5,
+  smoothness: 60,
+};
+
+const WIND_RANGES: Record<keyof WindParams, RangeDef> = {
+  maxAngle: { min: 1, max: 30, step: 1, unit: "deg", label: "흔들림 각도" },
+  period: { min: 1, max: 12, step: 0.1, unit: "초", label: "한 왕복 주기 (클수록 천천히)" },
+  smoothness: { min: 8, max: 120, step: 1, unit: "step", label: "부드러움(샘플 수)" },
+};
+
+// 타종 연출: 최대 각도에서 시작해 진폭이 점점 줄어들다 멈추고, 잠시 후 다시 반복
+const DAMPED_DEFAULTS: DampedParams = {
   maxAngle: 16,
   frequency: 3.2,
   damping: 3.5,
@@ -30,22 +59,11 @@ const DEFAULTS: BellParams = {
   smoothness: 36,
 };
 
-const RANGES: Record<
-  keyof BellParams,
-  { min: number; max: number; step: number; unit: string; label: string }
-> = {
-  anchorX: { min: 0, max: 100, step: 1, unit: "%", label: "앵커 X (좌우)" },
-  anchorY: { min: 0, max: 100, step: 1, unit: "%", label: "앵커 Y (상하)" },
+const DAMPED_RANGES: Record<keyof DampedParams, RangeDef> = {
   maxAngle: { min: 1, max: 60, step: 1, unit: "deg", label: "최대 각도" },
   frequency: { min: 0.5, max: 8, step: 0.1, unit: "회/초", label: "진동 속도" },
   damping: { min: 0, max: 10, step: 0.1, unit: "", label: "감쇠(감속) 강도" },
-  activeDuration: {
-    min: 0.2,
-    max: 4,
-    step: 0.1,
-    unit: "초",
-    label: "흔들리는 시간",
-  },
+  activeDuration: { min: 0.2, max: 4, step: 0.1, unit: "초", label: "흔들리는 시간" },
   loopPause: { min: 0, max: 6, step: 0.1, unit: "초", label: "정지 후 반복 간격" },
   smoothness: { min: 8, max: 80, step: 1, unit: "step", label: "부드러움(샘플 수)" },
 };
@@ -54,8 +72,22 @@ function fmt(n: number, digits = 1) {
   return Number.isInteger(n) ? String(n) : n.toFixed(digits);
 }
 
-/** 감쇠 사인파(taps → 진폭이 점점 줄어드는 종 흔들림)를 샘플링해 % 키프레임으로 변환 */
-function buildKeyframes(p: BellParams) {
+/** 감쇠 없는 사인파 한 주기를 그대로 샘플링 — 시작과 끝 각도가 같아 이음매 없이 반복됨 */
+function buildWindKeyframes(p: WindParams) {
+  const stops: { pct: number; angle: number }[] = [];
+  for (let i = 0; i <= p.smoothness; i++) {
+    const frac = i / p.smoothness;
+    const angle = p.maxAngle * Math.sin(2 * Math.PI * frac);
+    stops.push({ pct: frac * 100, angle });
+  }
+  const css = stops
+    .map((s) => `  ${fmt(s.pct, 2)}% { transform: rotate(${fmt(s.angle, 2)}deg); }`)
+    .join("\n");
+  return { css, total: p.period };
+}
+
+/** 감쇠 사인파(타종 → 진폭이 점점 줄어드는 종 흔들림)를 샘플링해 % 키프레임으로 변환 */
+function buildDampedKeyframes(p: DampedParams) {
   const total = p.activeDuration + p.loopPause;
   if (total <= 0) return { css: "", total: 0 };
 
@@ -82,28 +114,39 @@ function buildKeyframes(p: BellParams) {
 }
 
 export function BellSwingTuner() {
-  const [params, setParams] = useState<BellParams>({ ...DEFAULTS });
+  const [mode, setMode] = useState<Mode>("wind");
+  const [anchor, setAnchor] = useState<AnchorParams>({ ...ANCHOR_DEFAULTS });
+  const [wind, setWind] = useState<WindParams>({ ...WIND_DEFAULTS });
+  const [damped, setDamped] = useState<DampedParams>({ ...DAMPED_DEFAULTS });
   const [playing, setPlaying] = useState(true);
   const [showContext, setShowContext] = useState(true);
   const [replayKey, setReplayKey] = useState(0);
 
-  const setField = (field: keyof BellParams, value: number) => {
-    setParams((prev) => ({ ...prev, [field]: value }));
+  const setAnchorField = (field: keyof AnchorParams, value: number) => {
+    setAnchor((prev) => ({ ...prev, [field]: value }));
+  };
+  const setWindField = (field: keyof WindParams, value: number) => {
+    setWind((prev) => ({ ...prev, [field]: value }));
+  };
+  const setDampedField = (field: keyof DampedParams, value: number) => {
+    setDamped((prev) => ({ ...prev, [field]: value }));
   };
 
   const reset = () => {
-    setParams({ ...DEFAULTS });
+    setAnchor({ ...ANCHOR_DEFAULTS });
+    setWind({ ...WIND_DEFAULTS });
+    setDamped({ ...DAMPED_DEFAULTS });
     setReplayKey((k) => k + 1);
   };
 
   const replay = () => setReplayKey((k) => k + 1);
 
   const { css: keyframesCss, total } = useMemo(
-    () => buildKeyframes(params),
-    [params],
+    () => (mode === "wind" ? buildWindKeyframes(wind) : buildDampedKeyframes(damped)),
+    [mode, wind, damped],
   );
 
-  const transformOrigin = `${params.anchorX}% ${params.anchorY}%`;
+  const transformOrigin = `${anchor.anchorX}% ${anchor.anchorY}%`;
 
   const animationStyle = useMemo(
     () => ({
@@ -118,6 +161,10 @@ export function BellSwingTuner() {
   );
 
   const output = useMemo(() => {
+    const modeComment =
+      mode === "wind"
+        ? `/* 바람 연출: 각도 ${fmt(wind.maxAngle)}deg, 주기 ${fmt(wind.period)}초 (감쇠 없이 등각 반복) */`
+        : `/* 타종 연출: 최대 각도 ${fmt(damped.maxAngle)}deg, 진동 ${fmt(damped.frequency)}회/초, 감쇠 ${fmt(damped.damping)}, 흔들림 ${fmt(damped.activeDuration)}초 + 정지 ${fmt(damped.loopPause)}초 = 총 ${fmt(total, 2)}초 반복 */`;
     return [
       `/* 앵커: transform-origin ${transformOrigin} */`,
       `.bell-icon {`,
@@ -132,9 +179,9 @@ export function BellSwingTuner() {
       `  animation: bell-swing ${fmt(total, 2)}s linear infinite;`,
       `}`,
       ``,
-      `/* 최대 각도 ${fmt(params.maxAngle)}deg, 진동 ${fmt(params.frequency)}회/초, 감쇠 ${fmt(params.damping)}, 흔들림 ${fmt(params.activeDuration)}초 + 정지 ${fmt(params.loopPause)}초 = 총 ${fmt(total, 2)}초 반복 */`,
+      modeComment,
     ].join("\n");
-  }, [transformOrigin, keyframesCss, total, params]);
+  }, [transformOrigin, keyframesCss, total, mode, wind, damped]);
 
   const bell = (
     <div
@@ -153,7 +200,7 @@ export function BellSwingTuner() {
       <span
         aria-hidden="true"
         className="pointer-events-none absolute z-10 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-brand-vermillion bg-white/90 shadow"
-        style={{ left: `${params.anchorX}%`, top: `${params.anchorY}%` }}
+        style={{ left: `${anchor.anchorX}%`, top: `${anchor.anchorY}%` }}
       />
     </div>
   );
@@ -165,27 +212,51 @@ export function BellSwingTuner() {
       {/* 미리보기 */}
       <div className="flex flex-col items-center gap-4">
         <div className="sticky top-6 flex w-full flex-col items-center gap-4">
-          <div className="flex items-center gap-2 self-start rounded-full border border-brand-ink/15 bg-white p-1 text-sm">
-            <button
-              type="button"
-              onClick={() => setShowContext(false)}
-              className={cn(
-                "rounded-full px-3 py-1.5 font-semibold",
-                !showContext ? "bg-brand-ink text-white" : "text-brand-ink-soft",
-              )}
-            >
-              단독 보기
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowContext(true)}
-              className={cn(
-                "rounded-full px-3 py-1.5 font-semibold",
-                showContext ? "bg-brand-ink text-white" : "text-brand-ink-soft",
-              )}
-            >
-              실제 배치에서 보기
-            </button>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="flex items-center gap-1 rounded-full border border-brand-ink/15 bg-white p-1 text-sm">
+              <button
+                type="button"
+                onClick={() => setMode("wind")}
+                className={cn(
+                  "rounded-full px-3 py-1.5 font-semibold",
+                  mode === "wind" ? "bg-brand-indigo text-white" : "text-brand-ink-soft",
+                )}
+              >
+                바람 (등각 반복)
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode("damped")}
+                className={cn(
+                  "rounded-full px-3 py-1.5 font-semibold",
+                  mode === "damped" ? "bg-brand-indigo text-white" : "text-brand-ink-soft",
+                )}
+              >
+                타종 (감쇠 후 정지)
+              </button>
+            </div>
+            <div className="flex items-center gap-2 rounded-full border border-brand-ink/15 bg-white p-1 text-sm">
+              <button
+                type="button"
+                onClick={() => setShowContext(false)}
+                className={cn(
+                  "rounded-full px-3 py-1.5 font-semibold",
+                  !showContext ? "bg-brand-ink text-white" : "text-brand-ink-soft",
+                )}
+              >
+                단독 보기
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowContext(true)}
+                className={cn(
+                  "rounded-full px-3 py-1.5 font-semibold",
+                  showContext ? "bg-brand-ink text-white" : "text-brand-ink-soft",
+                )}
+              >
+                실제 배치에서 보기
+              </button>
+            </div>
           </div>
 
           {showContext ? (
@@ -281,74 +352,94 @@ export function BellSwingTuner() {
             {(["anchorX", "anchorY"] as const).map((field) => (
               <ParamSlider
                 key={field}
-                field={field}
-                value={params[field]}
-                onChange={(v) => setField(field, v)}
+                range={ANCHOR_RANGES[field]}
+                value={anchor[field]}
+                onChange={(v) => setAnchorField(field, v)}
               />
             ))}
           </div>
         </div>
 
-        <div className="rounded-lg border border-brand-ink/15 bg-white p-4">
-          <p className="mb-3 text-sm font-bold">흔들림 각도 / 속도</p>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {(["maxAngle", "frequency"] as const).map((field) => (
-              <ParamSlider
-                key={field}
-                field={field}
-                value={params[field]}
-                onChange={(v) => setField(field, v)}
-              />
-            ))}
+        {mode === "wind" ? (
+          <div className="rounded-lg border border-brand-ink/15 bg-white p-4">
+            <p className="mb-3 text-sm font-bold">바람에 흔들림 (같은 각도로 좌우 반복)</p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {(["maxAngle", "period", "smoothness"] as const).map((field) => (
+                <ParamSlider
+                  key={field}
+                  range={WIND_RANGES[field]}
+                  value={wind[field]}
+                  onChange={(v) => setWindField(field, v)}
+                />
+              ))}
+            </div>
+            <p className="mt-3 text-xs text-brand-ink-soft">
+              감쇠 없이 -각도 ↔ +각도를 {fmt(wind.period)}초 주기로 부드럽게(sin 곡선) 반복합니다.
+            </p>
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="rounded-lg border border-brand-ink/15 bg-white p-4">
+              <p className="mb-3 text-sm font-bold">흔들림 각도 / 속도</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {(["maxAngle", "frequency"] as const).map((field) => (
+                  <ParamSlider
+                    key={field}
+                    range={DAMPED_RANGES[field]}
+                    value={damped[field]}
+                    onChange={(v) => setDampedField(field, v)}
+                  />
+                ))}
+              </div>
+            </div>
 
-        <div className="rounded-lg border border-brand-ink/15 bg-white p-4">
-          <p className="mb-3 text-sm font-bold">감속(감쇠)</p>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {(["damping", "smoothness"] as const).map((field) => (
-              <ParamSlider
-                key={field}
-                field={field}
-                value={params[field]}
-                onChange={(v) => setField(field, v)}
-              />
-            ))}
-          </div>
-        </div>
+            <div className="rounded-lg border border-brand-ink/15 bg-white p-4">
+              <p className="mb-3 text-sm font-bold">감속(감쇠)</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {(["damping", "smoothness"] as const).map((field) => (
+                  <ParamSlider
+                    key={field}
+                    range={DAMPED_RANGES[field]}
+                    value={damped[field]}
+                    onChange={(v) => setDampedField(field, v)}
+                  />
+                ))}
+              </div>
+            </div>
 
-        <div className="rounded-lg border border-brand-ink/15 bg-white p-4">
-          <p className="mb-3 text-sm font-bold">루프</p>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {(["activeDuration", "loopPause"] as const).map((field) => (
-              <ParamSlider
-                key={field}
-                field={field}
-                value={params[field]}
-                onChange={(v) => setField(field, v)}
-              />
-            ))}
-          </div>
-          <p className="mt-3 text-xs text-brand-ink-soft">
-            총 반복 주기: {fmt(total, 2)}초 (흔들림 {fmt(params.activeDuration)}초 + 정지{" "}
-            {fmt(params.loopPause)}초)
-          </p>
-        </div>
+            <div className="rounded-lg border border-brand-ink/15 bg-white p-4">
+              <p className="mb-3 text-sm font-bold">루프</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {(["activeDuration", "loopPause"] as const).map((field) => (
+                  <ParamSlider
+                    key={field}
+                    range={DAMPED_RANGES[field]}
+                    value={damped[field]}
+                    onChange={(v) => setDampedField(field, v)}
+                  />
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-brand-ink-soft">
+                총 반복 주기: {fmt(total, 2)}초 (흔들림 {fmt(damped.activeDuration)}초 + 정지{" "}
+                {fmt(damped.loopPause)}초)
+              </p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 }
 
 function ParamSlider({
-  field,
+  range,
   value,
   onChange,
 }: {
-  field: keyof BellParams;
+  range: RangeDef;
   value: number;
   onChange: (value: number) => void;
 }) {
-  const range = RANGES[field];
   return (
     <label className="flex flex-col gap-1 text-xs text-brand-ink-soft">
       <span className="flex justify-between">
