@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
 
 import { ALLOWED_IMAGE_MIME_TYPES, MAX_IMAGE_SIZE_BYTES } from "@/constants/media";
-import { getAdminSession } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { uploadToStorage } from "@/lib/supabase";
+import { formatFileSize } from "@/lib/utils";
 
 export async function POST(request: Request) {
-  const session = await getAdminSession();
-  if (!session) {
-    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
-  }
+  const session = await requireAdmin();
+  if (session instanceof NextResponse) return session;
 
   const formData = await request.formData().catch(() => null);
   const file = formData?.get("file");
@@ -26,7 +25,7 @@ export async function POST(request: Request) {
 
   if (file.size > MAX_IMAGE_SIZE_BYTES) {
     return NextResponse.json(
-      { error: `이미지는 ${MAX_IMAGE_SIZE_BYTES / 1024 / 1024}MB 이하만 업로드할 수 있습니다.` },
+      { error: `이미지는 ${formatFileSize(MAX_IMAGE_SIZE_BYTES)} 이하만 업로드할 수 있습니다.` },
       { status: 400 },
     );
   }

@@ -1,5 +1,27 @@
+import { cache } from "react";
+
+import { MAX_ATTACHMENTS_PER_NOTICE } from "@/constants/media";
 import { d1Query } from "@/lib/d1";
 import type { Notice, NoticeAttachment } from "@/types/notice";
+
+export type AttachmentInput = { file_name: string; file_url: string; file_size: number };
+
+/** 요청 본문의 attachments 배열을 검증/정제한다. 공지 생성(POST)·수정(PUT) 양쪽에서 공유. */
+export function parseAttachments(body: unknown): AttachmentInput[] {
+  const raw = (body as { attachments?: unknown })?.attachments;
+  if (!Array.isArray(raw)) return [];
+
+  return raw
+    .filter(
+      (a): a is AttachmentInput =>
+        typeof a === "object" &&
+        a !== null &&
+        typeof (a as AttachmentInput).file_name === "string" &&
+        typeof (a as AttachmentInput).file_url === "string" &&
+        typeof (a as AttachmentInput).file_size === "number",
+    )
+    .slice(0, MAX_ATTACHMENTS_PER_NOTICE);
+}
 
 /**
  * 공지사항 목록 조회. D1 환경변수가 없거나 API 호출이 실패해도 페이지 빌드/렌더링이
@@ -28,8 +50,10 @@ export async function getNotices(): Promise<Notice[]> {
 
 /**
  * 공지사항 상세 조회. 존재하지 않거나 D1 조회에 실패하면 null을 반환한다 (호출부에서 notFound() 처리).
+ * `d1Query`가 POST 요청이라 Next의 fetch 요청 메모이제이션(GET 전용)이 적용되지 않으므로,
+ * generateMetadata와 페이지 컴포넌트가 같은 요청 안에서 중복 호출하지 않도록 React cache()로 감싼다.
  */
-export async function getNoticeById(id: number): Promise<Notice | null> {
+export const getNoticeById = cache(async (id: number): Promise<Notice | null> => {
   try {
     const [notices, attachments] = await Promise.all([
       d1Query<Omit<Notice, "attachments">>(
@@ -50,4 +74,4 @@ export async function getNoticeById(id: number): Promise<Notice | null> {
     console.error("공지사항 상세 조회 실패:", error);
     return null;
   }
-}
+});

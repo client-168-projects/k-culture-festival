@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 /**
  * Web Crypto API(crypto.subtle)만 사용한다 — Node.js(라즈베리파이 포함)와
@@ -174,4 +175,17 @@ export async function getAdminSession(): Promise<SessionPayload | null> {
   if (!token) return null;
 
   return verifySessionToken(token, secret);
+}
+
+/**
+ * `/api/admin/*` 라우트 핸들러 맨 앞에서 호출한다. 세션이 있으면 payload를,
+ * 없으면 그대로 반환할 수 있는 401 NextResponse를 준다.
+ * 호출부: `const session = await requireAdmin(); if (session instanceof NextResponse) return session;`
+ */
+export async function requireAdmin(): Promise<SessionPayload | NextResponse> {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: "인증이 필요합니다." }, { status: 401 });
+  }
+  return session;
 }
