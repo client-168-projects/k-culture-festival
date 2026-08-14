@@ -29,19 +29,19 @@ export function HeroSection() {
         className="pointer-events-none absolute right-0 bottom-0 -z-10 hidden h-auto w-130 opacity-90 sm:block md:w-175 lg:w-225 xl:w-270"
       />
 
-      <Container className="flex max-w-352.5 flex-1 flex-col px-0 sm:px-0">
+      <Container className="flex max-w-352.5 flex-1 flex-col px-5 sm:px-10 lg:px-0">
         <div className="-mt-4 grid flex-1 grid-cols-1 items-center gap-10 sm:-mt-6 lg:-mt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 xl:gap-16">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            <div className="mb-7 flex items-center justify-end gap-4 sm:gap-6 lg:justify-start">
+            <div className="mb-7 flex items-center justify-center gap-2 sm:justify-end sm:gap-6 lg:justify-start">
               <h1 className="sr-only">파주 K-컬처 페스티벌</h1>
 
-              <div className="relative h-48 w-60 shrink-0 sm:h-64 sm:w-80 lg:hidden">
+              <div className="relative h-32 w-44 shrink-0 sm:h-64 sm:w-80 lg:hidden">
                 <Image
                   src="/assets/logo/kculture-festival-logo.png"
                   alt=""
                   fill
                   priority
-                  sizes="320px"
+                  sizes="(min-width: 640px) 320px, 176px"
                   className="object-contain object-right"
                 />
               </div>
@@ -55,27 +55,34 @@ export function HeroSection() {
                 <span className="block">페스티벌</span>
               </div>
 
-              <div className="relative h-44 w-44 shrink-0 sm:h-64 sm:w-64 lg:hidden">
+              <div className="relative h-32 w-32 shrink-0 sm:h-64 sm:w-64 lg:hidden">
                 <Image
                   src="/assets/images/k-shape-main-image.png"
                   alt=""
                   fill
                   priority
-                  sizes="256px"
+                  sizes="(min-width: 640px) 256px, 128px"
                   className="object-contain"
                 />
               </div>
             </div>
 
-            <div className="relative mb-4 mx-auto h-10 w-64 opacity-40 sm:h-12 sm:w-80 lg:mx-0 lg:ml-12">
-              <Image
-                src="/assets/images/divider-image.png"
-                alt=""
-                fill
-                priority
-                sizes="480px"
-                className="object-cover"
-              />
+            <div
+              aria-hidden="true"
+              className="mb-4 flex items-center justify-center gap-2 opacity-70 sm:justify-start sm:gap-3 sm:opacity-40 lg:ml-12"
+            >
+              <span className="h-px w-20 bg-linear-to-r from-transparent to-brand-gold sm:w-28" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="size-3.5 shrink-0 text-brand-gold sm:size-4"
+              >
+                <path d="M12 12C9.8 9.6 9.8 5.8 12 3C14.2 5.8 14.2 9.6 12 12Z" />
+                <path d="M12 12C14.2 14.4 14.2 18.2 12 21C9.8 18.2 9.8 14.4 12 12Z" />
+                <path d="M12 12C9.6 9.8 5.8 9.8 3 12C5.8 14.2 9.6 14.2 12 12Z" />
+                <path d="M12 12C14.4 9.8 18.2 9.8 21 12C18.2 14.2 14.4 14.2 12 12Z" />
+              </svg>
+              <span className="h-px w-20 bg-linear-to-l from-transparent to-brand-gold sm:w-28" />
             </div>
 
             <div className="mb-9 flex items-center gap-3">
