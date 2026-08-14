@@ -146,6 +146,7 @@
   --text-3xl--line-height: 2.375rem;
 
   --animate-drop-down: drop-down 180ms ease-out;
+  --animate-bell-sway: bell-sway 4.5s linear infinite;
 
   @keyframes drop-down {
     from {
@@ -155,6 +156,160 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* K 모형 종 장식 — 바람에 살랑이는 루프 (앵커: 종 위쪽, 감쇠 없이 등각 반복)
+     사인 곡선을 촘촘히 샘플링한 뒤 linear로 이어서 재생 — 3~5개 지점만 두고
+     ease-in-out을 쓰면 각 구간 경계(0/25/50/75/100%)마다 속도가 0으로 꺼졌다
+     다시 붙는 것처럼 보여 "잠깐 멈추는" 끊김이 생긴다. */
+  @keyframes bell-sway {
+    0% {
+      transform: rotate(0deg);
+    }
+    2.08% {
+      transform: rotate(0.78deg);
+    }
+    4.17% {
+      transform: rotate(1.55deg);
+    }
+    6.25% {
+      transform: rotate(2.3deg);
+    }
+    8.33% {
+      transform: rotate(3deg);
+    }
+    10.42% {
+      transform: rotate(3.65deg);
+    }
+    12.5% {
+      transform: rotate(4.24deg);
+    }
+    14.58% {
+      transform: rotate(4.76deg);
+    }
+    16.67% {
+      transform: rotate(5.2deg);
+    }
+    18.75% {
+      transform: rotate(5.54deg);
+    }
+    20.83% {
+      transform: rotate(5.8deg);
+    }
+    22.92% {
+      transform: rotate(5.95deg);
+    }
+    25% {
+      transform: rotate(6deg);
+    }
+    27.08% {
+      transform: rotate(5.95deg);
+    }
+    29.17% {
+      transform: rotate(5.8deg);
+    }
+    31.25% {
+      transform: rotate(5.54deg);
+    }
+    33.33% {
+      transform: rotate(5.2deg);
+    }
+    35.42% {
+      transform: rotate(4.76deg);
+    }
+    37.5% {
+      transform: rotate(4.24deg);
+    }
+    39.58% {
+      transform: rotate(3.65deg);
+    }
+    41.67% {
+      transform: rotate(3deg);
+    }
+    43.75% {
+      transform: rotate(2.3deg);
+    }
+    45.83% {
+      transform: rotate(1.55deg);
+    }
+    47.92% {
+      transform: rotate(0.78deg);
+    }
+    50% {
+      transform: rotate(0deg);
+    }
+    52.08% {
+      transform: rotate(-0.78deg);
+    }
+    54.17% {
+      transform: rotate(-1.55deg);
+    }
+    56.25% {
+      transform: rotate(-2.3deg);
+    }
+    58.33% {
+      transform: rotate(-3deg);
+    }
+    60.42% {
+      transform: rotate(-3.65deg);
+    }
+    62.5% {
+      transform: rotate(-4.24deg);
+    }
+    64.58% {
+      transform: rotate(-4.76deg);
+    }
+    66.67% {
+      transform: rotate(-5.2deg);
+    }
+    68.75% {
+      transform: rotate(-5.54deg);
+    }
+    70.83% {
+      transform: rotate(-5.8deg);
+    }
+    72.92% {
+      transform: rotate(-5.95deg);
+    }
+    75% {
+      transform: rotate(-6deg);
+    }
+    77.08% {
+      transform: rotate(-5.95deg);
+    }
+    79.17% {
+      transform: rotate(-5.8deg);
+    }
+    81.25% {
+      transform: rotate(-5.54deg);
+    }
+    83.33% {
+      transform: rotate(-5.2deg);
+    }
+    85.42% {
+      transform: rotate(-4.76deg);
+    }
+    87.5% {
+      transform: rotate(-4.24deg);
+    }
+    89.58% {
+      transform: rotate(-3.65deg);
+    }
+    91.67% {
+      transform: rotate(-3deg);
+    }
+    93.75% {
+      transform: rotate(-2.3deg);
+    }
+    95.83% {
+      transform: rotate(-1.55deg);
+    }
+    97.92% {
+      transform: rotate(-0.78deg);
+    }
+    100% {
+      transform: rotate(0deg);
     }
   }
 }
