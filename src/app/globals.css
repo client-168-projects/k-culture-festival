@@ -124,8 +124,8 @@
   --font-display: var(--font-black-han-sans);
   --font-heading: "SchoolSafetyWave", var(--font-black-han-sans);
   --font-sans:
-    "Pretendard Variable", Pretendard, ui-sans-serif, system-ui,
-    -apple-system, sans-serif;
+    var(--font-pretendard), ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-handwriting: "KyoboHandwriting2025lyb", cursive;
 
