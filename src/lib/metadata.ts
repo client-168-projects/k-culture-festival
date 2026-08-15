@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import {
   SITE_DESCRIPTION,
+  SITE_HOME_TITLE,
   SITE_KEYWORDS,
   SITE_LOCALE,
   SITE_NAME,
@@ -47,14 +48,14 @@ export function createPageMetadata({
 export const rootMetadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: SITE_NAME,
+    default: SITE_HOME_TITLE,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   keywords: SITE_KEYWORDS,
   alternates: { canonical: SITE_URL },
   openGraph: {
-    title: SITE_NAME,
+    title: SITE_HOME_TITLE,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: SITE_NAME,
@@ -64,7 +65,7 @@ export const rootMetadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: SITE_NAME,
+    title: SITE_HOME_TITLE,
     description: SITE_DESCRIPTION,
     images: [SITE_OG_IMAGE.url],
   },

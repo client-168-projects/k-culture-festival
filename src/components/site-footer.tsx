@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { navSections } from "@/config/nav";
+import { SITE_PHONE, VENUE_ADDRESS, VENUE_NAME } from "@/constants/site";
 
-const PHONE = "031-956-2497";
-const PHONE_HREF = PHONE.replace(/[^+\d]/g, "");
+const PHONE_HREF = SITE_PHONE.replace(/[^+\d]/g, "");
 
 export function SiteFooter() {
   return (
@@ -44,11 +44,11 @@ export function SiteFooter() {
           <dl className="flex flex-col gap-2 text-sm text-muted-foreground">
             <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
               <dt className="shrink-0 sm:w-10">장소</dt>
-              <dd>경기미래교육 파주캠퍼스</dd>
+              <dd>{VENUE_NAME}</dd>
             </div>
             <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
               <dt className="shrink-0 sm:w-10">주소</dt>
-              <dd>경기도 파주시 탄현면 얼음실로 40 경기미래교육 파주캠퍼스</dd>
+              <dd>{VENUE_ADDRESS}</dd>
             </div>
           </dl>
 
@@ -57,7 +57,7 @@ export function SiteFooter() {
             className="hidden items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground sm:flex"
           >
             <Phone className="size-3.5" />
-            {PHONE}
+            {SITE_PHONE}
           </a>
           <a
             href={`tel:${PHONE_HREF}`}
