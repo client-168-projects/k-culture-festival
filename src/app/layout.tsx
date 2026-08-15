@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Black_Han_Sans, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 
 import { JsonLd } from "@/components/json-ld";
 import { SITE_THEME_COLOR } from "@/constants/site";
@@ -19,6 +20,13 @@ const blackHanSans = Black_Han_Sans({
   weight: "400",
 });
 
+const pretendard = localFont({
+  src: "../../public/fonts/pretendard/PretendardVariable.woff2",
+  variable: "--font-pretendard",
+  weight: "45 920",
+  display: "swap",
+});
+
 export const metadata: Metadata = rootMetadata;
 
 export const viewport: Viewport = {
@@ -29,15 +37,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="ko"
-      className={`${geistMono.variable} ${blackHanSans.variable} h-full antialiased`}
+      className={`${geistMono.variable} ${blackHanSans.variable} ${pretendard.variable} h-full antialiased`}
     >
       <head>
         <JsonLd data={[buildWebSiteJsonLd(), buildOrganizationJsonLd()]} />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
-        />
       </head>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
