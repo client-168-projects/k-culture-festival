@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import type { CSSProperties, TransitionEvent } from "react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
@@ -28,12 +28,12 @@ export const PANEL_SIZE_RIGHT = "w-[40%] h-[75%]";
 /** clip-path: inset(top right bottom left) 4개 값(%) — /dev/k-intro-tuner에서 조절 */
 export type MaskInset = { top: number; right: number; bottom: number; left: number };
 
-// 마스킹 박스 — /dev/k-intro-tuner에서 실측/조정한 값 (박스 너비 140%, 높이 98%, 위치 X 11%, Y 3%)
+// 마스킹 박스 — /dev/k-intro-tuner에서 실측/조정한 값 (박스 너비 150%, 높이 106%, 위치 X 11%, Y 4%)
 export const DEFAULT_MASK_INSET: MaskInset = {
-  top: 4,
-  right: -31,
-  bottom: -2,
-  left: -9,
+  top: 1,
+  right: -36,
+  bottom: -7,
+  left: -14,
 };
 
 // 페이지 로드 시 4개 도형이 날아와 K 모형으로 모이는 인트로. /dev/k-intro-tuner에서 값을 잡았다.
@@ -52,23 +52,52 @@ const INTRO_PANELS = {
   bottomRight: { dx: 75, dy: 60, rotate: -35, delay: 270 },
 } as const;
 
-function introStyle(
+// 호버 시 각 패널이 K 모형 중심에서 바깥쪽(자기 사분면 방향)으로만 살짝
+// 밀려나도록 방향을 잡는다 — 서로 반대쪽으로 갈라지므로 다른 패널과
+// 겹칠 일이 없다. 단위는 인트로와 동일하게 cqw/cqh, deg.
+const HOVER_OFFSETS = {
+  topLeft: { dx: -4, dy: -2.5, rotate: -4 },
+  topRight: { dx: 4.5, dy: -2.5, rotate: 4 },
+  bottomLeft: { dx: -4, dy: 2.5, rotate: -4 },
+  bottomRight: { dx: 4.5, dy: 2.5, rotate: 4 },
+} as const;
+const HOVER_TRANSITION_MS = 450;
+// 히어로 배경 슬라이드인(globals.css --animate-hero-slide-*)과 동일한 감속
+// 곡선 — 빠르게 출발해 도착 직전 확실히 감속하는 모양이라 호버로 살짝
+// 밀려났다 돌아오는 움직임에도 그대로 어울린다.
+const HOVER_EASING = "cubic-bezier(0.16, 1, 0.3, 1)";
+
+function panelStyle(
   panel: keyof typeof INTRO_PANELS,
   played: boolean,
+  introDone: boolean,
+  hovered: boolean,
   startDelayMs: number,
 ): CSSProperties {
   const p = INTRO_PANELS[panel];
+
+  if (!introDone) {
+    return {
+      transform: played
+        ? "translate(0%, 0%) rotate(0deg)"
+        : `translate(${p.dx}cqw, ${p.dy}cqh) rotate(${p.rotate}deg)`,
+      // 트랜지션 종료 시 컴포지팅 레이어가 승격→해제되면서 생기는 서브픽셀 스냅(도착
+      // 직후 미세하게 크기가 변해 보이는 현상) 방지 — 레이어를 계속 유지시킨다.
+      willChange: "transform",
+      transitionProperty: "transform",
+      transitionDuration: `${INTRO_DURATION_MS}ms`,
+      transitionTimingFunction: INTRO_EASING,
+      transitionDelay: `${startDelayMs + p.delay}ms`,
+    };
+  }
+
+  const h = hovered ? HOVER_OFFSETS[panel] : { dx: 0, dy: 0, rotate: 0 };
   return {
-    transform: played
-      ? "translate(0%, 0%) rotate(0deg)"
-      : `translate(${p.dx}cqw, ${p.dy}cqh) rotate(${p.rotate}deg)`,
-    // 트랜지션 종료 시 컴포지팅 레이어가 승격→해제되면서 생기는 서브픽셀 스냅(도착
-    // 직후 미세하게 크기가 변해 보이는 현상) 방지 — 레이어를 계속 유지시킨다.
+    transform: `translate(${h.dx}cqw, ${h.dy}cqh) rotate(${h.rotate}deg)`,
     willChange: "transform",
     transitionProperty: "transform",
-    transitionDuration: `${INTRO_DURATION_MS}ms`,
-    transitionTimingFunction: INTRO_EASING,
-    transitionDelay: `${startDelayMs + p.delay}ms`,
+    transitionDuration: `${HOVER_TRANSITION_MS}ms`,
+    transitionTimingFunction: HOVER_EASING,
   };
 }
 
@@ -83,6 +112,13 @@ export function KMarkGraphic({
   startDelayMs?: number;
 } = {}) {
   const [played, setPlayed] = useState(false);
+  // 인트로 트랜지션이 실제로 끝난 뒤에만 호버 인터랙션을 켠다 — 그 전에 켜두면
+  // 인트로용(1800ms) 트랜지션 타이밍과 호버용(220ms) 타이밍이 같은 렌더에서
+  // 뒤섞여 도착 애니메이션이 순간이동하듯 끊겨 보인다.
+  const [introDone, setIntroDone] = useState(false);
+  const [hoveredPanel, setHoveredPanel] = useState<
+    keyof typeof INTRO_PANELS | null
+  >(null);
 
   useEffect(() => {
     // 시작 위치가 먼저 페인트된 뒤에 전환이 걸리도록 rAF를 두 번 거친다.
@@ -95,6 +131,10 @@ export function KMarkGraphic({
       cancelAnimationFrame(raf2);
     };
   }, []);
+
+  const onIntroTransitionEnd = (event: TransitionEvent) => {
+    if (event.propertyName === "transform") setIntroDone(true);
+  };
 
   return (
     <div
@@ -109,7 +149,10 @@ export function KMarkGraphic({
       {/* 좌상단 — 비빔밥 + 노리개 */}
       <div
         className={`absolute top-[6%] left-0 ${PANEL_SIZE}`}
-        style={introStyle("topLeft", played, startDelayMs)}
+        style={panelStyle("topLeft", played, introDone, hoveredPanel === "topLeft", startDelayMs)}
+        onTransitionEnd={onIntroTransitionEnd}
+        onMouseEnter={() => setHoveredPanel("topLeft")}
+        onMouseLeave={() => setHoveredPanel(null)}
       >
         <ArchPanel
           tone="purple"
@@ -145,8 +188,11 @@ export function KMarkGraphic({
         className={`absolute top-[-15.8%] -right-1.5 ${PANEL_SIZE_RIGHT}`}
         style={{
           clipPath: "polygon(-200% 30%, 300% 30%, 300% 300%, -200% 300%)",
-          ...introStyle("topRight", played, startDelayMs),
+          ...panelStyle("topRight", played, introDone, hoveredPanel === "topRight", startDelayMs),
         }}
+        onTransitionEnd={onIntroTransitionEnd}
+        onMouseEnter={() => setHoveredPanel("topRight")}
+        onMouseLeave={() => setHoveredPanel(null)}
       >
         <ArchPanel tone="vermillion" flip className="h-full w-full rotate-45">
           {/* 이미지 콘텐츠만 반대로 되돌려 회전 전 방향 유지 */}
@@ -207,7 +253,10 @@ export function KMarkGraphic({
       {/* 좌하단 — 갓 + 구름 문양 */}
       <div
         className={`absolute bottom-0 left-0 ${PANEL_SIZE}`}
-        style={introStyle("bottomLeft", played, startDelayMs)}
+        style={panelStyle("bottomLeft", played, introDone, hoveredPanel === "bottomLeft", startDelayMs)}
+        onTransitionEnd={onIntroTransitionEnd}
+        onMouseEnter={() => setHoveredPanel("bottomLeft")}
+        onMouseLeave={() => setHoveredPanel(null)}
       >
         <ArchPanel
           tone="jade"
@@ -273,8 +322,11 @@ export function KMarkGraphic({
         className={`absolute -right-1.5 bottom-[-21%] ${PANEL_SIZE_RIGHT}`}
         style={{
           clipPath: "polygon(-200% -200%, 300% -200%, 300% 70%, -200% 70%)",
-          ...introStyle("bottomRight", played, startDelayMs),
+          ...panelStyle("bottomRight", played, introDone, hoveredPanel === "bottomRight", startDelayMs),
         }}
+        onTransitionEnd={onIntroTransitionEnd}
+        onMouseEnter={() => setHoveredPanel("bottomRight")}
+        onMouseLeave={() => setHoveredPanel(null)}
       >
         <ArchPanel tone="indigo-deep" className="h-full w-full -rotate-45">
           {/* 이미지 콘텐츠만 반대로 되돌려 회전 전 방향 유지 */}
