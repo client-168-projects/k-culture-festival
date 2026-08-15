@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Black_Han_Sans, Geist_Mono } from "next/font/google";
 
+import { JsonLd } from "@/components/json-ld";
 import { SITE_THEME_COLOR } from "@/constants/site";
 import { rootMetadata } from "@/lib/metadata";
+import { buildOrganizationJsonLd, buildWebSiteJsonLd } from "@/lib/structured-data";
 
 import "./globals.css";
 
@@ -30,6 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistMono.variable} ${blackHanSans.variable} h-full antialiased`}
     >
       <head>
+        <JsonLd data={[buildWebSiteJsonLd(), buildOrganizationJsonLd()]} />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link
           rel="stylesheet"
