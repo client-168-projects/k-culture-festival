@@ -147,11 +147,54 @@
 
   --animate-drop-down: drop-down 180ms ease-out;
   --animate-bell-sway: bell-sway 4.5s linear infinite;
+  --animate-cloud-drift-1: cloud-drift-1 12s linear infinite;
+  --animate-cloud-drift-2: cloud-drift-2 12s linear infinite;
+
+  /* 히어로 섹션 로드 인트로 — 좌측 배경 이미지가 왼쪽에서, 우측 배경 이미지가
+     오른쪽에서 순차적으로 페이드인하고, 타이틀/버튼 등은 공용 hero-reveal을
+     요소별로 animation-delay만 다르게 줘서 순서대로 떠오르게 한다. */
+  --animate-hero-slide-left: hero-slide-in-left 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-hero-slide-right:
+    hero-slide-in-right 800ms cubic-bezier(0.16, 1, 0.3, 1) 650ms both;
+  --animate-hero-reveal: hero-reveal 600ms ease-out both;
 
   @keyframes drop-down {
     from {
       opacity: 0;
       transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hero-slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-48px);
+    }
+    to {
+      opacity: 0.5;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes hero-slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(48px);
+    }
+    to {
+      opacity: 0.9;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes hero-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
     }
     to {
       opacity: 1;
@@ -310,6 +353,29 @@
     }
     100% {
       transform: rotate(0deg);
+    }
+  }
+
+  /* K 모형 구름 — 한 방향으로 천천히 드리프트하다 패널 밖으로 완전히 나가면
+     반대쪽 밖에서 다시 들어옴. cqw는 구름 자신이 아니라 담긴 패널(container-type
+     이 걸린 부모) 너비 기준. 각 구름의 시작 left/width에 맞춰 "패널을 완전히
+     벗어나는 최소 거리 + 약간의 여유"만큼만 이동해서, 화면 밖에 머무는 구간이
+     길어져 마치 멈춘 것처럼 보이지 않도록 범위를 좁혔다. */
+  @keyframes cloud-drift-1 {
+    0% {
+      transform: translateX(-44cqw);
+    }
+    100% {
+      transform: translateX(92cqw);
+    }
+  }
+
+  @keyframes cloud-drift-2 {
+    0% {
+      transform: translateX(-100cqw);
+    }
+    100% {
+      transform: translateX(24cqw);
     }
   }
 }

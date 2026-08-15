@@ -17,7 +17,7 @@ export function HeroSection() {
         width={1536}
         height={1024}
         priority
-        className="pointer-events-none absolute bottom-0 left-0 -z-10 hidden h-auto w-88 opacity-50 sm:block md:w-120 lg:w-155 xl:w-185"
+        className="pointer-events-none absolute bottom-0 left-0 -z-10 hidden h-auto w-88 animate-hero-slide-left sm:block md:w-120 lg:w-155 xl:w-185"
       />
       <Image
         src="/assets/images/main/background-right-bottom.png"
@@ -26,13 +26,16 @@ export function HeroSection() {
         width={1536}
         height={1024}
         priority
-        className="pointer-events-none absolute right-0 bottom-0 -z-10 hidden h-auto w-130 opacity-90 sm:block md:w-175 lg:w-225 xl:w-270"
+        className="pointer-events-none absolute right-0 bottom-0 -z-10 hidden h-auto w-130 animate-hero-slide-right sm:block md:w-175 lg:w-225 xl:w-270"
       />
 
       <Container className="flex max-w-352.5 flex-1 flex-col px-5 sm:px-10 lg:px-0">
         <div className="-mt-4 grid flex-1 grid-cols-1 items-center gap-10 sm:-mt-6 lg:-mt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 xl:gap-16">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            <div className="mb-7 flex items-center justify-center gap-2 sm:justify-end sm:gap-6 lg:justify-start">
+            <div
+              className="mb-7 flex animate-hero-reveal items-center justify-center gap-2 sm:justify-end sm:gap-6 lg:justify-start"
+              style={{ animationDelay: "1300ms" }}
+            >
               <h1 className="sr-only">파주 K-컬처 페스티벌</h1>
 
               <div className="relative h-32 w-44 shrink-0 sm:h-64 sm:w-80 lg:hidden">
@@ -85,14 +88,20 @@ export function HeroSection() {
               <span className="h-px w-20 bg-linear-to-l from-transparent to-brand-gold sm:w-28" />
             </div>
 
-            <div className="mb-9 flex items-center gap-3">
+            <div
+              className="mb-9 flex animate-hero-reveal items-center gap-3"
+              style={{ animationDelay: "1550ms" }}
+            >
               <CalendarDays className="size-6 text-brand-vermillion" />
               <span className="font-display text-2xl text-brand-vermillion sm:text-3xl">
                 2026. 9. 12.(토)
               </span>
             </div>
 
-            <div className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:items-start lg:justify-start">
+            <div
+              className="flex animate-hero-reveal flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:items-start lg:justify-start"
+              style={{ animationDelay: "1700ms" }}
+            >
               <Button className="h-auto w-full gap-2.5 rounded-full bg-brand-vermillion px-7 py-4 text-lg font-bold text-brand-paper shadow-md shadow-brand-vermillion/25 sm:w-auto">
                 <MapPin className="size-5" />
                 경기미래교육 파주캠퍼스
@@ -112,7 +121,7 @@ export function HeroSection() {
           </div>
 
           <div className="hidden lg:block">
-            <KMarkGraphic />
+            <KMarkGraphic startDelayMs={1900} />
           </div>
         </div>
       </Container>
