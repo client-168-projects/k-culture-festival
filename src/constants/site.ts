@@ -16,13 +16,33 @@ export const ORGANIZER_URL = "https://www.gill.or.kr";
 export const ORGANIZER_LOGO = "/assets/logo/gyungi-institute-lifelong-learning-logo.png";
 
 export const SITE_PHONE = "031-956-2497";
+
+/**
+ * 공식 명칭은 SITE_NAME("K-컬처")이지만, 실제 검색은 표기가 갈려서 들어옴 — 색인/구조화 데이터용 비공식 표기 변형.
+ * 하이픈·띄어쓰기 차이는 검색엔진이 토큰화 단계에서 정규화하므로 나열하지 않고,
+ * 스펠링(컬처/컬쳐/케이컬처) 계열과 언어(한글/영문)가 실제로 다른 대표값만 등록한다.
+ */
+export const SITE_ALTERNATE_NAMES = [
+  "K컬처페스티벌",
+  "K 컬쳐 페스티벌",
+  "K컬쳐페스티벌",
+  "케이 컬쳐 페스티벌",
+  "케이컬처 페스티벌",
+  "케이컬쳐페스티벌",
+  "K Culture Festival",
+  "K-Culture Festival",
+];
+
 export const SITE_KEYWORDS = [
   "K-컬처 페스티벌",
   "파주 축제",
+  "파주 문화축제",
+  "파주 행사",
   "경기미래교육 파주캠퍼스",
   "K-컬처",
   "파주 K-컬처 페스티벌",
   "축제 프로그램",
+  ...SITE_ALTERNATE_NAMES,
 ];
 export const SITE_LOCALE = "ko_KR";
 export const SITE_OG_IMAGE = {

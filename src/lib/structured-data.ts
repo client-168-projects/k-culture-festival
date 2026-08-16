@@ -2,6 +2,7 @@ import {
   FESTIVAL_START_DATE,
   ORGANIZER_NAME,
   ORGANIZER_URL,
+  SITE_ALTERNATE_NAMES,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_OG_IMAGE,
@@ -19,6 +20,7 @@ export function buildWebSiteJsonLd(): JsonLdObject {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: SITE_NAME,
+    alternateName: SITE_ALTERNATE_NAMES,
     url: SITE_URL,
   };
 }
@@ -37,6 +39,7 @@ export function buildFestivalEventJsonLd(): JsonLdObject {
     "@context": "https://schema.org",
     "@type": "Festival",
     name: SITE_NAME,
+    alternateName: SITE_ALTERNATE_NAMES,
     description: SITE_DESCRIPTION,
     startDate: FESTIVAL_START_DATE,
     eventStatus: "https://schema.org/EventScheduled",
