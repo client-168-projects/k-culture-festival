@@ -1,6 +1,7 @@
 import { ScrollToTopButton } from "@/components/scroll-to-top-button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { NoticePopupManager } from "@/features/notice-popup/components/notice-popup-manager";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
@@ -9,6 +10,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       {children}
       <SiteFooter />
       <ScrollToTopButton />
+      <NoticePopupManager />
     </div>
   );
 }
