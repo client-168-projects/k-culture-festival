@@ -1,17 +1,21 @@
 "use client";
 
-import { ExternalLink, LogOut, Megaphone } from "lucide-react";
+import { ExternalLink, ImageIcon, LogOut, Megaphone } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const navItems = [{ key: "notices", label: "공지사항", icon: Megaphone }];
+const navItems = [
+  { key: "notices", label: "공지사항", icon: Megaphone },
+  { key: "notice-popups", label: "팝업 관리", icon: ImageIcon },
+];
 
-export function AdminSidebar({ active }: { active: string }) {
+export function AdminSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [loggingOut, setLoggingOut] = useState(false);
 
   async function handleLogout() {
@@ -36,7 +40,8 @@ export function AdminSidebar({ active }: { active: string }) {
               href={`/admin/${item.key}`}
               className={cn(
                 "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                active === item.key && "bg-accent text-accent-foreground",
+                pathname.startsWith(`/admin/${item.key}`) &&
+                  "bg-accent text-accent-foreground",
               )}
             >
               <item.icon className="size-4" />
