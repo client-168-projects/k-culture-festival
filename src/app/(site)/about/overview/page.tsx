@@ -18,7 +18,7 @@ export const metadata: Metadata = createPageMetadata({
 const info = [
   { label: "명칭", value: "K-컬처 페스티벌" },
   { label: "기간", value: "2026년 9월 12일(토)" },
-  { label: "장소", value: "경기미래교육 파주캠퍼스" },
+  { label: "장소", value: "경기미래교육파주캠퍼스" },
 ];
 
 export default function OverviewPage() {
@@ -70,7 +70,7 @@ export default function OverviewPage() {
               <h2 className="text-lg font-semibold">축제 소개</h2>
               <p className="leading-loose text-muted-foreground">
                 &apos;파주 K-컬처 페스티벌&apos;은 다양한 K-콘텐츠 촬영명소로
-                알려진 경기미래교육 파주캠퍼스(구 파주 영어마을)에서 진행하는
+                알려진 경기미래교육파주캠퍼스(구 파주 영어마을)에서 진행하는
                 K-컬처 종합문화예술축제입니다.
               </p>
               <p className="leading-loose text-muted-foreground">

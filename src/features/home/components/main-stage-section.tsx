@@ -17,7 +17,7 @@ const SPECIAL_TONES: ArchTone[] = ["indigo", "vermillion", "jade"];
 const SPECIAL_IMAGES: Record<string, string> = {
   김태우: "/assets/images/main/김태우-메인.png",
   CLASSy: "/assets/images/main/클라씨-메인.png",
-  "김민형 마술사": "/assets/images/main/김민형-메인.png",
+  "마술사 김민형": "/assets/images/main/김민형-메인.png",
 };
 
 const specialLineup = stagePrograms

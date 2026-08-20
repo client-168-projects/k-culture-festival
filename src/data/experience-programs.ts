@@ -23,7 +23,7 @@ export const experiencePrograms: ExperienceProgram[] = [
   {
     title: "전통 부채 꾸미기",
     capacity: "1회 10명",
-    sessions: "총 14회",
+    sessions: "총 12회",
     category: "K-전통",
   },
   {
@@ -42,13 +42,13 @@ export const experiencePrograms: ExperienceProgram[] = [
   {
     title: "민화 팬시우드 공예 체험",
     capacity: "1회 10명",
-    sessions: "총 7회",
+    sessions: "총 6회",
     category: "K-전통",
   },
   {
     title: "한복키링 만들기",
     capacity: "1회 10명",
-    sessions: "총 7회",
+    sessions: "총 6회",
     category: "K-전통",
   },
   {
@@ -60,7 +60,7 @@ export const experiencePrograms: ExperienceProgram[] = [
   {
     title: "전통의상 체험",
     capacity: "1회 15명",
-    sessions: "총 17회",
+    sessions: "총 6회",
     category: "K-전통",
   },
   {
@@ -125,6 +125,20 @@ export const experiencePrograms: ExperienceProgram[] = [
     category: "K-문화",
   },
   {
+    title: "원어민과 함께하는 쿠킹클래스 Ⅰ",
+    capacity: "1회 20명",
+    sessions: "총 4회",
+    note: "사전 신청 준비중",
+    category: "K-문화",
+  },
+  {
+    title: "원어민과 함께하는 쿠킹클래스 Ⅱ",
+    capacity: "1회 50명",
+    sessions: "총 3회",
+    note: "사전 신청 준비중",
+    category: "K-문화",
+  },
+  {
     title: "키캡키링 만들기",
     capacity: "1회 10명",
     sessions: "총 14회",
@@ -134,7 +148,7 @@ export const experiencePrograms: ExperienceProgram[] = [
   {
     title: "매듭실 소원팔찌 만들기",
     capacity: "1회 10명",
-    sessions: "총 7회",
+    sessions: "총 6회",
     category: "K-공예",
   },
   {
@@ -157,7 +171,7 @@ export const experiencePrograms: ExperienceProgram[] = [
   },
   {
     title: "원어민과 함께하는 무궁화 스트링아트",
-    capacity: "1회 90명",
+    capacity: "1회 120명",
     sessions: "총 6회",
     category: "K-공예",
   },
@@ -196,20 +210,6 @@ export const experiencePrograms: ExperienceProgram[] = [
     capacity: "1회 10명",
     sessions: "상시 운영",
     imageUrl: "/assets/images/main/dalgona.png",
-    category: "K-간식",
-  },
-  {
-    title: "원어민과 함께하는 쿠킹클래스 Ⅰ",
-    capacity: "1회 20명",
-    sessions: "총 4회",
-    note: "사전 신청 준비중",
-    category: "K-간식",
-  },
-  {
-    title: "원어민과 함께하는 쿠킹클래스 Ⅱ",
-    capacity: "1회 50명",
-    sessions: "총 3회",
-    note: "사전 신청 준비중",
     category: "K-간식",
   },
 ];

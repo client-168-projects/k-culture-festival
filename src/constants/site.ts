@@ -2,12 +2,12 @@ export const SITE_NAME = "2026 파주 K-컬처 페스티벌";
 export const SITE_HOME_TITLE = "2026 파주 케이컬처페스티벌";
 export const SITE_URL = "https://kculturepaju.com";
 export const SITE_DESCRIPTION =
-  "2026년 9월 12일 경기미래교육 파주캠퍼스 K-컬처 페스티벌 공식 웹사이트. 무대·체험 프로그램, 오시는 길, 셔틀버스 정보를 확인하세요.";
+  "2026년 9월 12일 경기미래교육파주캠퍼스 K-컬처 페스티벌 공식 웹사이트. 무대·체험 프로그램, 오시는 길, 셔틀버스 정보를 확인하세요.";
 
 export const FESTIVAL_START_DATE = "2026-09-12";
 
-export const VENUE_NAME = "경기미래교육 파주캠퍼스";
-export const VENUE_ADDRESS = "경기도 파주시 탄현면 얼음실로 40 경기미래교육 파주캠퍼스";
+export const VENUE_NAME = "경기미래교육파주캠퍼스";
+export const VENUE_ADDRESS = "경기도 파주시 탄현면 얼음실로 40 경기미래교육파주캠퍼스";
 export const VENUE_LAT = 37.784985;
 export const VENUE_LNG = 126.703487;
 
@@ -38,7 +38,7 @@ export const SITE_KEYWORDS = [
   "파주 축제",
   "파주 문화축제",
   "파주 행사",
-  "경기미래교육 파주캠퍼스",
+  "경기미래교육파주캠퍼스",
   "K-컬처",
   "파주 K-컬처 페스티벌",
   "축제 프로그램",

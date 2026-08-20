@@ -104,7 +104,7 @@ export function HeroSection() {
             >
               <Button className="h-auto w-full gap-2.5 rounded-full bg-brand-vermillion px-7 py-4 text-lg font-bold text-brand-paper shadow-md shadow-brand-vermillion/25 sm:w-auto">
                 <MapPin className="size-5" />
-                경기미래교육 파주캠퍼스
+                경기미래교육파주캠퍼스
               </Button>
 
               <Button
