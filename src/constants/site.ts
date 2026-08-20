@@ -1,5 +1,5 @@
 export const SITE_NAME = "2026 파주 K-컬처 페스티벌";
-export const SITE_HOME_TITLE = "2026 파주 K-컬처 페스티벌 공식 홈페이지";
+export const SITE_HOME_TITLE = "2026 파주 케이컬처페스티벌";
 export const SITE_URL = "https://kculturepaju.com";
 export const SITE_DESCRIPTION =
   "2026년 9월 12일 경기미래교육 파주캠퍼스 K-컬처 페스티벌 공식 웹사이트. 무대·체험 프로그램, 오시는 길, 셔틀버스 정보를 확인하세요.";
