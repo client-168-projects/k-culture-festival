@@ -34,7 +34,7 @@ export const stagePrograms: StageProgram[] = [
   {
     category: "특별공연",
     genre: "K-매직",
-    name: "김민형 마술사",
+    name: "마술사 김민형",
     image: `${IMAGE_BASE}/김민형.jpg`,
     imageWidth: 714,
     imageHeight: 1024,
@@ -42,7 +42,7 @@ export const stagePrograms: StageProgram[] = [
   {
     category: "공연",
     genre: "다국적 걸그룹",
-    name: "이리즈",
+    name: "Eris",
     image: `${IMAGE_BASE}/이리즈.jpg`,
     imageWidth: 1600,
     imageHeight: 900,

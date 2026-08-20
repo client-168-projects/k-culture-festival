@@ -40,14 +40,14 @@ export const extraPrograms: ExtraProgram[] = [
     imageUrl: "/assets/images/extra/풍선삐에로.png",
   },
   {
-    title: "K-푸드 간식",
-    schedule: { type: "always" },
-    imageUrl: "/assets/images/extra/K푸드간식.png",
-  },
-  {
     title: "포토네컷",
     schedule: { type: "event", label: "이벤트" },
-    note: "스탬프 투어, 만족도 조사 참여 후 이용 가능",
+    note: "스탬프 체험, 만족도 조사 참여 후 이용 가능",
     imageUrl: "/assets/images/extra/인생네컷.png",
+  },
+  {
+    title: "스탬프 체험",
+    schedule: { type: "always" },
+    imageUrl: "/assets/images/extra/스탬프-체험.png",
   },
 ];
