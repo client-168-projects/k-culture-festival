@@ -11,6 +11,11 @@ export type GA4Summary = {
   topPages: { path: string; views: number }[];
 };
 
+export type GA4Result =
+  | { status: "unconfigured" }
+  | { status: "error"; message: string }
+  | { status: "ok"; data: GA4Summary };
+
 /**
  * `src/lib/auth.ts`와 동일하게 Web Crypto(`crypto.subtle`)만 사용한다 —
  * Cloudflare Workers와 Node.js(라즈베리파이) 양쪽에서 동일하게 동작해야 하기 때문이다.
@@ -127,12 +132,12 @@ async function batchRunReports(
 
 /**
  * 관리자 통계 페이지용 GA4 요약 데이터.
- * 서비스 계정 환경변수가 없거나 API 호출이 실패해도 페이지가 죽지 않도록 null로 폴백한다
- * (호출부에서 설정 안내 화면을 보여준다).
+ * 환경변수 미설정과 API 호출 실패를 구분해서 반환한다 — 관리자만 보는 화면이라
+ * 실패 원인을 그대로 보여줘도 되고, 그래야 설정 문제인지 다른 문제인지 바로 알 수 있다.
  */
-export async function getGA4Summary(): Promise<GA4Summary | null> {
+export async function getGA4Summary(): Promise<GA4Result> {
   const config = getConfig();
-  if (!config) return null;
+  if (!config) return { status: "unconfigured" };
 
   try {
     const accessToken = await getAccessToken(config.clientEmail, config.privateKey);
@@ -177,14 +182,18 @@ export async function getGA4Summary(): Promise<GA4Summary | null> {
     }));
 
     return {
-      activeUsersToday: Number(todayReport?.rows?.[0]?.metricValues?.[0]?.value ?? 0),
-      visitors7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[0]?.value ?? 0),
-      pageViews7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[1]?.value ?? 0),
-      dailyTrend,
-      topPages,
+      status: "ok",
+      data: {
+        activeUsersToday: Number(todayReport?.rows?.[0]?.metricValues?.[0]?.value ?? 0),
+        visitors7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[0]?.value ?? 0),
+        pageViews7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[1]?.value ?? 0),
+        dailyTrend,
+        topPages,
+      },
     };
   } catch (error) {
     console.error("GA4 통계 조회 실패:", error);
-    return null;
+    const message = error instanceof Error ? error.message : String(error);
+    return { status: "error", message };
   }
 }
