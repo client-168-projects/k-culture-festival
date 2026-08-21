@@ -19,6 +19,8 @@ function StatCard({ label, value }: { label: string; value: number }) {
 }
 
 export function StatsDashboard({ summary }: { summary: GA4Summary }) {
+  const maxTrafficUsers = Math.max(1, ...summary.trafficSources.map((s) => s.users));
+
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -81,41 +83,83 @@ export function StatsDashboard({ summary }: { summary: GA4Summary }) {
         </Card>
       </div>
 
-      <Card className="self-start lg:w-1/2">
-        <CardHeader>
-          <CardTitle>공지사항별 누적 조회수</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {summary.noticePages.length === 0 ? (
-            <p className="py-8 text-center text-muted-foreground">
-              아직 수집된 데이터가 없습니다.
-            </p>
-          ) : (
-            <ul className="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2">
-              {summary.noticePages.map((page) => {
-                const id = page.path.replace("/community/notice/", "");
-                return (
-                  <li
-                    key={page.path}
-                    className="flex items-center justify-between gap-3 rounded-md bg-muted px-3 py-2"
-                  >
-                    <Link
-                      href={page.path}
-                      target="_blank"
-                      className="truncate font-mono text-sm text-brand-vermillion hover:underline"
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>공지사항별 누적 조회수</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {summary.noticePages.length === 0 ? (
+              <p className="py-8 text-center text-muted-foreground">
+                아직 수집된 데이터가 없습니다.
+              </p>
+            ) : (
+              <ul className="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2">
+                {summary.noticePages.map((page) => {
+                  const id = page.path.replace("/community/notice/", "");
+                  return (
+                    <li
+                      key={page.path}
+                      className="flex items-center justify-between gap-3 rounded-md bg-muted px-3 py-2"
                     >
-                      공지 #{id}
-                    </Link>
-                    <span className="shrink-0 font-mono text-sm text-muted-foreground">
-                      {page.views.toLocaleString("ko-KR")}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
+                      <Link
+                        href={page.path}
+                        target="_blank"
+                        className="truncate font-mono text-sm text-brand-vermillion hover:underline"
+                      >
+                        공지 #{id}
+                      </Link>
+                      <span className="shrink-0 font-mono text-sm text-muted-foreground">
+                        {page.views.toLocaleString("ko-KR")}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>유입경로 (최근 7일)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {summary.trafficSources.length === 0 ? (
+              <p className="py-8 text-center text-muted-foreground">
+                아직 수집된 데이터가 없습니다.
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-1.5">
+                {summary.trafficSources.map((source) => {
+                  const percent = Math.max(4, (source.users / maxTrafficUsers) * 100);
+                  return (
+                    <li key={source.channel} className="relative overflow-hidden rounded-md">
+                      <div
+                        className="absolute inset-y-0 left-0 bg-brand-cobalt/10"
+                        style={{ width: `${percent}%` }}
+                      />
+                      <div className="relative flex items-center justify-between gap-3 px-3 py-2">
+                        <span className="flex min-w-0 flex-col">
+                          <span className="truncate text-sm font-medium">{source.channel}</span>
+                          {source.description ? (
+                            <span className="truncate text-xs text-muted-foreground">
+                              {source.description}
+                            </span>
+                          ) : null}
+                        </span>
+                        <span className="shrink-0 font-mono text-sm text-muted-foreground">
+                          {source.users.toLocaleString("ko-KR")}
+                        </span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
