@@ -9,12 +9,31 @@ export type GA4Summary = {
   pageViews7d: number;
   dailyTrend: { date: string; visitors: number; pageViews: number }[];
   topPages: { path: string; views: number }[];
+  noticePages: { path: string; views: number }[];
 };
 
 export type GA4Result =
   | { status: "unconfigured"; missing: string[] }
   | { status: "error"; message: string }
   | { status: "ok"; data: GA4Summary };
+
+/**
+ * GA4 리포트 API는 방문자가 0명인 날짜의 행을 아예 반환하지 않는다.
+ * "최근 7일" 범위(6daysAgo~today, GA4 속성 시간대인 KST 기준)의 날짜 목록을
+ * YYYYMMDD 형식으로 미리 만들어두고, 응답에 없는 날짜는 0으로 채워 넣는다.
+ */
+function getRecentKstDateStrings(days: number): string[] {
+  const nowKst = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const dates: string[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(nowKst.getTime() - i * 24 * 60 * 60 * 1000);
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(d.getUTCDate()).padStart(2, "0");
+    dates.push(`${y}${m}${day}`);
+  }
+  return dates;
+}
 
 /**
  * `src/lib/auth.ts`와 동일하게 Web Crypto(`crypto.subtle`)만 사용한다 —
@@ -150,10 +169,8 @@ export async function getGA4Summary(): Promise<GA4Result> {
   try {
     const accessToken = await getAccessToken(config.clientEmail, config.privateKey);
 
-    const [todayReport, weekTotalReport, trendReport, topPagesReport] = await batchRunReports(
-      accessToken,
-      config.propertyId,
-      [
+    const [todayReport, weekTotalReport, trendReport, topPagesReport, noticePagesReport] =
+      await batchRunReports(accessToken, config.propertyId, [
         {
           dateRanges: [{ startDate: "today", endDate: "today" }],
           metrics: [{ name: "activeUsers" }],
@@ -175,16 +192,44 @@ export async function getGA4Summary(): Promise<GA4Result> {
           orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
           limit: 10,
         },
-      ],
-    );
+        {
+          // GA4는 "전체 기간"을 직접 지정하는 옵션이 없어, 속성 생성 시점보다 훨씬
+          // 이른 고정 날짜를 시작일로 써서 사실상 전체 누적 데이터를 가져온다.
+          dateRanges: [{ startDate: "2020-01-01", endDate: "today" }],
+          dimensions: [{ name: "pagePath" }],
+          metrics: [{ name: "screenPageViews" }],
+          dimensionFilter: {
+            filter: {
+              fieldName: "pagePath",
+              stringFilter: { matchType: "BEGINS_WITH", value: "/community/notice/" },
+            },
+          },
+          orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
+          limit: 50,
+        },
+      ]);
 
-    const dailyTrend = (trendReport?.rows ?? []).map((row) => ({
-      date: row.dimensionValues?.[0]?.value ?? "",
-      visitors: Number(row.metricValues?.[0]?.value ?? 0),
-      pageViews: Number(row.metricValues?.[1]?.value ?? 0),
+    const trendByDate = new Map(
+      (trendReport?.rows ?? []).map((row) => [
+        row.dimensionValues?.[0]?.value ?? "",
+        {
+          visitors: Number(row.metricValues?.[0]?.value ?? 0),
+          pageViews: Number(row.metricValues?.[1]?.value ?? 0),
+        },
+      ]),
+    );
+    const dailyTrend = getRecentKstDateStrings(7).map((date) => ({
+      date,
+      visitors: trendByDate.get(date)?.visitors ?? 0,
+      pageViews: trendByDate.get(date)?.pageViews ?? 0,
     }));
 
     const topPages = (topPagesReport?.rows ?? []).map((row) => ({
+      path: row.dimensionValues?.[0]?.value ?? "",
+      views: Number(row.metricValues?.[0]?.value ?? 0),
+    }));
+
+    const noticePages = (noticePagesReport?.rows ?? []).map((row) => ({
       path: row.dimensionValues?.[0]?.value ?? "",
       views: Number(row.metricValues?.[0]?.value ?? 0),
     }));
@@ -197,6 +242,7 @@ export async function getGA4Summary(): Promise<GA4Result> {
         pageViews7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[1]?.value ?? 0),
         dailyTrend,
         topPages,
+        noticePages,
       },
     };
   } catch (error) {
