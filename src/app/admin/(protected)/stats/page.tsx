@@ -7,7 +7,7 @@ import { getGA4Summary } from "@/lib/ga4";
 
 async function StatsContent() {
   const result = await getGA4Summary();
-  if (result.status === "unconfigured") return <StatsSetupNotice />;
+  if (result.status === "unconfigured") return <StatsSetupNotice missing={result.missing} />;
   if (result.status === "error") return <StatsErrorNotice message={result.message} />;
   return <StatsDashboard summary={result.data} />;
 }
