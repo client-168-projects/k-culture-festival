@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Trash2 } from "lucide-react";
+import { Pin, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import type { Notice } from "@/types/notice";
 
 type DialogState = { mode: "create" } | { mode: "edit"; notice: Notice } | null;
@@ -61,14 +62,24 @@ export function NoticesManager({ notices }: { notices: Notice[] }) {
               {notices.map((notice) => (
                 <li
                   key={notice.id}
-                  className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"
+                  className={cn(
+                    "flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0",
+                    notice.is_pinned === 1 && "bg-brand-vermillion/10 px-3",
+                  )}
                 >
                   <button
                     type="button"
                     onClick={() => setDialogState({ mode: "edit", notice })}
-                    className="flex-1 truncate text-left text-base hover:underline"
+                    className={cn(
+                      "flex flex-1 items-center gap-1.5 truncate text-left text-base hover:underline",
+                      notice.is_pinned === 1 &&
+                        "font-bold text-brand-vermillion",
+                    )}
                   >
-                    {notice.title}
+                    {notice.is_pinned === 1 ? (
+                      <Pin className="size-3.5 shrink-0 fill-current" />
+                    ) : null}
+                    <span className="truncate">{notice.title}</span>
                   </button>
                   <span className="shrink-0 font-mono text-sm text-muted-foreground">
                     {notice.created_at.slice(0, 10)}
