@@ -41,9 +41,11 @@ const CHANNEL_META_KO: Record<string, { label: string; description: string }> = 
 export type GA4Summary = {
   activeUsersToday: number;
   visitors7d: number;
-  pageViews7d: number;
+  mainPageViewsAllTime: number;
   dailyTrend: { date: string; visitors: number; pageViews: number }[];
+  dailyTrendAllTime: { date: string; visitors: number; pageViews: number }[];
   topPages: { path: string; views: number }[];
+  topPagesAllTime: { path: string; views: number }[];
   noticePages: { path: string; views: number }[];
   trafficSources: { channel: string; description: string; users: number }[];
 };
@@ -67,6 +69,25 @@ function getRecentKstDateStrings(days: number): string[] {
     const m = String(d.getUTCMonth() + 1).padStart(2, "0");
     const day = String(d.getUTCDate()).padStart(2, "0");
     dates.push(`${y}${m}${day}`);
+  }
+  return dates;
+}
+
+/** `getRecentKstDateStrings`와 같은 방식으로, 특정 시작일(YYYY-MM-DD)부터 오늘까지의 날짜 목록을 만든다. */
+function getKstDateStringsFrom(startDateISO: string): string[] {
+  const [y, m, d] = startDateISO.split("-").map(Number);
+  const startUtcMs = Date.UTC(y, m - 1, d);
+  const nowKst = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const todayUtcMs = Date.UTC(nowKst.getUTCFullYear(), nowKst.getUTCMonth(), nowKst.getUTCDate());
+  const dayCount = Math.max(0, Math.round((todayUtcMs - startUtcMs) / 86_400_000)) + 1;
+
+  const dates: string[] = [];
+  for (let i = 0; i < dayCount; i++) {
+    const day = new Date(startUtcMs + i * 86_400_000);
+    const yy = day.getUTCFullYear();
+    const mm = String(day.getUTCMonth() + 1).padStart(2, "0");
+    const dd = String(day.getUTCDate()).padStart(2, "0");
+    dates.push(`${yy}${mm}${dd}`);
   }
   return dates;
 }
@@ -205,16 +226,25 @@ export async function getGA4Summary(): Promise<GA4Result> {
   try {
     const accessToken = await getAccessToken(config.clientEmail, config.privateKey);
 
+    const ALL_TIME_START_DATE = "2026-08-14"; // 홈페이지 개시일 — 그 이전엔 트래픽 자체가 없다
+    const EXCLUDE_ADMIN_FILTER = {
+      notExpression: {
+        filter: {
+          fieldName: "pagePath",
+          stringFilter: { matchType: "BEGINS_WITH" as const, value: "/admin" },
+        },
+      },
+    };
+
+    // batchRunReports는 한 번에 최대 5개 요청까지만 허용해서 두 번에 나눠 호출한다.
     const [
-      weekTotalReport,
-      trendReport,
-      topPagesReport,
-      noticePagesReport,
-      trafficSourcesReport,
-    ] = await batchRunReports(accessToken, config.propertyId, [
+      [weekTotalReport, trendReport, topPagesReport, noticePagesReport, trafficSourcesReport],
+      [topPagesAllTimeReport, trendAllTimeReport, mainPageAllTimeReport],
+    ] = await Promise.all([
+      batchRunReports(accessToken, config.propertyId, [
         {
           dateRanges: [{ startDate: "6daysAgo", endDate: "today" }],
-          metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }],
+          metrics: [{ name: "activeUsers" }],
         },
         {
           dateRanges: [{ startDate: "6daysAgo", endDate: "today" }],
@@ -227,21 +257,12 @@ export async function getGA4Summary(): Promise<GA4Result> {
           dimensions: [{ name: "pagePath" }],
           metrics: [{ name: "screenPageViews" }],
           // 관리자 페이지 제외 적용 전에 쌓인 과거 기록이 남아있어도 이 목록엔 안 뜨도록 필터링한다.
-          dimensionFilter: {
-            notExpression: {
-              filter: {
-                fieldName: "pagePath",
-                stringFilter: { matchType: "BEGINS_WITH", value: "/admin" },
-              },
-            },
-          },
+          dimensionFilter: EXCLUDE_ADMIN_FILTER,
           orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
           limit: 10,
         },
         {
-          // GA4는 "전체 기간"을 직접 지정하는 옵션이 없어, 속성 생성 시점보다 훨씬
-          // 이른 고정 날짜를 시작일로 써서 사실상 전체 누적 데이터를 가져온다.
-          dateRanges: [{ startDate: "2020-01-01", endDate: "today" }],
+          dateRanges: [{ startDate: ALL_TIME_START_DATE, endDate: "today" }],
           dimensions: [{ name: "pagePath" }],
           metrics: [{ name: "screenPageViews" }],
           dimensionFilter: {
@@ -260,7 +281,32 @@ export async function getGA4Summary(): Promise<GA4Result> {
           orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
           limit: 10,
         },
-      ]);
+      ]),
+      batchRunReports(accessToken, config.propertyId, [
+        {
+          dateRanges: [{ startDate: ALL_TIME_START_DATE, endDate: "today" }],
+          dimensions: [{ name: "pagePath" }],
+          metrics: [{ name: "screenPageViews" }],
+          dimensionFilter: EXCLUDE_ADMIN_FILTER,
+          orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
+          limit: 10,
+        },
+        {
+          dateRanges: [{ startDate: ALL_TIME_START_DATE, endDate: "today" }],
+          dimensions: [{ name: "date" }],
+          metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }],
+          orderBys: [{ dimension: { dimensionName: "date" } }],
+        },
+        {
+          dateRanges: [{ startDate: ALL_TIME_START_DATE, endDate: "today" }],
+          dimensions: [{ name: "pagePath" }],
+          metrics: [{ name: "screenPageViews" }],
+          dimensionFilter: {
+            filter: { fieldName: "pagePath", stringFilter: { matchType: "EXACT", value: "/" } },
+          },
+        },
+      ]),
+    ]);
 
     const trendByDate = new Map(
       (trendReport?.rows ?? []).map((row) => [
@@ -277,7 +323,27 @@ export async function getGA4Summary(): Promise<GA4Result> {
       pageViews: trendByDate.get(date)?.pageViews ?? 0,
     }));
 
+    const trendAllTimeByDate = new Map(
+      (trendAllTimeReport?.rows ?? []).map((row) => [
+        row.dimensionValues?.[0]?.value ?? "",
+        {
+          visitors: Number(row.metricValues?.[0]?.value ?? 0),
+          pageViews: Number(row.metricValues?.[1]?.value ?? 0),
+        },
+      ]),
+    );
+    const dailyTrendAllTime = getKstDateStringsFrom(ALL_TIME_START_DATE).map((date) => ({
+      date,
+      visitors: trendAllTimeByDate.get(date)?.visitors ?? 0,
+      pageViews: trendAllTimeByDate.get(date)?.pageViews ?? 0,
+    }));
+
     const topPages = (topPagesReport?.rows ?? []).map((row) => ({
+      path: row.dimensionValues?.[0]?.value ?? "",
+      views: Number(row.metricValues?.[0]?.value ?? 0),
+    }));
+
+    const topPagesAllTime = (topPagesAllTimeReport?.rows ?? []).map((row) => ({
       path: row.dimensionValues?.[0]?.value ?? "",
       views: Number(row.metricValues?.[0]?.value ?? 0),
     }));
@@ -301,9 +367,13 @@ export async function getGA4Summary(): Promise<GA4Result> {
       data: {
         activeUsersToday: dailyTrend[dailyTrend.length - 1]?.visitors ?? 0,
         visitors7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[0]?.value ?? 0),
-        pageViews7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[1]?.value ?? 0),
+        mainPageViewsAllTime: Number(
+          mainPageAllTimeReport?.rows?.[0]?.metricValues?.[0]?.value ?? 0,
+        ),
         dailyTrend,
+        dailyTrendAllTime,
         topPages,
+        topPagesAllTime,
         noticePages,
         trafficSources,
       },

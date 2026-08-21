@@ -1,8 +1,8 @@
 import Link from "next/link";
 
+import { TopPagesCard } from "@/components/admin/top-pages-card";
+import { VisitorTrendCard } from "@/components/admin/visitor-trend-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { VisitorTrendChart } from "@/components/admin/visitor-trend-chart";
-import { cn } from "@/lib/utils";
 import type { GA4Summary } from "@/lib/ga4";
 
 function StatCard({ label, value }: { label: string; value: number }) {
@@ -26,61 +26,15 @@ export function StatsDashboard({ summary }: { summary: GA4Summary }) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard label="오늘 방문자" value={summary.activeUsersToday} />
         <StatCard label="최근 7일 방문자" value={summary.visitors7d} />
-        <StatCard label="최근 7일 페이지뷰" value={summary.pageViews7d} />
+        <StatCard label="누적 메인페이지 조회수" value={summary.mainPageViewsAllTime} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card className="flex flex-col">
-          <CardHeader>
-            <CardTitle>일별 방문자 추이</CardTitle>
-          </CardHeader>
-          <CardContent className="flex min-h-0 flex-1 flex-col">
-            {summary.dailyTrend.length === 0 ? (
-              <p className="py-8 text-center text-muted-foreground">
-                아직 수집된 데이터가 없습니다.
-              </p>
-            ) : (
-              <VisitorTrendChart dailyTrend={summary.dailyTrend} />
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>인기 페이지 TOP 10</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {summary.topPages.length === 0 ? (
-              <p className="py-8 text-center text-muted-foreground">
-                아직 수집된 데이터가 없습니다.
-              </p>
-            ) : (
-              <ul className="flex flex-col divide-y divide-border">
-                {summary.topPages.map((page) => {
-                  const pinned = page.path.startsWith("/community/notice");
-                  return (
-                    <li
-                      key={page.path}
-                      className="flex items-center justify-between gap-3 py-2 first:pt-0 last:pb-0"
-                    >
-                      <span
-                        className={cn(
-                          "truncate font-mono text-sm",
-                          pinned ? "text-brand-vermillion" : "text-foreground",
-                        )}
-                      >
-                        {page.path}
-                      </span>
-                      <span className="shrink-0 font-mono text-sm text-muted-foreground">
-                        {page.views.toLocaleString("ko-KR")}
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+        <VisitorTrendCard
+          dailyTrend={summary.dailyTrend}
+          dailyTrendAllTime={summary.dailyTrendAllTime}
+        />
+        <TopPagesCard topPages={summary.topPages} topPagesAllTime={summary.topPagesAllTime} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
