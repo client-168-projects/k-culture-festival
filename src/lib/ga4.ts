@@ -3,6 +3,41 @@ const DATA_API_BASE = "https://analyticsdata.googleapis.com/v1beta";
 const SCOPE = "https://www.googleapis.com/auth/analytics.readonly";
 const REQUEST_TIMEOUT_MS = 10_000;
 
+/**
+ * GA4의 기본 채널 그룹(sessionDefaultChannelGroup) 영문 값을 관리자 화면용
+ * 한글 라벨 + 설명으로 바꾼다. 비개발자가 봐도 무슨 뜻인지 알 수 있도록 설명을 붙인다.
+ */
+const CHANNEL_META_KO: Record<string, { label: string; description: string }> = {
+  Direct: {
+    label: "직접 유입",
+    description: "주소를 직접 입력했거나 출처를 알 수 없는 방문 (카톡 공유 링크 등 포함)",
+  },
+  "Organic Search": {
+    label: "자연 검색",
+    description: "네이버·구글 등에서 검색해서 들어옴",
+  },
+  "Paid Search": { label: "검색 광고", description: "검색 광고를 클릭해서 들어옴" },
+  "Organic Social": {
+    label: "소셜 미디어",
+    description: "인스타그램·페이스북 등 SNS 링크로 들어옴",
+  },
+  "Paid Social": { label: "소셜 광고", description: "SNS 광고를 클릭해서 들어옴" },
+  Referral: { label: "다른 웹사이트 링크", description: "다른 사이트에 걸린 링크를 타고 들어옴" },
+  Email: { label: "이메일", description: "이메일에 포함된 링크로 들어옴" },
+  "Organic Video": { label: "동영상", description: "유튜브 등 동영상 플랫폼을 통해 들어옴" },
+  "Paid Video": { label: "동영상 광고", description: "동영상 광고를 클릭해서 들어옴" },
+  Display: { label: "배너 광고", description: "배너(디스플레이) 광고를 클릭해서 들어옴" },
+  Affiliates: { label: "제휴 사이트", description: "제휴 사이트를 통해 들어옴" },
+  Audio: { label: "오디오", description: "오디오 광고를 통해 들어옴" },
+  SMS: { label: "문자(SMS)", description: "문자 메시지 링크로 들어옴" },
+  "Mobile Push Notifications": { label: "푸시 알림", description: "앱 푸시 알림을 통해 들어옴" },
+  "Paid Other": { label: "기타 광고", description: "위 분류에 안 맞는 기타 광고를 통해 들어옴" },
+  Unassigned: {
+    label: "미분류",
+    description: "구글이 출처를 특정하지 못한 방문 (직접 유입과 비슷하게 보면 됨)",
+  },
+};
+
 export type GA4Summary = {
   activeUsersToday: number;
   visitors7d: number;
@@ -10,6 +45,7 @@ export type GA4Summary = {
   dailyTrend: { date: string; visitors: number; pageViews: number }[];
   topPages: { path: string; views: number }[];
   noticePages: { path: string; views: number }[];
+  trafficSources: { channel: string; description: string; users: number }[];
 };
 
 export type GA4Result =
@@ -169,12 +205,13 @@ export async function getGA4Summary(): Promise<GA4Result> {
   try {
     const accessToken = await getAccessToken(config.clientEmail, config.privateKey);
 
-    const [todayReport, weekTotalReport, trendReport, topPagesReport, noticePagesReport] =
-      await batchRunReports(accessToken, config.propertyId, [
-        {
-          dateRanges: [{ startDate: "today", endDate: "today" }],
-          metrics: [{ name: "activeUsers" }],
-        },
+    const [
+      weekTotalReport,
+      trendReport,
+      topPagesReport,
+      noticePagesReport,
+      trafficSourcesReport,
+    ] = await batchRunReports(accessToken, config.propertyId, [
         {
           dateRanges: [{ startDate: "6daysAgo", endDate: "today" }],
           metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }],
@@ -189,6 +226,15 @@ export async function getGA4Summary(): Promise<GA4Result> {
           dateRanges: [{ startDate: "6daysAgo", endDate: "today" }],
           dimensions: [{ name: "pagePath" }],
           metrics: [{ name: "screenPageViews" }],
+          // 관리자 페이지 제외 적용 전에 쌓인 과거 기록이 남아있어도 이 목록엔 안 뜨도록 필터링한다.
+          dimensionFilter: {
+            notExpression: {
+              filter: {
+                fieldName: "pagePath",
+                stringFilter: { matchType: "BEGINS_WITH", value: "/admin" },
+              },
+            },
+          },
           orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
           limit: 10,
         },
@@ -206,6 +252,13 @@ export async function getGA4Summary(): Promise<GA4Result> {
           },
           orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
           limit: 50,
+        },
+        {
+          dateRanges: [{ startDate: "6daysAgo", endDate: "today" }],
+          dimensions: [{ name: "sessionDefaultChannelGroup" }],
+          metrics: [{ name: "activeUsers" }],
+          orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+          limit: 10,
         },
       ]);
 
@@ -234,15 +287,25 @@ export async function getGA4Summary(): Promise<GA4Result> {
       views: Number(row.metricValues?.[0]?.value ?? 0),
     }));
 
+    const trafficSources = (trafficSourcesReport?.rows ?? []).map((row) => {
+      const raw = row.dimensionValues?.[0]?.value ?? "";
+      return {
+        channel: CHANNEL_META_KO[raw]?.label ?? raw,
+        description: CHANNEL_META_KO[raw]?.description ?? "",
+        users: Number(row.metricValues?.[0]?.value ?? 0),
+      };
+    });
+
     return {
       status: "ok",
       data: {
-        activeUsersToday: Number(todayReport?.rows?.[0]?.metricValues?.[0]?.value ?? 0),
+        activeUsersToday: dailyTrend[dailyTrend.length - 1]?.visitors ?? 0,
         visitors7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[0]?.value ?? 0),
         pageViews7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[1]?.value ?? 0),
         dailyTrend,
         topPages,
         noticePages,
+        trafficSources,
       },
     };
   } catch (error) {
