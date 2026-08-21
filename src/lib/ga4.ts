@@ -9,6 +9,7 @@ export type GA4Summary = {
   pageViews7d: number;
   dailyTrend: { date: string; visitors: number; pageViews: number }[];
   topPages: { path: string; views: number }[];
+  noticePages: { path: string; views: number }[];
 };
 
 export type GA4Result =
@@ -150,10 +151,8 @@ export async function getGA4Summary(): Promise<GA4Result> {
   try {
     const accessToken = await getAccessToken(config.clientEmail, config.privateKey);
 
-    const [todayReport, weekTotalReport, trendReport, topPagesReport] = await batchRunReports(
-      accessToken,
-      config.propertyId,
-      [
+    const [todayReport, weekTotalReport, trendReport, topPagesReport, noticePagesReport] =
+      await batchRunReports(accessToken, config.propertyId, [
         {
           dateRanges: [{ startDate: "today", endDate: "today" }],
           metrics: [{ name: "activeUsers" }],
@@ -175,8 +174,22 @@ export async function getGA4Summary(): Promise<GA4Result> {
           orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
           limit: 10,
         },
-      ],
-    );
+        {
+          // GA4는 "전체 기간"을 직접 지정하는 옵션이 없어, 속성 생성 시점보다 훨씬
+          // 이른 고정 날짜를 시작일로 써서 사실상 전체 누적 데이터를 가져온다.
+          dateRanges: [{ startDate: "2020-01-01", endDate: "today" }],
+          dimensions: [{ name: "pagePath" }],
+          metrics: [{ name: "screenPageViews" }],
+          dimensionFilter: {
+            filter: {
+              fieldName: "pagePath",
+              stringFilter: { matchType: "BEGINS_WITH", value: "/community/notice/" },
+            },
+          },
+          orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
+          limit: 50,
+        },
+      ]);
 
     const dailyTrend = (trendReport?.rows ?? []).map((row) => ({
       date: row.dimensionValues?.[0]?.value ?? "",
@@ -189,6 +202,11 @@ export async function getGA4Summary(): Promise<GA4Result> {
       views: Number(row.metricValues?.[0]?.value ?? 0),
     }));
 
+    const noticePages = (noticePagesReport?.rows ?? []).map((row) => ({
+      path: row.dimensionValues?.[0]?.value ?? "",
+      views: Number(row.metricValues?.[0]?.value ?? 0),
+    }));
+
     return {
       status: "ok",
       data: {
@@ -197,6 +215,7 @@ export async function getGA4Summary(): Promise<GA4Result> {
         pageViews7d: Number(weekTotalReport?.rows?.[0]?.metricValues?.[1]?.value ?? 0),
         dailyTrend,
         topPages,
+        noticePages,
       },
     };
   } catch (error) {

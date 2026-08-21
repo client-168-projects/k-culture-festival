@@ -1,11 +1,9 @@
+import Link from "next/link";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { VisitorTrendChart } from "@/components/admin/visitor-trend-chart";
 import { cn } from "@/lib/utils";
 import type { GA4Summary } from "@/lib/ga4";
-
-function formatGA4Date(raw: string): string {
-  if (raw.length !== 8) return raw;
-  return `${raw.slice(4, 6)}/${raw.slice(6, 8)}`;
-}
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
@@ -21,8 +19,6 @@ function StatCard({ label, value }: { label: string; value: number }) {
 }
 
 export function StatsDashboard({ summary }: { summary: GA4Summary }) {
-  const maxVisitors = Math.max(1, ...summary.dailyTrend.map((d) => d.visitors));
-
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -42,27 +38,7 @@ export function StatsDashboard({ summary }: { summary: GA4Summary }) {
                 아직 수집된 데이터가 없습니다.
               </p>
             ) : (
-              <div className="flex h-40 items-end gap-2">
-                {summary.dailyTrend.map((day) => (
-                  <div
-                    key={day.date}
-                    className="flex flex-1 flex-col items-center gap-2"
-                  >
-                    <div className="flex h-32 w-full items-end">
-                      <div
-                        className="w-full rounded-t-sm bg-brand-cobalt"
-                        style={{
-                          height: `${Math.max(4, (day.visitors / maxVisitors) * 100)}%`,
-                        }}
-                        title={`${day.visitors.toLocaleString("ko-KR")}명`}
-                      />
-                    </div>
-                    <span className="font-mono text-xs text-muted-foreground">
-                      {formatGA4Date(day.date)}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              <VisitorTrendChart dailyTrend={summary.dailyTrend} />
             )}
           </CardContent>
         </Card>
@@ -104,6 +80,42 @@ export function StatsDashboard({ summary }: { summary: GA4Summary }) {
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>공지사항별 누적 조회수</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {summary.noticePages.length === 0 ? (
+            <p className="py-8 text-center text-muted-foreground">
+              아직 수집된 데이터가 없습니다.
+            </p>
+          ) : (
+            <ul className="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2">
+              {summary.noticePages.map((page) => {
+                const id = page.path.replace("/community/notice/", "");
+                return (
+                  <li
+                    key={page.path}
+                    className="flex items-center justify-between gap-3 rounded-md bg-muted px-3 py-2"
+                  >
+                    <Link
+                      href={page.path}
+                      target="_blank"
+                      className="truncate font-mono text-sm text-brand-vermillion hover:underline"
+                    >
+                      공지 #{id}
+                    </Link>
+                    <span className="shrink-0 font-mono text-sm text-muted-foreground">
+                      {page.views.toLocaleString("ko-KR")}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
