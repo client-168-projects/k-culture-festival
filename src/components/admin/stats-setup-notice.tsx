@@ -1,21 +1,40 @@
 import { AlertTriangle, BarChart3 } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-export function StatsSetupNotice() {
+const GA4_ENV_KEYS = [
+  "GA4_PROPERTY_ID",
+  "GA4_SERVICE_ACCOUNT_EMAIL",
+  "GA4_SERVICE_ACCOUNT_PRIVATE_KEY",
+];
+
+export function StatsSetupNotice({ missing }: { missing: string[] }) {
   return (
     <Card>
       <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
         <BarChart3 className="size-8 text-muted-foreground" />
         <p className="text-base font-medium">GA4 연동이 아직 설정되지 않았습니다.</p>
         <p className="max-w-md text-sm text-muted-foreground">
-          Google Cloud 서비스 계정을 만들고 GA4 속성에 뷰어 권한으로 추가한 뒤, 아래
-          환경변수를 설정하면 이 화면에 통계가 표시됩니다.
+          아래 환경변수 중 이 서버가 실제로 읽지 못하고 있는 값이 빨간색으로
+          표시됩니다. 배포 환경의 변수 설정을 다시 확인해주세요.
         </p>
-        <ul className="mt-1 flex flex-col gap-1 rounded-md bg-muted px-4 py-3 text-left font-mono text-xs text-muted-foreground">
-          <li>GA4_PROPERTY_ID</li>
-          <li>GA4_SERVICE_ACCOUNT_EMAIL</li>
-          <li>GA4_SERVICE_ACCOUNT_PRIVATE_KEY</li>
+        <ul className="mt-1 flex flex-col gap-1 rounded-md bg-muted px-4 py-3 text-left font-mono text-xs">
+          {GA4_ENV_KEYS.map((key) => {
+            const isMissing = missing.includes(key);
+            return (
+              <li
+                key={key}
+                className={cn(
+                  isMissing
+                    ? "font-bold text-destructive"
+                    : "text-muted-foreground",
+                )}
+              >
+                {isMissing ? "✗" : "✓"} {key}
+              </li>
+            );
+          })}
         </ul>
       </CardContent>
     </Card>

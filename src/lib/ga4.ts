@@ -12,7 +12,7 @@ export type GA4Summary = {
 };
 
 export type GA4Result =
-  | { status: "unconfigured" }
+  | { status: "unconfigured"; missing: string[] }
   | { status: "error"; message: string }
   | { status: "ok"; data: GA4Summary };
 
@@ -46,6 +46,14 @@ function pemToArrayBuffer(pem: string): ArrayBuffer {
 }
 
 type GA4Config = { propertyId: string; clientEmail: string; privateKey: string };
+
+function getMissingEnvKeys(): string[] {
+  const missing: string[] = [];
+  if (!process.env.GA4_PROPERTY_ID) missing.push("GA4_PROPERTY_ID");
+  if (!process.env.GA4_SERVICE_ACCOUNT_EMAIL) missing.push("GA4_SERVICE_ACCOUNT_EMAIL");
+  if (!process.env.GA4_SERVICE_ACCOUNT_PRIVATE_KEY) missing.push("GA4_SERVICE_ACCOUNT_PRIVATE_KEY");
+  return missing;
+}
 
 function getConfig(): GA4Config | null {
   const propertyId = process.env.GA4_PROPERTY_ID;
@@ -137,7 +145,7 @@ async function batchRunReports(
  */
 export async function getGA4Summary(): Promise<GA4Result> {
   const config = getConfig();
-  if (!config) return { status: "unconfigured" };
+  if (!config) return { status: "unconfigured", missing: getMissingEnvKeys() };
 
   try {
     const accessToken = await getAccessToken(config.clientEmail, config.privateKey);
