@@ -1,4 +1,4 @@
-import { BarChart3 } from "lucide-react";
+import { AlertTriangle, BarChart3 } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -17,6 +17,24 @@ export function StatsSetupNotice() {
           <li>GA4_SERVICE_ACCOUNT_EMAIL</li>
           <li>GA4_SERVICE_ACCOUNT_PRIVATE_KEY</li>
         </ul>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function StatsErrorNotice({ message }: { message: string }) {
+  return (
+    <Card>
+      <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
+        <AlertTriangle className="size-8 text-destructive" />
+        <p className="text-base font-medium">GA4 데이터를 불러오지 못했습니다.</p>
+        <p className="max-w-2xl text-sm text-muted-foreground">
+          환경변수는 설정되어 있지만 API 호출이 실패했습니다. 서비스 계정에 GA4 속성
+          뷰어 권한이 있는지, 속성 ID가 맞는지 확인해주세요.
+        </p>
+        <pre className="mt-1 w-full max-w-2xl overflow-x-auto rounded-md bg-muted px-4 py-3 text-left font-mono text-xs text-destructive">
+          {message}
+        </pre>
       </CardContent>
     </Card>
   );

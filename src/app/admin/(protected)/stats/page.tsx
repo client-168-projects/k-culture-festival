@@ -1,14 +1,15 @@
 import { Suspense } from "react";
 
 import { StatsDashboard } from "@/components/admin/stats-dashboard";
-import { StatsSetupNotice } from "@/components/admin/stats-setup-notice";
+import { StatsErrorNotice, StatsSetupNotice } from "@/components/admin/stats-setup-notice";
 import { StatsSkeleton } from "@/components/admin/stats-skeleton";
 import { getGA4Summary } from "@/lib/ga4";
 
 async function StatsContent() {
-  const summary = await getGA4Summary();
-  if (!summary) return <StatsSetupNotice />;
-  return <StatsDashboard summary={summary} />;
+  const result = await getGA4Summary();
+  if (result.status === "unconfigured") return <StatsSetupNotice />;
+  if (result.status === "error") return <StatsErrorNotice message={result.message} />;
+  return <StatsDashboard summary={result.data} />;
 }
 
 export default function StatsPage() {
