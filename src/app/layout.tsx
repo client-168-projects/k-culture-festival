@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Black_Han_Sans, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { JsonLd } from "@/components/json-ld";
 import { SITE_THEME_COLOR } from "@/constants/site";
 import { rootMetadata } from "@/lib/metadata";
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <JsonLd data={[buildWebSiteJsonLd(), buildOrganizationJsonLd()]} />
+        <GoogleAnalytics />
       </head>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, ImageIcon, LogOut, Megaphone } from "lucide-react";
+import { BarChart3, ExternalLink, ImageIcon, LogOut, Megaphone } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navItems = [
+  { key: "stats", label: "통계", icon: BarChart3 },
   { key: "notices", label: "공지사항", icon: Megaphone },
   { key: "notice-popups", label: "팝업 관리", icon: ImageIcon },
 ];
