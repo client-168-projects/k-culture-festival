@@ -38,6 +38,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
   const body = await request.json().catch(() => null);
   const title = typeof body?.title === "string" ? body.title.trim() : "";
   const content = typeof body?.content === "string" ? body.content : "";
+  const isPinned = body?.is_pinned === true ? 1 : 0;
   const attachments = parseAttachments(body);
 
   if (!title || !content) {
@@ -50,10 +51,10 @@ export async function PUT(request: Request, { params }: RouteParams) {
   try {
     const updated = await d1Query<{ id: number }>(
       `UPDATE notices
-       SET title = ?, content = ?, updated_at = datetime('now')
+       SET title = ?, content = ?, is_pinned = ?, updated_at = datetime('now')
        WHERE id = ?
        RETURNING id`,
-      [title, sanitizeNoticeContent(content), noticeId],
+      [title, sanitizeNoticeContent(content), isPinned, noticeId],
       { noStore: true },
     );
 

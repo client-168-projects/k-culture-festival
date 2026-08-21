@@ -31,7 +31,7 @@ export async function getNotices(): Promise<Notice[]> {
   try {
     const [notices, attachments] = await Promise.all([
       d1Query<Omit<Notice, "attachments">>(
-        "SELECT id, title, content, created_at, updated_at FROM notices ORDER BY created_at DESC",
+        "SELECT id, title, content, is_pinned, created_at, updated_at FROM notices ORDER BY is_pinned DESC, created_at DESC",
       ),
       d1Query<NoticeAttachment>(
         "SELECT id, notice_id, file_name, file_url, file_size, created_at FROM notice_attachments ORDER BY created_at ASC",
@@ -57,7 +57,7 @@ export const getNoticeById = cache(async (id: number): Promise<Notice | null> =>
   try {
     const [notices, attachments] = await Promise.all([
       d1Query<Omit<Notice, "attachments">>(
-        "SELECT id, title, content, created_at, updated_at FROM notices WHERE id = ?",
+        "SELECT id, title, content, is_pinned, created_at, updated_at FROM notices WHERE id = ?",
         [id],
       ),
       d1Query<NoticeAttachment>(

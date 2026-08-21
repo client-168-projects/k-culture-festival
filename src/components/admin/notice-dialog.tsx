@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Paperclip, X } from "lucide-react";
+import { FileText, Paperclip, Pin, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import { type ChangeEvent, useRef, useState } from "react";
 
@@ -53,6 +53,7 @@ export function NoticeDialog({
 }: Props) {
   const [title, setTitle] = useState(notice?.title ?? "");
   const [content, setContent] = useState(notice?.content ?? "");
+  const [isPinned, setIsPinned] = useState(notice?.is_pinned === 1);
   const [attachments, setAttachments] = useState<AttachmentDraft[]>(
     notice?.attachments ?? [],
   );
@@ -71,6 +72,7 @@ export function NoticeDialog({
     if (next) {
       setTitle(notice?.title ?? "");
       setContent(notice?.content ?? "");
+      setIsPinned(notice?.is_pinned === 1);
       setAttachments(notice?.attachments ?? []);
       setView("edit");
       setError(null);
@@ -174,7 +176,7 @@ export function NoticeDialog({
     setSaving(true);
     setError(null);
 
-    const payload = { title, content, attachments };
+    const payload = { title, content, is_pinned: isPinned, attachments };
     const res =
       mode === "create"
         ? await fetch("/api/admin/notices", {
@@ -218,6 +220,21 @@ export function NoticeDialog({
               placeholder="공지 제목을 입력하세요"
             />
           </div>
+
+          <button
+            type="button"
+            onClick={() => setIsPinned((prev) => !prev)}
+            aria-pressed={isPinned}
+            className={cn(
+              "flex w-fit items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors",
+              isPinned
+                ? "border-brand-vermillion bg-brand-vermillion/10 text-brand-vermillion"
+                : "border-input text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <Pin className={cn("size-4", isPinned && "fill-current")} />
+            상단 고정
+          </button>
 
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-1 self-start rounded-md bg-muted p-1">

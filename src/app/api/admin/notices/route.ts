@@ -13,6 +13,7 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
   const title = typeof body?.title === "string" ? body.title.trim() : "";
   const content = typeof body?.content === "string" ? body.content : "";
+  const isPinned = body?.is_pinned === true ? 1 : 0;
   const attachments = parseAttachments(body);
 
   if (!title || !content) {
@@ -24,10 +25,10 @@ export async function POST(request: Request) {
 
   try {
     const rows = await d1Query<{ id: number }>(
-      `INSERT INTO notices (title, content)
-       VALUES (?, ?)
+      `INSERT INTO notices (title, content, is_pinned)
+       VALUES (?, ?, ?)
        RETURNING id`,
-      [title, sanitizeNoticeContent(content)],
+      [title, sanitizeNoticeContent(content), isPinned],
       { noStore: true },
     );
     const noticeId = rows[0]?.id;
