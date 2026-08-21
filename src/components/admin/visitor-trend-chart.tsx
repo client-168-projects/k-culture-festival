@@ -36,7 +36,7 @@ export function VisitorTrendChart({
   dailyTrend: GA4Summary["dailyTrend"];
 }) {
   return (
-    <div className="h-40 w-full">
+    <div className="h-full min-h-40 w-full flex-1">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={dailyTrend} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
           <defs>

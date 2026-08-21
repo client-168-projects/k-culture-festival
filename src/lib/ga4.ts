@@ -18,6 +18,24 @@ export type GA4Result =
   | { status: "ok"; data: GA4Summary };
 
 /**
+ * GA4 리포트 API는 방문자가 0명인 날짜의 행을 아예 반환하지 않는다.
+ * "최근 7일" 범위(6daysAgo~today, GA4 속성 시간대인 KST 기준)의 날짜 목록을
+ * YYYYMMDD 형식으로 미리 만들어두고, 응답에 없는 날짜는 0으로 채워 넣는다.
+ */
+function getRecentKstDateStrings(days: number): string[] {
+  const nowKst = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const dates: string[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(nowKst.getTime() - i * 24 * 60 * 60 * 1000);
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(d.getUTCDate()).padStart(2, "0");
+    dates.push(`${y}${m}${day}`);
+  }
+  return dates;
+}
+
+/**
  * `src/lib/auth.ts`와 동일하게 Web Crypto(`crypto.subtle`)만 사용한다 —
  * Cloudflare Workers와 Node.js(라즈베리파이) 양쪽에서 동일하게 동작해야 하기 때문이다.
  * 서비스 계정 JWT 서명(RS256)에 Node 전용 `crypto`/`jsonwebtoken` 라이브러리를 쓰지 않는다.
@@ -191,10 +209,19 @@ export async function getGA4Summary(): Promise<GA4Result> {
         },
       ]);
 
-    const dailyTrend = (trendReport?.rows ?? []).map((row) => ({
-      date: row.dimensionValues?.[0]?.value ?? "",
-      visitors: Number(row.metricValues?.[0]?.value ?? 0),
-      pageViews: Number(row.metricValues?.[1]?.value ?? 0),
+    const trendByDate = new Map(
+      (trendReport?.rows ?? []).map((row) => [
+        row.dimensionValues?.[0]?.value ?? "",
+        {
+          visitors: Number(row.metricValues?.[0]?.value ?? 0),
+          pageViews: Number(row.metricValues?.[1]?.value ?? 0),
+        },
+      ]),
+    );
+    const dailyTrend = getRecentKstDateStrings(7).map((date) => ({
+      date,
+      visitors: trendByDate.get(date)?.visitors ?? 0,
+      pageViews: trendByDate.get(date)?.pageViews ?? 0,
     }));
 
     const topPages = (topPagesReport?.rows ?? []).map((row) => ({

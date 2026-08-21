@@ -28,11 +28,11 @@ export function StatsDashboard({ summary }: { summary: GA4Summary }) {
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card>
+        <Card className="flex flex-col">
           <CardHeader>
             <CardTitle>일별 방문자 추이</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex min-h-0 flex-1 flex-col">
             {summary.dailyTrend.length === 0 ? (
               <p className="py-8 text-center text-muted-foreground">
                 아직 수집된 데이터가 없습니다.
@@ -81,7 +81,7 @@ export function StatsDashboard({ summary }: { summary: GA4Summary }) {
         </Card>
       </div>
 
-      <Card>
+      <Card className="self-start lg:w-1/2">
         <CardHeader>
           <CardTitle>공지사항별 누적 조회수</CardTitle>
         </CardHeader>
