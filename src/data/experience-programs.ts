@@ -128,15 +128,15 @@ export const experiencePrograms: ExperienceProgram[] = [
     title: "원어민과 함께하는 쿠킹클래스 Ⅰ",
     capacity: "1회 20명",
     sessions: "총 4회",
-    note: "사전 신청 준비중",
     category: "K-문화",
+    applicationUrl: "https://form.naver.com/response/LC9cSaibiVV" 
   },
   {
     title: "원어민과 함께하는 쿠킹클래스 Ⅱ",
     capacity: "1회 50명",
     sessions: "총 3회",
-    note: "사전 신청 준비중",
     category: "K-문화",
+    applicationUrl: "https://form.naver.com/response/BL8UzG0RKV5"
   },
   {
     title: "키캡키링 만들기",
@@ -174,6 +174,7 @@ export const experiencePrograms: ExperienceProgram[] = [
     capacity: "1회 120명",
     sessions: "총 6회",
     category: "K-공예",
+
   },
   {
     title: "전통무늬 친환경 샴푸바 만들기",
