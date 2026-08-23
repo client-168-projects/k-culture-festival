@@ -12,6 +12,7 @@ import {
 
 import { SegmentedToggle } from "@/components/admin/segmented-toggle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import type { GA4Summary } from "@/lib/ga4";
 
 function formatGA4Date(raw: string): string {
@@ -98,9 +99,7 @@ export function VisitorTrendCard({
       </CardHeader>
       <CardContent className="flex min-h-0 flex-1 flex-col">
         {data.length === 0 ? (
-          <p className="py-8 text-center text-muted-foreground">
-            아직 수집된 데이터가 없습니다.
-          </p>
+          <EmptyState message="아직 수집된 데이터가 없습니다." />
         ) : (
           <TrendAreaChart data={data} />
         )}

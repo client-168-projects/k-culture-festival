@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { NoticeList } from "@/components/notice-list";
 import { PageContainer, PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { createPageMetadata } from "@/lib/metadata";
 import { getNotices } from "@/lib/notices";
 
@@ -22,9 +23,7 @@ export default async function NoticePage() {
       <Card>
         <CardContent>
           {notices.length === 0 ? (
-            <p className="py-8 text-center text-muted-foreground">
-              등록된 공지사항이 없습니다.
-            </p>
+            <EmptyState message="등록된 공지사항이 없습니다." />
           ) : (
             <NoticeList notices={notices} />
           )}

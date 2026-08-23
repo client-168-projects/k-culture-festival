@@ -3,7 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { navSections } from "@/config/nav";
-import { SITE_PHONE, VENUE_ADDRESS, VENUE_NAME } from "@/constants/site";
+import {
+  ORGANIZER_LOGO,
+  ORGANIZER_URL,
+  SITE_PHONE,
+  VENUE_ADDRESS,
+  VENUE_NAME,
+} from "@/constants/site";
 
 const PHONE_HREF = SITE_PHONE.replace(/[^+\d]/g, "");
 
@@ -20,13 +26,13 @@ export function SiteFooter() {
 
           <div className="flex flex-nowrap items-center justify-start gap-3">
             <a
-              href="https://www.gill.or.kr"
+              href={ORGANIZER_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center rounded-lg border border-border bg-white px-3 py-2 transition-opacity hover:opacity-80"
             >
               <Image
-                src="/assets/logo/gyungi-institute-lifelong-learning-logo.png"
+                src={ORGANIZER_LOGO}
                 alt="경기도평생교육진흥원 로고"
                 width={288}
                 height={80}

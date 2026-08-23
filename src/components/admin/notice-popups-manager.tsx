@@ -4,10 +4,12 @@ import { ArrowDown, ArrowUp, ExternalLink, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { NoticePopupDialog } from "@/components/admin/notice-popup-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { getPopupStatus } from "@/lib/notice-popup-validation";
 import type { NoticePopup, PopupStatus } from "@/types/notice-popup";
 
@@ -60,7 +62,7 @@ export function NoticePopupsManager({ popups }: { popups: NoticePopup[] }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold tracking-tight">팝업 관리</h1>
+        <AdminPageHeader>팝업 관리</AdminPageHeader>
         <Button onClick={() => setDialogState({ mode: "create" })}>
           <Plus className="size-4" />새 팝업 등록
         </Button>
@@ -69,9 +71,7 @@ export function NoticePopupsManager({ popups }: { popups: NoticePopup[] }) {
       <Card>
         <CardContent>
           {popups.length === 0 ? (
-            <p className="py-8 text-center text-muted-foreground">
-              등록된 팝업이 없습니다.
-            </p>
+            <EmptyState message="등록된 팝업이 없습니다." />
           ) : (
             <ul className="flex flex-col divide-y divide-border">
               {popups.map((popup, index) => {
