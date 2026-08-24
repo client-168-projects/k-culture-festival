@@ -15,3 +15,29 @@ export function formatFileSize(bytes: number): string {
 export function toAbsoluteUrl(url: string): string {
   return /^https?:\/\//i.test(url) ? url : `https://${url}`;
 }
+
+/** ISO datetime을 "2026. 8. 31.(월) AM 10:00" 형태의 KST 안내 문구로 변환 */
+export function formatKstOpensAt(iso: string): string {
+  const date = new Date(iso);
+
+  const dateParts = new Intl.DateTimeFormat("ko-KR", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    weekday: "short",
+  }).formatToParts(date);
+  const getDatePart = (type: Intl.DateTimeFormatPartTypes) =>
+    dateParts.find((part) => part.type === type)?.value ?? "";
+
+  const timeParts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Seoul",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).formatToParts(date);
+  const getTimePart = (type: Intl.DateTimeFormatPartTypes) =>
+    timeParts.find((part) => part.type === type)?.value ?? "";
+
+  return `${getDatePart("year")}. ${getDatePart("month")}. ${getDatePart("day")}.(${getDatePart("weekday")}) ${getTimePart("dayPeriod")} ${getTimePart("hour")}:${getTimePart("minute")}`;
+}
