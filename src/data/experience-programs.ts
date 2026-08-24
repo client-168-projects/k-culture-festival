@@ -138,7 +138,7 @@ export const experiencePrograms: ExperienceProgram[] = [
   {
     title: "원어민과 함께하는 쿠킹클래스 Ⅱ",
     capacity: "1회 50명",
-    sessions: "총 3회",
+    sessions: "총 2회",
     category: "K-문화",
     applicationUrl:
       "https://docs.google.com/forms/d/1Iw3M5U2JRTSR8iRpSLS_fDeqVRtteHDHA_h56G_kd3s/viewform?edit_requested=true",
