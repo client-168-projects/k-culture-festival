@@ -3,19 +3,19 @@
 import { Eye, ImagePlus, Trash2 } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
 
+import { ConfirmDeleteDialog } from "@/components/admin/confirm-delete-dialog";
 import { Button } from "@/components/ui/button";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FieldGroup } from "@/components/ui/field-group";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import {
   HIDE_DURATION_OPTIONS,
@@ -31,7 +31,9 @@ import {
   resizeImageIfNeeded,
   trimTransparentPadding,
 } from "@/lib/image-resize";
+import { validateImageFile } from "@/lib/media-validation";
 import { validateNoticePopupInput } from "@/lib/notice-popup-validation";
+import { uploadFile } from "@/lib/upload-client";
 import { formatFileSize } from "@/lib/utils";
 import type { NoticePopup, PopupSize } from "@/types/notice-popup";
 
@@ -105,14 +107,9 @@ export function NoticePopupDialog({
 
     setError(null);
 
-    if (!ALLOWED_IMAGE_MIME_TYPES.includes(file.type)) {
-      setError("PNG, JPEG, WEBP, GIF 이미지만 업로드할 수 있습니다.");
-      return;
-    }
-    if (file.size > MAX_IMAGE_SIZE_BYTES) {
-      setError(
-        `이미지는 ${formatFileSize(MAX_IMAGE_SIZE_BYTES)} 이하만 업로드할 수 있습니다.`,
-      );
+    const validationError = validateImageFile(file);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
@@ -126,23 +123,19 @@ export function NoticePopupDialog({
     );
 
     setUploadStep({ label: "업로드 중...", value: 80 });
-    const formData = new FormData();
-    formData.append("file", resized);
+    const result = await uploadFile<{ url: string }>(
+      "/api/admin/upload/image",
+      resized,
+    );
 
-    const res = await fetch("/api/admin/upload/image", {
-      method: "POST",
-      body: formData,
-    });
-    const body = await res.json().catch(() => null);
-
-    if (!res.ok) {
+    if (!result.ok) {
       setUploadStep(null);
-      setError(body?.error ?? "이미지 업로드에 실패했습니다.");
+      setError(result.error ?? "이미지 업로드에 실패했습니다.");
       return;
     }
 
     setUploadStep({ label: "완료", value: 100 });
-    setImageUrl(body.url);
+    setImageUrl(result.data.url);
     setTimeout(() => setUploadStep(null), 300);
   }
 
@@ -207,8 +200,7 @@ export function NoticePopupDialog({
           </DialogHeader>
 
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <Label>이미지</Label>
+            <FieldGroup label="이미지">
               {imageUrl ? (
                 // Supabase 공개 URL 이미지 — next.config에 remotePatterns가 없어 next/image 대신
                 // 프로젝트 전반의 관례(공지 첨부/본문 이미지)와 동일하게 일반 img 태그를 사용한다.
@@ -265,12 +257,9 @@ export function NoticePopupDialog({
                 자동으로 잘려나가고 가로/세로 {POPUP_IMAGE_MAX_DIMENSION}
                 px 초과 시 자동으로 축소되어 업로드됩니다.
               </p>
-            </div>
+            </FieldGroup>
 
-            <div className="flex flex-col gap-1.5">
-              <Label>
-                팝업 크기 (너비 기준, 높이는 이미지 비율에 따라 자동)
-              </Label>
+            <FieldGroup label="팝업 크기 (너비 기준, 높이는 이미지 비율에 따라 자동)">
               <div className="flex flex-wrap gap-2">
                 {POPUP_SIZE_OPTIONS.map((option) => (
                   <Button
@@ -284,10 +273,9 @@ export function NoticePopupDialog({
                   </Button>
                 ))}
               </div>
-            </div>
+            </FieldGroup>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="popup-target-url">이동 URL (선택)</Label>
+            <FieldGroup label="이동 URL (선택)" htmlFor="popup-target-url">
               <Input
                 id="popup-target-url"
                 value={targetUrl}
@@ -297,10 +285,9 @@ export function NoticePopupDialog({
               <p className="text-sm text-muted-foreground">
                 http:// 또는 https://를 포함한 전체 주소를 입력해주세요.
               </p>
-            </div>
+            </FieldGroup>
 
-            <div className="flex flex-col gap-1.5">
-              <Label>게시 기간</Label>
+            <FieldGroup label="게시 기간">
               <DateRangePicker
                 startDate={startDate}
                 endDate={endDate}
@@ -309,10 +296,9 @@ export function NoticePopupDialog({
                   setEndDate(range.endDate);
                 }}
               />
-            </div>
+            </FieldGroup>
 
-            <div className="flex flex-col gap-1.5">
-              <Label>N일간 보지 않기 기간</Label>
+            <FieldGroup label="N일간 보지 않기 기간">
               <div className="flex flex-wrap gap-2">
                 {HIDE_DURATION_OPTIONS.map((days) => (
                   <Button
@@ -326,10 +312,9 @@ export function NoticePopupDialog({
                   </Button>
                 ))}
               </div>
-            </div>
+            </FieldGroup>
 
-            <div className="flex flex-col gap-1.5">
-              <Label>게시 상태</Label>
+            <FieldGroup label="게시 상태">
               <div className="flex gap-2">
                 <Button
                   type="button"
@@ -348,7 +333,7 @@ export function NoticePopupDialog({
                   숨김
                 </Button>
               </div>
-            </div>
+            </FieldGroup>
 
             {error ? <p className="text-sm text-destructive">{error}</p> : null}
           </div>
@@ -378,28 +363,14 @@ export function NoticePopupDialog({
         </DialogContent>
       </Dialog>
 
-      <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle>공지 팝업 삭제</DialogTitle>
-            <DialogDescription>
-              공지 팝업을 삭제하시겠습니까? 삭제 후 복구할 수 없습니다.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">취소</Button>
-            </DialogClose>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={deleting}
-            >
-              {deleting ? "삭제 중..." : "삭제"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmDeleteDialog
+        open={deleteConfirmOpen}
+        onOpenChange={setDeleteConfirmOpen}
+        title="공지 팝업 삭제"
+        description="공지 팝업을 삭제하시겠습니까? 삭제 후 복구할 수 없습니다."
+        onConfirm={handleDelete}
+        pending={deleting}
+      />
 
       <NoticePopupPreviewOverlay
         open={previewOpen}

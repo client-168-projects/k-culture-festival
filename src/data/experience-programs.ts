@@ -4,6 +4,8 @@ export type ExperienceProgram = {
   sessions: string;
   /** 값이 있으면 카드에 "사전신청하러 가기" 버튼이 자동으로 표시된다. */
   applicationUrl?: string;
+  /** 지정 시 그 시각(KST) 전까지는 버튼이 비활성화되고, 도달하면 자동으로 활성화된다. ISO datetime, 오프셋 명시 (예: "2026-08-31T10:00:00+09:00"). */
+  applicationOpensAt?: string;
   /** 메인 페이지 체험 프로그램 하이라이트 카드에서만 사용 */
   imageUrl?: string;
   /** K-전통 / K-문화 / K-공예 / K-간식 */
@@ -126,17 +128,21 @@ export const experiencePrograms: ExperienceProgram[] = [
   },
   {
     title: "원어민과 함께하는 쿠킹클래스 Ⅰ",
-    capacity: "1회 20명",
-    sessions: "총 4회",
+    capacity: "1회 5명",
+    sessions: "총 3회",
     category: "K-문화",
-    applicationUrl: "https://form.naver.com/response/LC9cSaibiVV" 
+    applicationUrl:
+      "https://docs.google.com/forms/d/1MBhqYC2fsP9fBaQdIja0BuDH-j6YLUeOKSTHfBeZBAY/viewform?edit_requested=true",
+    applicationOpensAt: "2026-08-31T10:00:00+09:00",
   },
   {
     title: "원어민과 함께하는 쿠킹클래스 Ⅱ",
     capacity: "1회 50명",
     sessions: "총 3회",
     category: "K-문화",
-    applicationUrl: "https://form.naver.com/response/BL8UzG0RKV5"
+    applicationUrl:
+      "https://docs.google.com/forms/d/1Iw3M5U2JRTSR8iRpSLS_fDeqVRtteHDHA_h56G_kd3s/viewform?edit_requested=true",
+    applicationOpensAt: "2026-08-31T10:00:00+09:00",
   },
   {
     title: "키캡키링 만들기",

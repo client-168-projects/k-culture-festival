@@ -6,8 +6,8 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { FieldGroup } from "@/components/ui/field-group";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export function LoginForm() {
   const router = useRouter();
@@ -42,8 +42,7 @@ export function LoginForm() {
     <Card className="w-full max-w-sm">
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="username">아이디</Label>
+          <FieldGroup label="아이디" htmlFor="username">
             <Input
               id="username"
               autoComplete="username"
@@ -51,9 +50,8 @@ export function LoginForm() {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="password">비밀번호</Label>
+          </FieldGroup>
+          <FieldGroup label="비밀번호" htmlFor="password">
             <Input
               id="password"
               type="password"
@@ -62,7 +60,7 @@ export function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-          </div>
+          </FieldGroup>
           {error ? (
             <p className="text-sm text-destructive">{error}</p>
           ) : null}

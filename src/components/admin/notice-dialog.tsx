@@ -13,14 +13,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FieldGroup } from "@/components/ui/field-group";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import {
   ALLOWED_ATTACHMENT_EXTENSIONS,
   MAX_ATTACHMENT_SIZE_BYTES,
   MAX_ATTACHMENTS_PER_NOTICE,
 } from "@/constants/media";
+import { uploadFile } from "@/lib/upload-client";
 import { cn, formatFileSize } from "@/lib/utils";
 import type { Notice } from "@/types/notice";
 
@@ -107,23 +108,20 @@ export function NoticeDialog({
     const results = await Promise.allSettled(
       filesToUpload.map(async (file) => {
         try {
-          const formData = new FormData();
-          formData.append("file", file);
+          const result = await uploadFile<{
+            name: string;
+            url: string;
+            size: number;
+          }>("/api/admin/upload/attachment", file);
 
-          const res = await fetch("/api/admin/upload/attachment", {
-            method: "POST",
-            body: formData,
-          });
-          const body = await res.json().catch(() => null);
-
-          if (!res.ok) {
-            throw new Error(body?.error ?? "첨부파일 업로드에 실패했습니다.");
+          if (!result.ok) {
+            throw new Error(result.error ?? "첨부파일 업로드에 실패했습니다.");
           }
 
           return {
-            file_name: body.name,
-            file_url: body.url,
-            file_size: body.size,
+            file_name: result.data.name,
+            file_url: result.data.url,
+            file_size: result.data.size,
           } as AttachmentDraft;
         } finally {
           setAttachmentProgress((prev) =>
@@ -211,15 +209,14 @@ export function NoticeDialog({
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="notice-title">제목</Label>
+          <FieldGroup label="제목" htmlFor="notice-title">
             <Input
               id="notice-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="공지 제목을 입력하세요"
             />
-          </div>
+          </FieldGroup>
 
           <button
             type="button"
@@ -284,8 +281,7 @@ export function NoticeDialog({
 
           {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
-          <div className="flex flex-col gap-1.5">
-            <Label>첨부파일</Label>
+          <FieldGroup label="첨부파일">
             {attachments.length > 0 ? (
               <ul className="flex flex-col gap-1">
                 {attachments.map((attachment, index) => (
@@ -358,7 +354,7 @@ export function NoticeDialog({
             {attachmentError ? (
               <p className="text-sm text-destructive">{attachmentError}</p>
             ) : null}
-          </div>
+          </FieldGroup>
         </div>
 
         <DialogFooter>

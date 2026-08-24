@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { StatsDashboard } from "@/components/admin/stats-dashboard";
 import { StatsErrorNotice, StatsSetupNotice } from "@/components/admin/stats-setup-notice";
 import { StatsSkeleton } from "@/components/admin/stats-skeleton";
@@ -15,7 +16,7 @@ async function StatsContent() {
 export default function StatsPage() {
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-semibold tracking-tight">통계</h1>
+      <AdminPageHeader>통계</AdminPageHeader>
       <Suspense fallback={<StatsSkeleton />}>
         <StatsContent />
       </Suspense>

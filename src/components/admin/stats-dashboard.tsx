@@ -3,6 +3,7 @@ import Link from "next/link";
 import { TopPagesCard } from "@/components/admin/top-pages-card";
 import { VisitorTrendCard } from "@/components/admin/visitor-trend-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import type { GA4Summary } from "@/lib/ga4";
 
 function StatCard({ label, value }: { label: string; value: number }) {
@@ -44,9 +45,7 @@ export function StatsDashboard({ summary }: { summary: GA4Summary }) {
           </CardHeader>
           <CardContent>
             {summary.noticePages.length === 0 ? (
-              <p className="py-8 text-center text-muted-foreground">
-                아직 수집된 데이터가 없습니다.
-              </p>
+              <EmptyState message="아직 수집된 데이터가 없습니다." />
             ) : (
               <ul className="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2">
                 {summary.noticePages.map((page) => {
@@ -80,9 +79,7 @@ export function StatsDashboard({ summary }: { summary: GA4Summary }) {
           </CardHeader>
           <CardContent>
             {summary.trafficSources.length === 0 ? (
-              <p className="py-8 text-center text-muted-foreground">
-                아직 수집된 데이터가 없습니다.
-              </p>
+              <EmptyState message="아직 수집된 데이터가 없습니다." />
             ) : (
               <ul className="flex flex-col gap-1.5">
                 {summary.trafficSources.map((source) => {

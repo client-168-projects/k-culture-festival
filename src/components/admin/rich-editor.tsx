@@ -36,28 +36,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ALLOWED_IMAGE_MIME_TYPES, MAX_IMAGE_SIZE_BYTES } from "@/constants/media";
-import { cn, formatFileSize } from "@/lib/utils";
+import { ALLOWED_IMAGE_MIME_TYPES } from "@/constants/media";
+import { validateImageFile } from "@/lib/media-validation";
+import { uploadFile } from "@/lib/upload-client";
+import { cn } from "@/lib/utils";
 
 async function uploadImage(file: File): Promise<string> {
-  if (!ALLOWED_IMAGE_MIME_TYPES.includes(file.type)) {
-    throw new Error("PNG, JPEG, WEBP, GIF 이미지만 업로드할 수 있습니다.");
-  }
-  if (file.size > MAX_IMAGE_SIZE_BYTES) {
-    throw new Error(`이미지는 ${formatFileSize(MAX_IMAGE_SIZE_BYTES)} 이하만 업로드할 수 있습니다.`);
+  const validationError = validateImageFile(file);
+  if (validationError) {
+    throw new Error(validationError);
   }
 
-  const formData = new FormData();
-  formData.append("file", file);
-  const res = await fetch("/api/admin/upload/image", {
-    method: "POST",
-    body: formData,
-  });
-  const body = await res.json().catch(() => null);
-  if (!res.ok) {
-    throw new Error(body?.error ?? "이미지 업로드에 실패했습니다.");
+  const result = await uploadFile<{ url: string }>("/api/admin/upload/image", file);
+  if (!result.ok) {
+    throw new Error(result.error ?? "이미지 업로드에 실패했습니다.");
   }
-  return body.url as string;
+  return result.data.url;
 }
 
 const TEXT_COLORS = [

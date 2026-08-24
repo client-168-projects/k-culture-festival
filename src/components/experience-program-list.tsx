@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowDownAZ, ArrowRight, ArrowUpAZ, Search } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { EXPERIENCE_CATEGORY_STYLE } from "@/constants/experience-category";
 import type { ExperienceProgram } from "@/data/experience-programs";
-import { cn, toAbsoluteUrl } from "@/lib/utils";
+import { cn, formatKstOpensAt, toAbsoluteUrl } from "@/lib/utils";
 
 type SortOrder = "none" | "asc" | "desc";
 
@@ -34,6 +34,76 @@ function parseSessionCount(sessions: string): number | null {
   // 다른 숫자가 문자열 어딘가에 섞여 있는 경우까지 잘못 집어내지 않기 위함.
   const match = sessions.match(/^총\s*(\d+)회/);
   return match ? Number(match[1]) : null;
+}
+
+function ApplicationSection({
+  capacity,
+  sessions,
+  applicationUrl,
+  applicationOpensAt,
+}: {
+  capacity: string;
+  sessions: string;
+  applicationUrl?: string;
+  applicationOpensAt?: string;
+}) {
+  // 정적 생성(SSG) 페이지라 서버 렌더 시점의 시각을 알 수 없다 — 항상 "닫힘"으로
+  // 시작해 서버/클라이언트 첫 렌더를 일치시키고, mount 직후 useEffect에서 실제
+  // 시각으로 보정한다(hydration mismatch 방지).
+  const [isOpen, setIsOpen] = useState(!applicationOpensAt);
+
+  useEffect(() => {
+    if (!applicationOpensAt) return;
+    const target = new Date(applicationOpensAt).getTime();
+    const check = () => setIsOpen(Date.now() >= target);
+    check();
+    const delay = target - Date.now();
+    if (delay > 0) {
+      const timer = setTimeout(check, delay);
+      return () => clearTimeout(timer);
+    }
+  }, [applicationOpensAt]);
+
+  return (
+    <>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+          <span>참여 인원 {capacity}</span>
+          <span>진행 회차 {sessions}</span>
+        </div>
+        <div className="flex min-h-9 shrink-0 items-center">
+          {applicationUrl ? (
+            isOpen ? (
+              <Button
+                asChild
+                size="sm"
+                className="shrink-0 rounded-sm bg-brand-cobalt hover:bg-brand-cobalt-deep"
+              >
+                <a
+                  href={toAbsoluteUrl(applicationUrl)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  사전신청 바로가기
+                  <ArrowRight className="size-4" />
+                </a>
+              </Button>
+            ) : (
+              <Button disabled size="sm" className="shrink-0 rounded-sm">
+                사전신청 바로가기
+                <ArrowRight className="size-4" />
+              </Button>
+            )
+          ) : null}
+        </div>
+      </div>
+      {applicationUrl && !isOpen && applicationOpensAt ? (
+        <p className="text-right text-xs text-muted-foreground">
+          *{formatKstOpensAt(applicationOpensAt)} 사전 신청 오픈
+        </p>
+      ) : null}
+    </>
+  );
 }
 
 export function ExperienceProgramList({
@@ -160,31 +230,13 @@ export function ExperienceProgramList({
                   {item.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-1 flex-col justify-end px-4 sm:px-5">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-                    <span>참여 인원 {item.capacity}</span>
-                    <span>진행 회차 {item.sessions}</span>
-                  </div>
-                  <div className="flex min-h-9 shrink-0 items-center">
-                    {item.applicationUrl ? (
-                      <Button
-                        asChild
-                        size="sm"
-                        className="shrink-0 rounded-sm bg-brand-cobalt hover:bg-brand-cobalt-deep"
-                      >
-                        <a
-                          href={toAbsoluteUrl(item.applicationUrl)}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          사전신청 바로가기
-                          <ArrowRight className="size-4" />
-                        </a>
-                      </Button>
-                    ) : null}
-                  </div>
-                </div>
+              <CardContent className="flex flex-1 flex-col justify-end gap-2 px-4 sm:px-5">
+                <ApplicationSection
+                  capacity={item.capacity}
+                  sessions={item.sessions}
+                  applicationUrl={item.applicationUrl}
+                  applicationOpensAt={item.applicationOpensAt}
+                />
               </CardContent>
             </Card>
           ))}

@@ -4,14 +4,13 @@ import { useState } from "react";
 
 import { SegmentedToggle } from "@/components/admin/segmented-toggle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
 import type { GA4Summary } from "@/lib/ga4";
 
 function PageList({ pages }: { pages: GA4Summary["topPages"] }) {
   if (pages.length === 0) {
-    return (
-      <p className="py-8 text-center text-muted-foreground">아직 수집된 데이터가 없습니다.</p>
-    );
+    return <EmptyState message="아직 수집된 데이터가 없습니다." />;
   }
 
   return (
