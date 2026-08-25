@@ -13,6 +13,7 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 const SCHEDULE_IMAGE_URL = "/assets/images/main/festival-schedule.webp";
+const SCHEDULE_DOWNLOAD_URL = "/assets/images/main/festival-schedule.jpg";
 
 export default function SchedulePage() {
   return (
@@ -35,7 +36,7 @@ export default function SchedulePage() {
       </div>
 
       <Button asChild variant="outline" className="self-start">
-        <a href={SCHEDULE_IMAGE_URL} download>
+        <a href={SCHEDULE_DOWNLOAD_URL} download>
           <Download className="size-4" />
           일정표 다운로드
         </a>
