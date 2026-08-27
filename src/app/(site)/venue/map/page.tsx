@@ -1,7 +1,9 @@
+import { Download } from "lucide-react";
 import type { Metadata } from "next";
-import { Construction } from "lucide-react";
+import Image from "next/image";
 
 import { PageContainer, PageHeader } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
@@ -10,17 +12,31 @@ export const metadata: Metadata = createPageMetadata({
   path: "/venue/map",
 });
 
+const MAP_IMAGE_URL = "/assets/images/main/festival-map.webp";
+const MAP_DOWNLOAD_URL = "/assets/images/main/festival-map.jpg";
+
 export default function MapPage() {
   return (
     <PageContainer className="max-w-4xl">
       <PageHeader title="행사장 지도" />
 
-      <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-card py-20 text-center">
-        <Construction className="size-8 text-muted-foreground" />
-        <p className="text-lg font-semibold text-foreground">
-          준비중입니다
-        </p>
+      <div className="relative w-full overflow-hidden rounded-lg border border-border">
+        <Image
+          src={MAP_IMAGE_URL}
+          alt="파주 K-컬처 페스티벌 행사장 지도"
+          width={1300}
+          height={863}
+          sizes="(min-width: 1024px) 56rem, 100vw"
+          className="h-auto w-full"
+        />
       </div>
+
+      <Button asChild variant="outline" className="self-start">
+        <a href={MAP_DOWNLOAD_URL} download>
+          <Download className="size-4" />
+          행사장 지도 다운로드
+        </a>
+      </Button>
     </PageContainer>
   );
 }

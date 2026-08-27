@@ -16,7 +16,7 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 const info = [
-  { label: "명칭", value: "K-컬처 페스티벌" },
+  { label: "명칭", value: "파주 K-컬처 페스티벌" },
   { label: "기간", value: "2026년 9월 12일(토)" },
   { label: "장소", value: "경기미래교육파주캠퍼스" },
 ];
