@@ -6,6 +6,8 @@ export type ExperienceProgram = {
   applicationUrl?: string;
   /** 지정 시 그 시각(KST) 전까지는 버튼이 비활성화되고, 도달하면 자동으로 활성화된다. ISO datetime, 오프셋 명시 (예: "2026-08-31T10:00:00+09:00"). */
   applicationOpensAt?: string;
+  /** true면 오픈 시각과 무관하게 버튼이 "사전신청 마감" 상태로 비활성화된다. */
+  applicationClosed?: boolean;
   /** 메인 페이지 체험 프로그램 하이라이트 카드에서만 사용 */
   imageUrl?: string;
   /** K-전통 / K-문화 / K-공예 / K-간식 */
@@ -134,6 +136,7 @@ export const experiencePrograms: ExperienceProgram[] = [
     applicationUrl:
       "https://docs.google.com/forms/d/1MBhqYC2fsP9fBaQdIja0BuDH-j6YLUeOKSTHfBeZBAY/viewform?edit_requested=true",
     applicationOpensAt: "2026-08-31T10:00:00+09:00",
+    applicationClosed: true,
   },
   {
     title: "원어민과 함께하는 쿠킹클래스 Ⅱ",

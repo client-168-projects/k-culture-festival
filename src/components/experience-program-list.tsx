@@ -41,11 +41,13 @@ function ApplicationSection({
   sessions,
   applicationUrl,
   applicationOpensAt,
+  applicationClosed,
 }: {
   capacity: string;
   sessions: string;
   applicationUrl?: string;
   applicationOpensAt?: string;
+  applicationClosed?: boolean;
 }) {
   // 정적 생성(SSG) 페이지라 서버 렌더 시점의 시각을 알 수 없다 — 항상 "닫힘"으로
   // 시작해 서버/클라이언트 첫 렌더를 일치시키고, mount 직후 useEffect에서 실제
@@ -53,6 +55,7 @@ function ApplicationSection({
   const [isOpen, setIsOpen] = useState(!applicationOpensAt);
 
   useEffect(() => {
+    if (applicationClosed) return;
     if (!applicationOpensAt) return;
     const target = new Date(applicationOpensAt).getTime();
     const check = () => setIsOpen(Date.now() >= target);
@@ -73,7 +76,11 @@ function ApplicationSection({
         </div>
         <div className="flex min-h-9 shrink-0 items-center">
           {applicationUrl ? (
-            isOpen ? (
+            applicationClosed ? (
+              <Button disabled size="sm" className="shrink-0 rounded-sm">
+                사전신청 마감
+              </Button>
+            ) : isOpen ? (
               <Button
                 asChild
                 size="sm"
@@ -97,7 +104,7 @@ function ApplicationSection({
           ) : null}
         </div>
       </div>
-      {applicationUrl && !isOpen && applicationOpensAt ? (
+      {applicationUrl && !applicationClosed && !isOpen && applicationOpensAt ? (
         <p className="text-right text-xs text-muted-foreground">
           *{formatKstOpensAt(applicationOpensAt)} 사전 신청 오픈
         </p>
@@ -236,6 +243,7 @@ export function ExperienceProgramList({
                   sessions={item.sessions}
                   applicationUrl={item.applicationUrl}
                   applicationOpensAt={item.applicationOpensAt}
+                  applicationClosed={item.applicationClosed}
                 />
               </CardContent>
             </Card>
