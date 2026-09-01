@@ -215,24 +215,17 @@ export function ExperienceProgramList({
               className="flex h-full flex-col gap-2 py-5"
             >
               <CardHeader className="gap-2 px-4 sm:px-5">
-                <div className="flex items-start justify-between gap-2">
-                  {item.category ? (
-                    <span
-                      className={cn(
-                        "inline-block w-fit rounded-full px-2.5 py-1 text-xs font-bold",
-                        EXPERIENCE_CATEGORY_STYLE[item.category] ??
-                          "bg-brand-paper text-brand-ink",
-                      )}
-                    >
-                      {item.category}
-                    </span>
-                  ) : null}
-                  {item.note ? (
-                    <span className="text-right text-xs text-muted-foreground/80">
-                      ※ {item.note}
-                    </span>
-                  ) : null}
-                </div>
+                {item.category ? (
+                  <span
+                    className={cn(
+                      "inline-block w-fit rounded-full px-2.5 py-1 text-xs font-bold",
+                      EXPERIENCE_CATEGORY_STYLE[item.category] ??
+                        "bg-brand-paper text-brand-ink",
+                    )}
+                  >
+                    {item.category}
+                  </span>
+                ) : null}
                 <CardTitle className="line-clamp-2 min-h-14 font-heading text-lg leading-snug font-bold text-brand-cobalt">
                   {item.title}
                 </CardTitle>
@@ -245,6 +238,11 @@ export function ExperienceProgramList({
                   applicationOpensAt={item.applicationOpensAt}
                   applicationClosed={item.applicationClosed}
                 />
+                {item.note ? (
+                  <p className="text-right text-xs text-muted-foreground">
+                    *{item.note}
+                  </p>
+                ) : null}
               </CardContent>
             </Card>
           ))}
