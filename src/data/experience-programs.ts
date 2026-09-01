@@ -137,6 +137,7 @@ export const experiencePrograms: ExperienceProgram[] = [
       "https://docs.google.com/forms/d/1MBhqYC2fsP9fBaQdIja0BuDH-j6YLUeOKSTHfBeZBAY/viewform?edit_requested=true",
     applicationOpensAt: "2026-08-31T10:00:00+09:00",
     applicationClosed: true,
+    note: "선정자 발표 9.8.(화) 14:00 (공지사항 참고)",
   },
   {
     title: "원어민과 함께하는 쿠킹클래스 Ⅱ",
@@ -146,6 +147,8 @@ export const experiencePrograms: ExperienceProgram[] = [
     applicationUrl:
       "https://docs.google.com/forms/d/1Iw3M5U2JRTSR8iRpSLS_fDeqVRtteHDHA_h56G_kd3s/viewform?edit_requested=true",
     applicationOpensAt: "2026-08-31T10:00:00+09:00",
+    applicationClosed: true,
+    note: "선정자 발표 9.8.(화) 14:00 (공지사항 참고)",
   },
   {
     title: "키캡키링 만들기",
