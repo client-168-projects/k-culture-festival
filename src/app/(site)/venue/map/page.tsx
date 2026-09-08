@@ -8,7 +8,7 @@ import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
   title: "행사장 지도",
-  description: "파주 K-컬처 페스티벌 행사장 배치와 주요 시설 위치를 안내합니다.",
+  description: "파주k-컬처페스티벌 행사장 배치와 주요 시설 위치를 안내합니다.",
   path: "/venue/map",
 });
 
@@ -23,7 +23,7 @@ export default function MapPage() {
       <div className="relative w-full overflow-hidden rounded-lg border border-border">
         <Image
           src={MAP_IMAGE_URL}
-          alt="파주 K-컬처 페스티벌 행사장 지도"
+          alt="파주k-컬처페스티벌 행사장 지도"
           width={1300}
           height={863}
           sizes="(min-width: 1024px) 56rem, 100vw"

@@ -7,7 +7,7 @@ import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
   title: "무대 프로그램",
-  description: "파주 K-컬처 페스티벌 무대에서 진행되는 공연 및 행사 일정을 안내합니다.",
+  description: "파주k-컬처페스티벌 무대에서 진행되는 공연 및 행사 일정을 안내합니다.",
   path: "/program/stage",
 });
 

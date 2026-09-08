@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import { ImageModal } from "@/components/image-modal";
+import { LeafletDownloadButton } from "@/components/leaflet-download-button";
 import { PageContainer, PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { createPageMetadata } from "@/lib/metadata";
@@ -11,12 +12,12 @@ const POSTER_SRC = "/assets/poster/파주-k-컬처-페스티벌-포스터jpg.jpg
 export const metadata: Metadata = createPageMetadata({
   title: "축제개요",
   description:
-    "파주 K-컬처 페스티벌의 취지와 주요 특징을 소개합니다. 일시, 장소 등 축제 정보를 확인하세요.",
+    "파주K-컬처페스티벌의 취지와 주요 특징을 소개합니다. 일시, 장소 등 축제 정보를 확인하세요.",
   path: "/about/overview",
 });
 
 const info = [
-  { label: "명칭", value: "파주 K-컬처 페스티벌" },
+  { label: "명칭", value: "파주K-컬처페스티벌" },
   { label: "기간", value: "2026년 9월 12일(토)" },
   { label: "장소", value: "경기미래교육파주캠퍼스" },
 ];
@@ -29,7 +30,7 @@ export default function OverviewPage() {
       <div className="grid gap-6 sm:grid-cols-[minmax(0,360px)_1fr]">
         <ImageModal
           src={POSTER_SRC}
-          alt="파주 K-컬처 페스티벌 포스터"
+          alt="파주K-컬처페스티벌 포스터"
           width={485}
           height={843}
         >
@@ -39,7 +40,7 @@ export default function OverviewPage() {
           >
             <Image
               src={POSTER_SRC}
-              alt="파주 K-컬처 페스티벌 포스터"
+              alt="파주k-컬처페스티벌 포스터"
               fill
               priority
               className="object-contain"
@@ -69,7 +70,7 @@ export default function OverviewPage() {
             <CardContent className="flex h-full flex-col justify-center gap-5">
               <h2 className="text-lg font-semibold">축제 소개</h2>
               <p className="leading-loose text-muted-foreground">
-                &apos;파주 K-컬처 페스티벌&apos;은 다양한 K-콘텐츠 촬영명소로
+                &apos;파주k-컬처페스티벌&apos;은 다양한 K-콘텐츠 촬영명소로
                 알려진 경기미래교육파주캠퍼스(구 파주 영어마을)에서 진행하는
                 K-컬처 종합문화예술축제입니다.
               </p>
@@ -81,6 +82,8 @@ export default function OverviewPage() {
           </Card>
         </div>
       </div>
+
+      <LeafletDownloadButton />
     </PageContainer>
   );
 }

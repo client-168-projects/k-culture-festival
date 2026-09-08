@@ -20,7 +20,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-4 border-b border-border pb-8 lg:max-w-xs lg:border-b-0 lg:pb-0">
           <div className="flex flex-col gap-2">
             <span className="text-sm font-semibold text-muted-foreground">
-              파주 K-컬처 페스티벌
+              파주k-컬처페스티벌
             </span>
           </div>
 

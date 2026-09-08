@@ -20,7 +20,7 @@ const KAKAO_MAP_HREF = `https://map.kakao.com/link/search/${encodeURIComponent(V
 
 export const metadata: Metadata = createPageMetadata({
   title: "오시는 길",
-  description: "파주 K-컬처 페스티벌 행사장까지 오시는 대중교통, 주차, 셔틀버스 등 다양한 교통 방법을 안내합니다.",
+  description: "파주k-컬처페스티벌 행사장까지 오시는 대중교통, 주차, 셔틀버스 등 다양한 교통 방법을 안내합니다.",
   path: "/venue/directions",
 });
 
@@ -61,9 +61,9 @@ const subwayRoutes: Route[] = [
 ];
 
 const parkingText = [
-  "파주 K-컬처 페스티벌 행사장 주차장이 협소하여 주차가 어려울 수 있습니다. 방문객께서는 인근 통일동산 주차장을 이용해 주시기 바랍니다.",
+  "파주k-컬처페스티벌 행사장 주차장이 협소하여 주차가 어려울 수 있습니다. 방문객께서는 인근 통일동산 주차장을 이용해 주시기 바랍니다.",
   "내비게이션에서 '통일동산 주차장'을 검색하시면 보다 쉽게 찾아오실 수 있습니다.",
-  "축제 기간 동안 '통일동산 주차장' ↔ '파주 K-컬처 페스티벌 행사장'(경기미래교육파주캠퍼스)을 오가는 셔틀버스를 상시 운행합니다.",
+  "축제 기간 동안 '통일동산 주차장' ↔ '파주k-컬처페스티벌 행사장'(경기미래교육파주캠퍼스)을 오가는 셔틀버스를 상시 운행합니다.",
 ];
 
 const PARKING_ADDRESS = "경기도 파주시 탄현면 성동리 646(통일동산 공영주차장)";

@@ -8,7 +8,7 @@ import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
   title: "전체 일정표",
-  description: "파주 K-컬처 페스티벌의 전체 일정을 한눈에 확인하세요.",
+  description: "파주k-컬처페스티벌의 전체 일정을 한눈에 확인하세요.",
   path: "/about/schedule",
 });
 
@@ -27,7 +27,7 @@ export default function SchedulePage() {
       <div className="relative w-full overflow-hidden rounded-lg border border-border">
         <Image
           src={SCHEDULE_IMAGE_URL}
-          alt="2026 K-컬처 페스티벌 축제 전체 일정표"
+          alt="2026 K-컬처페스티벌 축제 전체 일정표"
           width={1200}
           height={2476}
           sizes="(min-width: 1024px) 56rem, 100vw"
