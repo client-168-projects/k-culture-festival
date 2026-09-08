@@ -30,7 +30,7 @@ export function AdminSidebar() {
     <aside className="flex w-56 shrink-0 flex-col justify-between border-r border-border p-4">
       <div className="flex flex-col gap-4">
         <div className="px-3 pt-1">
-          <p className="text-lg font-semibold">파주 K-컬처 페스티벌</p>
+          <p className="text-lg font-semibold">파주k-컬처페스티벌</p>
           <p className="text-sm text-muted-foreground">관리자 페이지</p>
         </div>
 

@@ -54,7 +54,7 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
 
-  /* Brand palette (파주 K-컬처 페스티벌 아이덴티티) — fixed festival colors, reused
+  /* Brand palette (파주k-컬처페스티벌 아이덴티티) — fixed festival colors, reused
      across marketing sections/pages. */
   --brand-paper: #f8f2e6;
   --brand-paper-deep: #e8dcc1;

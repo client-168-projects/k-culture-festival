@@ -8,7 +8,7 @@ import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
   title: "셔틀버스",
-  description: "파주 K-컬처 페스티벌 셔틀버스 운행 시간과 탑승 장소를 안내합니다.",
+  description: "파주k-컬처페스티벌 셔틀버스 운행 시간과 탑승 장소를 안내합니다.",
   path: "/venue/shuttle",
 });
 

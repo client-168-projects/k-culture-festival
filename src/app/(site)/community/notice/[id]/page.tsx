@@ -22,14 +22,14 @@ export async function generateMetadata({
   if (!notice) {
     return createPageMetadata({
       title: "공지사항",
-      description: "파주 K-컬처 페스티벌 관련 공지사항을 확인하세요.",
+      description: "파주k-컬처페스티벌 관련 공지사항을 확인하세요.",
       path: `/community/notice/${id}`,
     });
   }
 
   return createPageMetadata({
     title: notice.title,
-    description: `파주 K-컬처 페스티벌 공지사항: ${notice.title}`,
+    description: `파주k-컬처페스티벌 공지사항: ${notice.title}`,
     path: `/community/notice/${notice.id}`,
   });
 }

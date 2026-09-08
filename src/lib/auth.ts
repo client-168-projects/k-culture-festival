@@ -1,13 +1,11 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-/**
- * Web Crypto API(crypto.subtle)만 사용한다 — Node.js(라즈베리파이 포함)와
- * Cloudflare Workers 양쪽에서 동일하게 동작하기 위해서다.
- * Node 전용 `crypto` 모듈이나 bcrypt 네이티브 바인딩은 의도적으로 쓰지 않는다.
- */
+// 비밀번호/세션 처리는 Web Crypto(crypto.subtle)만 사용한다. Node.js(라즈베리파이)와
+// Cloudflare Workers에서 동일하게 동작시키기 위함이며, Node 전용 `crypto` 모듈이나
+// bcrypt 네이티브 바인딩은 쓰지 않는다.
 
-/** Cloudflare Workers의 Web Crypto PBKDF2는 반복 횟수 100,000이 상한이라 그 값을 그대로 쓴다. */
+/** Cloudflare Workers의 Web Crypto PBKDF2 반복 횟수 상한이 100,000이라 그대로 쓴다. */
 const PBKDF2_ITERATIONS = 100_000;
 const SESSION_COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7일
 
@@ -90,13 +88,22 @@ async function pbkdf2(password: string, salt: Uint8Array): Promise<ArrayBuffer> 
   );
 }
 
-/** "salt:hash" 형태의 hex 문자열을 반환한다. D1의 admins.password_hash에 그대로 저장한다. */
+/**
+ * 비밀번호를 PBKDF2-SHA256으로 해싱한다.
+ * @param password 평문 비밀번호
+ * @returns `salt:hash` hex 문자열 (D1 `admins.password_hash`에 그대로 저장)
+ */
 export async function hashPassword(password: string): Promise<string> {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const hash = await pbkdf2(password, salt);
   return `${toHex(salt)}:${toHex(hash)}`;
 }
 
+/**
+ * 평문 비밀번호가 저장된 해시와 일치하는지 timing-safe 비교한다.
+ * @param password 평문 비밀번호
+ * @param stored `hashPassword`가 만든 `salt:hash` hex 문자열
+ */
 export async function verifyPassword(
   password: string,
   stored: string,
@@ -118,6 +125,13 @@ async function hmacKey(secret: string) {
   );
 }
 
+/**
+ * HMAC-SHA256으로 서명한 세션 토큰을 만든다.
+ * @param payload 세션에 담을 사용자 정보 (`exp`는 자동 계산)
+ * @param secret 서명 키 (`ADMIN_SESSION_SECRET`)
+ * @param maxAgeSeconds 만료까지 남은 시간(초), 기본 7일
+ * @returns `payloadBase64Url.signatureBase64Url` 형태의 토큰
+ */
 export async function createSessionToken(
   payload: Omit<SessionPayload, "exp">,
   secret: string,
@@ -137,6 +151,12 @@ export async function createSessionToken(
   return `${payloadB64}.${base64UrlEncode(signature)}`;
 }
 
+/**
+ * 세션 토큰의 서명과 만료 시각을 검증한다.
+ * @param token `createSessionToken`이 만든 토큰
+ * @param secret 서명 키 (`ADMIN_SESSION_SECRET`)
+ * @returns 유효하면 payload, 아니면 `null`
+ */
 export async function verifySessionToken(
   token: string,
   secret: string,
@@ -165,7 +185,11 @@ export async function verifySessionToken(
 export const SESSION_COOKIE_NAME = "admin_session";
 export { SESSION_COOKIE_MAX_AGE };
 
-/** 현재 요청의 admin 세션을 쿠키에서 읽어 검증한다. 각 보호된 페이지/라우트에서 직접 호출한다. */
+/**
+ * 현재 요청 쿠키에서 admin 세션을 읽어 검증한다.
+ * 전역 미들웨어 게이트가 없으므로 보호된 페이지/라우트에서 직접 호출한다.
+ * @returns 유효한 세션, 아니면 `null`
+ */
 export async function getAdminSession(): Promise<SessionPayload | null> {
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret) return null;
@@ -178,9 +202,8 @@ export async function getAdminSession(): Promise<SessionPayload | null> {
 }
 
 /**
- * `/api/admin/*` 라우트 핸들러 맨 앞에서 호출한다. 세션이 있으면 payload를,
- * 없으면 그대로 반환할 수 있는 401 NextResponse를 준다.
- * 호출부: `const session = await requireAdmin(); if (session instanceof NextResponse) return session;`
+ * `/api/admin/*` 라우트 핸들러용 세션 가드.
+ * @returns 유효한 세션, 또는 그대로 반환하면 되는 401 `NextResponse`
  */
 export async function requireAdmin(): Promise<SessionPayload | NextResponse> {
   const session = await getAdminSession();
@@ -189,3 +212,4 @@ export async function requireAdmin(): Promise<SessionPayload | NextResponse> {
   }
   return session;
 }
+ 
