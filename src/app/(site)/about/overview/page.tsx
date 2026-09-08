@@ -1,13 +1,27 @@
+import { Download } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 
 import { ImageModal } from "@/components/image-modal";
-import { LeafletDownloadButton } from "@/components/leaflet-download-button";
 import { PageContainer, PageHeader } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { createPageMetadata } from "@/lib/metadata";
 
 const POSTER_SRC = "/assets/poster/파주-k-컬처-페스티벌-포스터jpg.jpg";
+
+const LEAFLET_DOWNLOADS = [
+  {
+    href: "/assets/images/main/leaflet-festival-info.jpg",
+    fileName: "파주K-컬처페스티벌_리플렛_축제정보.jpg",
+    label: "리플렛 다운로드(축제정보)",
+  },
+  {
+    href: "/assets/images/main/leaflet-venue-guide.jpg",
+    fileName: "파주K-컬처페스티벌_리플렛_행사장안내.jpg",
+    label: "리플렛 다운로드(행사장 안내)",
+  },
+];
 
 export const metadata: Metadata = createPageMetadata({
   title: "축제개요",
@@ -83,7 +97,16 @@ export default function OverviewPage() {
         </div>
       </div>
 
-      <LeafletDownloadButton />
+      <div className="flex flex-col gap-3 sm:flex-row">
+        {LEAFLET_DOWNLOADS.map(({ href, fileName, label }) => (
+          <Button key={href} asChild variant="outline">
+            <a href={href} download={fileName}>
+              <Download className="size-4" />
+              {label}
+            </a>
+          </Button>
+        ))}
+      </div>
     </PageContainer>
   );
 }
