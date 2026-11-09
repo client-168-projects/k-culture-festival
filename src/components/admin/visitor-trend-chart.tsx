@@ -35,7 +35,7 @@ function ChartTooltip({ active, payload }: TooltipContentProps) {
 }
 
 function TrendAreaChart({ data }: { data: GA4Summary["dailyTrend"] }) {
-  // 날짜가 많아질수록 X축 라벨이 겹치지 않도록 대략 6개 정도만 보이게 건너뛴다.
+  // X축 라벨이 겹치지 않게 6개 정도만 표시
   const tickInterval = data.length > 10 ? Math.ceil(data.length / 6) - 1 : "preserveStartEnd";
 
   return (

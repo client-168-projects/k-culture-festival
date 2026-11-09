@@ -193,7 +193,7 @@ export function ExperienceSection() {
 
           {/* 프로모 카드 */}
           <div className="flex flex-col overflow-hidden border border-brand-gold/30 bg-brand-paper/6 lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:self-end">
-            {/* 조명/천막 이미지 — 패딩 없이 꽉 채움 */}
+            {/* 조명, 천막 이미지 */}
             <div className="relative aspect-4/3 w-full overflow-hidden">
               <Image
                 src="/assets/images/main/festival-tent.png"

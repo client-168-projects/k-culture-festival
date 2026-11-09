@@ -7,7 +7,7 @@ export type ExtraProgram = {
   title: string;
   schedule: ExtraProgramSchedule;
   imageUrl?: string;
-  /** 카드에 추가로 노출되는 한 줄 안내 (선택) */
+  /** 카드 안내 문구 */
   note?: string;
 };
 

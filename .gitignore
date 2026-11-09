@@ -50,7 +50,7 @@ backup.sql
 # opennextjs-cloudflare build output
 .open-next/
 
-CLAUDE.md
+AGENTS.md
 
 .temp
 /docs

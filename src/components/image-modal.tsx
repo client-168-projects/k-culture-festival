@@ -17,9 +17,9 @@ export function ImageModal({
 }: {
   src: string;
   alt: string;
-  /** 이미지의 실제 가로 픽셀 크기. */
+  /** 원본 너비(px) */
   width: number;
-  /** 이미지의 실제 세로 픽셀 크기. */
+  /** 원본 높이(px) */
   height: number;
   children: ReactNode;
   className?: string;
@@ -42,7 +42,7 @@ export function ImageModal({
             확대된 이미지
           </DialogPrimitive.Description>
 
-          {/* 모바일: 화면 너비의 95% 기준 확대. 데스크톱(sm~): 화면 높이의 90% 기준으로 확대하되, 그 결과 너비가 화면의 90%를 넘으면 너비 기준으로 전환. */}
+          {/* 모바일은 화면 너비 95%, 데스크톱은 화면 높이 90% 기준 (너비 90% 초과 시 너비 기준) */}
           <Image
             src={src}
             alt={alt}

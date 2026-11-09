@@ -9,7 +9,7 @@ export function SectionHead({
   eyebrow: string;
   title: string;
   description: string;
-  /** 어두운 배경(체험 프로그램 섹션 등) 위에 놓일 때 */
+  /** 어두운 배경 위에 놓일 때 */
   invert?: boolean;
 }) {
   return (

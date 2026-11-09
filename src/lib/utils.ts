@@ -11,12 +11,12 @@ export function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
 }
 
-/** "www.example.com"처럼 스킴이 빠진 값을 절대 URL로 보정 */
+// 스킴이 빠진 주소(www.example.com)를 절대 URL로 보정
 export function toAbsoluteUrl(url: string): string {
   return /^https?:\/\//i.test(url) ? url : `https://${url}`;
 }
 
-/** ISO datetime을 "2026. 8. 31.(월) AM 10:00" 형태의 KST 안내 문구로 변환 */
+// ISO 시각을 "2026. 8. 31.(월) AM 10:00" 형식(KST)으로 변환
 export function formatKstOpensAt(iso: string): string {
   const date = new Date(iso);
 
