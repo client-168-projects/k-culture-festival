@@ -23,3 +23,18 @@ export const ALLOWED_ATTACHMENT_EXTENSIONS = [
   "webp",
   "gif",
 ];
+
+export const ATTACHMENT_CONTENT_TYPES: Record<string, string> = {
+  pdf: "application/pdf",
+  hwp: "application/x-hwp",
+  hwpx: "application/vnd.hancom.hwpx",
+  doc: "application/msword",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  xls: "application/vnd.ms-excel",
+  xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  png: "image/png",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  webp: "image/webp",
+  gif: "image/gif",
+};

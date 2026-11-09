@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { d1Query } from "@/lib/d1";
 import { validateNoticePopupInput } from "@/lib/notice-popup-validation";
-import { deleteFromStorage, storagePathFromPublicUrl } from "@/lib/supabase";
+import { deleteFromStorage, isStorageUrl, storagePathFromPublicUrl } from "@/lib/supabase";
 import type { NoticePopup } from "@/types/notice-popup";
 
 type RouteParams = { params: Promise<{ id: string }> };
@@ -48,6 +48,9 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   });
   if (validationError) {
     return NextResponse.json({ error: validationError }, { status: 400 });
+  }
+  if (!isStorageUrl(imageUrl, "images")) {
+    return NextResponse.json({ error: "잘못된 이미지 주소입니다." }, { status: 400 });
   }
 
   try {

@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { ALLOWED_ATTACHMENT_EXTENSIONS, MAX_ATTACHMENT_SIZE_BYTES } from "@/constants/media";
+import {
+  ALLOWED_ATTACHMENT_EXTENSIONS,
+  ATTACHMENT_CONTENT_TYPES,
+  MAX_ATTACHMENT_SIZE_BYTES,
+} from "@/constants/media";
 import { requireAdmin } from "@/lib/auth";
 import { deleteFromStorage, storagePathFromPublicUrl, uploadToStorage } from "@/lib/supabase";
 import { formatFileSize } from "@/lib/utils";
@@ -36,7 +40,8 @@ export async function POST(request: Request) {
   const path = `attachments/${crypto.randomUUID()}.${ext}`;
 
   try {
-    const url = await uploadToStorage(path, file);
+    // Content-Type은 확장자 기준으로 정한다. (브라우저가 보낸 값을 그대로 쓰지 않음)
+    const url = await uploadToStorage(path, file, ATTACHMENT_CONTENT_TYPES[ext]);
     return NextResponse.json({ url, name: file.name, size: file.size });
   } catch (error) {
     console.error("첨부파일 업로드 실패:", error);
@@ -55,7 +60,7 @@ export async function DELETE(request: Request) {
   const url = typeof body?.url === "string" ? body.url : "";
   const path = url ? storagePathFromPublicUrl(url) : null;
 
-  if (!path) {
+  if (!path?.startsWith("attachments/")) {
     return NextResponse.json({ error: "잘못된 요청입니다." }, { status: 400 });
   }
 

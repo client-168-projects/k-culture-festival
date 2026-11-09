@@ -8,14 +8,24 @@ import {
   verifyPassword,
 } from "@/lib/auth";
 import { d1Query } from "@/lib/d1";
+import {
+  clearLoginFailures,
+  getClientIp,
+  isLoginBlocked,
+  recordLoginFailure,
+} from "@/lib/login-rate-limit";
 
 type AdminRow = { id: number; username: string; password_hash: string };
+
+// 없는 계정도 같은 시간만큼 해싱해서 응답 시간으로 계정 존재 여부를 알 수 없게 한다.
+const DUMMY_HASH = `${"0".repeat(32)}:${"0".repeat(64)}`;
 
 export async function POST(request: Request) {
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret) {
+    console.error("ADMIN_SESSION_SECRET이 설정되지 않았습니다.");
     return NextResponse.json(
-      { error: "서버에 ADMIN_SESSION_SECRET이 설정되지 않았습니다." },
+      { error: "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요." },
       { status: 500 },
     );
   }
@@ -28,6 +38,18 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: "아이디와 비밀번호를 입력해주세요." },
       { status: 400 },
+    );
+  }
+
+  const ip = getClientIp(request);
+  const blocked = await isLoginBlocked(ip).catch((error) => {
+    console.error("로그인 제한 조회 오류:", error);
+    return false;
+  });
+  if (blocked) {
+    return NextResponse.json(
+      { error: "로그인 시도가 너무 많습니다. 15분 후 다시 시도해주세요." },
+      { status: 429 },
     );
   }
 
@@ -47,16 +69,17 @@ export async function POST(request: Request) {
   }
   const admin = admins[0];
 
-  const valid = admin
-    ? await verifyPassword(password, admin.password_hash)
-    : false;
+  const valid = await verifyPassword(password, admin?.password_hash ?? DUMMY_HASH);
 
   if (!admin || !valid) {
+    await recordLoginFailure(ip).catch((error) => console.error("로그인 실패 기록 오류:", error));
     return NextResponse.json(
       { error: "아이디 또는 비밀번호가 올바르지 않습니다." },
       { status: 401 },
     );
   }
+
+  await clearLoginFailures(ip).catch((error) => console.error("로그인 기록 삭제 오류:", error));
 
   const token = await createSessionToken(
     { sub: admin.id, username: admin.username },

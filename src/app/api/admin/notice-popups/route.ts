@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/auth";
 import { d1Query } from "@/lib/d1";
 import { getNoticePopups } from "@/lib/notice-popups";
 import { validateNoticePopupInput } from "@/lib/notice-popup-validation";
+import { isStorageUrl } from "@/lib/supabase";
 
 export async function GET() {
   const session = await requireAdmin();
@@ -37,6 +38,9 @@ export async function POST(request: Request) {
   });
   if (validationError) {
     return NextResponse.json({ error: validationError }, { status: 400 });
+  }
+  if (!isStorageUrl(imageUrl, "images")) {
+    return NextResponse.json({ error: "잘못된 이미지 주소입니다." }, { status: 400 });
   }
 
   try {
