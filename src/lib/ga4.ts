@@ -3,10 +3,7 @@ const DATA_API_BASE = "https://analyticsdata.googleapis.com/v1beta";
 const SCOPE = "https://www.googleapis.com/auth/analytics.readonly";
 const REQUEST_TIMEOUT_MS = 10_000;
 
-/**
- * GA4의 기본 채널 그룹(sessionDefaultChannelGroup) 영문 값을 관리자 화면용
- * 한글 라벨 + 설명으로 바꾼다. 비개발자가 봐도 무슨 뜻인지 알 수 있도록 설명을 붙인다.
- */
+/** GA4 기본 채널 그룹(sessionDefaultChannelGroup) 값의 한글 라벨/설명 */
 const CHANNEL_META_KO: Record<string, { label: string; description: string }> = {
   Direct: {
     label: "직접 유입",
@@ -55,48 +52,41 @@ export type GA4Result =
   | { status: "error"; message: string }
   | { status: "ok"; data: GA4Summary };
 
+const DAY_MS = 86_400_000;
+const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+
+function toYmd(date: Date): string {
+  const y = date.getUTCFullYear();
+  const m = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(date.getUTCDate()).padStart(2, "0");
+  return `${y}${m}${d}`;
+}
+
+function getKstTodayUtcMs(): number {
+  const nowKst = new Date(Date.now() + KST_OFFSET_MS);
+  return Date.UTC(nowKst.getUTCFullYear(), nowKst.getUTCMonth(), nowKst.getUTCDate());
+}
+
 /**
- * GA4 리포트 API는 방문자가 0명인 날짜의 행을 아예 반환하지 않는다.
- * "최근 7일" 범위(6daysAgo~today, GA4 속성 시간대인 KST 기준)의 날짜 목록을
- * YYYYMMDD 형식으로 미리 만들어두고, 응답에 없는 날짜는 0으로 채워 넣는다.
+ * GA4는 방문자가 0명인 날짜의 행을 반환하지 않으므로,
+ * 기간 내 전체 날짜(YYYYMMDD, KST)를 미리 만들어 빈 날짜를 0으로 채우는 데 사용한다.
  */
 function getRecentKstDateStrings(days: number): string[] {
-  const nowKst = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  const dates: string[] = [];
-  for (let i = days - 1; i >= 0; i--) {
-    const d = new Date(nowKst.getTime() - i * 24 * 60 * 60 * 1000);
-    const y = d.getUTCFullYear();
-    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-    const day = String(d.getUTCDate()).padStart(2, "0");
-    dates.push(`${y}${m}${day}`);
-  }
-  return dates;
+  const todayMs = getKstTodayUtcMs();
+  return Array.from({ length: days }, (_, i) =>
+    toYmd(new Date(todayMs - (days - 1 - i) * DAY_MS)),
+  );
 }
 
-/** `getRecentKstDateStrings`와 같은 방식으로, 특정 시작일(YYYY-MM-DD)부터 오늘까지의 날짜 목록을 만든다. */
+/** 시작일(YYYY-MM-DD)부터 오늘(KST)까지의 날짜 목록 */
 function getKstDateStringsFrom(startDateISO: string): string[] {
   const [y, m, d] = startDateISO.split("-").map(Number);
-  const startUtcMs = Date.UTC(y, m - 1, d);
-  const nowKst = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  const todayUtcMs = Date.UTC(nowKst.getUTCFullYear(), nowKst.getUTCMonth(), nowKst.getUTCDate());
-  const dayCount = Math.max(0, Math.round((todayUtcMs - startUtcMs) / 86_400_000)) + 1;
-
-  const dates: string[] = [];
-  for (let i = 0; i < dayCount; i++) {
-    const day = new Date(startUtcMs + i * 86_400_000);
-    const yy = day.getUTCFullYear();
-    const mm = String(day.getUTCMonth() + 1).padStart(2, "0");
-    const dd = String(day.getUTCDate()).padStart(2, "0");
-    dates.push(`${yy}${mm}${dd}`);
-  }
-  return dates;
+  const startMs = Date.UTC(y, m - 1, d);
+  const dayCount = Math.max(0, Math.round((getKstTodayUtcMs() - startMs) / DAY_MS)) + 1;
+  return Array.from({ length: dayCount }, (_, i) => toYmd(new Date(startMs + i * DAY_MS)));
 }
 
-/**
- * `src/lib/auth.ts`와 동일하게 Web Crypto(`crypto.subtle`)만 사용한다 —
- * Cloudflare Workers와 Node.js(라즈베리파이) 양쪽에서 동일하게 동작해야 하기 때문이다.
- * 서비스 계정 JWT 서명(RS256)에 Node 전용 `crypto`/`jsonwebtoken` 라이브러리를 쓰지 않는다.
- */
+// 서비스 계정 JWT(RS256) 서명은 auth.ts와 같이 Web Crypto만 사용한다 (Workers/Node.js 공용).
 
 function base64UrlEncode(data: string | ArrayBuffer): string {
   let base64: string;
@@ -138,7 +128,7 @@ function getConfig(): GA4Config | null {
 
   if (!propertyId || !clientEmail || !privateKeyRaw) return null;
 
-  // 환경변수는 한 줄로 저장되므로 PEM 개행은 "\n" 리터럴로 이스케이프되어 들어온다.
+  // 환경변수에는 PEM 개행이 "\n" 리터럴로 저장된다.
   return { propertyId, clientEmail, privateKey: privateKeyRaw.replace(/\\n/g, "\n") };
 }
 
@@ -214,11 +204,7 @@ async function batchRunReports(
   return json.reports ?? [];
 }
 
-/**
- * 관리자 통계 페이지용 GA4 요약 데이터.
- * 환경변수 미설정과 API 호출 실패를 구분해서 반환한다 — 관리자만 보는 화면이라
- * 실패 원인을 그대로 보여줘도 되고, 그래야 설정 문제인지 다른 문제인지 바로 알 수 있다.
- */
+/** 관리자 통계 페이지용 GA4 요약. 환경변수 미설정과 API 오류를 구분해 반환한다. */
 export async function getGA4Summary(): Promise<GA4Result> {
   const config = getConfig();
   if (!config) return { status: "unconfigured", missing: getMissingEnvKeys() };
@@ -226,7 +212,7 @@ export async function getGA4Summary(): Promise<GA4Result> {
   try {
     const accessToken = await getAccessToken(config.clientEmail, config.privateKey);
 
-    const ALL_TIME_START_DATE = "2026-08-14"; // 홈페이지 개시일 — 그 이전엔 트래픽 자체가 없다
+    const ALL_TIME_START_DATE = "2026-08-14"; // 사이트 오픈일
     const EXCLUDE_ADMIN_FILTER = {
       notExpression: {
         filter: {
@@ -236,7 +222,7 @@ export async function getGA4Summary(): Promise<GA4Result> {
       },
     };
 
-    // batchRunReports는 한 번에 최대 5개 요청까지만 허용해서 두 번에 나눠 호출한다.
+    // batchRunReports는 요청당 최대 5개 리포트까지 허용
     const [
       [weekTotalReport, trendReport, topPagesReport, noticePagesReport, trafficSourcesReport],
       [topPagesAllTimeReport, trendAllTimeReport, mainPageAllTimeReport],
@@ -256,7 +242,6 @@ export async function getGA4Summary(): Promise<GA4Result> {
           dateRanges: [{ startDate: "6daysAgo", endDate: "today" }],
           dimensions: [{ name: "pagePath" }],
           metrics: [{ name: "screenPageViews" }],
-          // 관리자 페이지 제외 적용 전에 쌓인 과거 기록이 남아있어도 이 목록엔 안 뜨도록 필터링한다.
           dimensionFilter: EXCLUDE_ADMIN_FILTER,
           orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
           limit: 10,
