@@ -17,7 +17,7 @@ function writeMap(map: HiddenMap) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
   } catch {
-    // localStorage 접근 불가(프라이빗 모드 등) — 조용히 무시, 팝업은 매번 다시 노출된다.
+    // localStorage를 사용할 수 없는 환경에서는 무시한다.
   }
 }
 
@@ -27,7 +27,7 @@ export function isPopupHidden(id: number): boolean {
   return new Date(until).getTime() > Date.now();
 }
 
-/** 팝업 ID별로 독립적으로 "N일간 보지 않기"를 기록한다. */
+/** 팝업별 "N일간 보지 않기" 기록 */
 export function hidePopupForDays(id: number, days: number) {
   const map = readMap();
   map[`popup-${id}`] = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();

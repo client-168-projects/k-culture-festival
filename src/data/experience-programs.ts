@@ -2,17 +2,17 @@ export type ExperienceProgram = {
   title: string;
   capacity: string;
   sessions: string;
-  /** 값이 있으면 카드에 "사전신청하러 가기" 버튼이 자동으로 표시된다. */
+  /** 값이 있으면 "사전신청하러 가기" 버튼을 표시한다. */
   applicationUrl?: string;
-  /** 지정 시 그 시각(KST) 전까지는 버튼이 비활성화되고, 도달하면 자동으로 활성화된다. ISO datetime, 오프셋 명시 (예: "2026-08-31T10:00:00+09:00"). */
+  /** 신청 버튼 활성화 시각. 오프셋을 포함한 ISO datetime (예: "2026-08-31T10:00:00+09:00") */
   applicationOpensAt?: string;
-  /** true면 오픈 시각과 무관하게 버튼이 "사전신청 마감" 상태로 비활성화된다. */
+  /** true면 오픈 시각과 무관하게 "사전신청 마감"으로 표시한다. */
   applicationClosed?: boolean;
-  /** 메인 페이지 체험 프로그램 하이라이트 카드에서만 사용 */
+  /** 메인 페이지 하이라이트 카드 전용 */
   imageUrl?: string;
   /** K-전통 / K-문화 / K-공예 / K-간식 */
   category?: string;
-  /** 체험 프로그램 페이지 카드 우측 하단에 작게 노출되는 안내 문구 (선택) */
+  /** 카드 하단 안내 문구 */
   note?: string;
 };
 

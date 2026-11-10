@@ -54,8 +54,7 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
 
-  /* Brand palette (파주k-컬처페스티벌 아이덴티티) — fixed festival colors, reused
-     across marketing sections/pages. */
+  /* 브랜드 팔레트 */
   --brand-paper: #f8f2e6;
   --brand-paper-deep: #e8dcc1;
   --brand-ink: #211b12;
@@ -129,7 +128,7 @@
   --font-mono: var(--font-geist-mono);
   --font-handwriting: "KyoboHandwriting2025lyb", cursive;
 
-  /* Accessible type scale: festival site audience includes older visitors, so every step is bumped above the Tailwind default while staying within a normal reading range. */
+  /* 고령층 가독성을 고려해 Tailwind 기본값보다 한 단계씩 키운 타입 스케일 */
   --text-xs: 0.8125rem;
   --text-xs--line-height: 1.125rem;
   --text-sm: 0.9375rem;
@@ -150,9 +149,7 @@
   --animate-cloud-drift-1: cloud-drift-1 12s linear infinite;
   --animate-cloud-drift-2: cloud-drift-2 12s linear infinite;
 
-  /* 히어로 섹션 로드 인트로 — 좌측 배경 이미지가 왼쪽에서, 우측 배경 이미지가
-     오른쪽에서 순차적으로 페이드인하고, 타이틀/버튼 등은 공용 hero-reveal을
-     요소별로 animation-delay만 다르게 줘서 순서대로 떠오르게 한다. */
+  /* 히어로 인트로: 배경은 좌우에서 순차 슬라이드인, 텍스트는 hero-reveal + 요소별 delay */
   --animate-hero-slide-left: hero-slide-in-left 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-hero-slide-right:
     hero-slide-in-right 800ms cubic-bezier(0.16, 1, 0.3, 1) 650ms both;
@@ -202,10 +199,7 @@
     }
   }
 
-  /* K 모형 종 장식 — 바람에 살랑이는 루프 (앵커: 종 위쪽, 감쇠 없이 등각 반복)
-     사인 곡선을 촘촘히 샘플링한 뒤 linear로 이어서 재생 — 3~5개 지점만 두고
-     ease-in-out을 쓰면 각 구간 경계(0/25/50/75/100%)마다 속도가 0으로 꺼졌다
-     다시 붙는 것처럼 보여 "잠깐 멈추는" 끊김이 생긴다. */
+  /* 사인 곡선을 촘촘히 샘플링해 linear로 재생 (키프레임 경계에서 멈칫하는 현상 방지) */
   @keyframes bell-sway {
     0% {
       transform: rotate(0deg);
@@ -356,11 +350,7 @@
     }
   }
 
-  /* K 모형 구름 — 한 방향으로 천천히 드리프트하다 패널 밖으로 완전히 나가면
-     반대쪽 밖에서 다시 들어옴. cqw는 구름 자신이 아니라 담긴 패널(container-type
-     이 걸린 부모) 너비 기준. 각 구름의 시작 left/width에 맞춰 "패널을 완전히
-     벗어나는 최소 거리 + 약간의 여유"만큼만 이동해서, 화면 밖에 머무는 구간이
-     길어져 마치 멈춘 것처럼 보이지 않도록 범위를 좁혔다. */
+  /* cqw는 부모 패널(container) 너비 기준. 패널을 막 벗어나는 거리까지만 이동한다. */
   @keyframes cloud-drift-1 {
     0% {
       transform: translateX(-44cqw);
@@ -389,8 +379,7 @@
   }
 }
 
-/* Tiptap 에디터 및 공지사항 렌더링 콘텐츠 공용 스타일 (Tailwind preflight가 지운 목록/제목 기본값 복원) */
-/* 히어로 타이틀 등 포스터 스타일 타이틀에 쓰는 골드 레이어 그림자 (브랜드 골드 토큰 기반) */
+/* 포스터 스타일 타이틀용 골드 레이어 그림자 */
 .text-shadow-poster {
   text-shadow:
     1px 1px 0 var(--brand-gold),
@@ -399,6 +388,7 @@
     4px 4px 0 var(--brand-gold);
 }
 
+/* Tiptap 에디터와 공지 본문 공용 스타일 (preflight가 제거한 목록/제목 기본값 복원) */
 .tiptap-content {
   display: flex;
   flex-direction: column;

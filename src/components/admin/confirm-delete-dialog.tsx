@@ -22,7 +22,7 @@ type Props = {
   pending: boolean;
 };
 
-/** admin 다이얼로그 전반에서 쓰는 삭제 확인 다이얼로그. */
+/** 삭제 확인 다이얼로그 */
 export function ConfirmDeleteDialog({
   open,
   onOpenChange,

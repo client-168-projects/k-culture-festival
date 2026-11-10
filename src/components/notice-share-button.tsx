@@ -15,7 +15,7 @@ export function NoticeShareButton({ title }: { title: string }) {
       try {
         await navigator.share({ title, url });
       } catch {
-        // 사용자가 공유를 취소한 경우 등 — 별도 처리 불필요
+        // 사용자가 공유를 취소한 경우
       }
       return;
     }

@@ -1,13 +1,11 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-// 비밀번호/세션 처리는 Web Crypto(crypto.subtle)만 사용한다. Node.js(라즈베리파이)와
-// Cloudflare Workers에서 동일하게 동작시키기 위함이며, Node 전용 `crypto` 모듈이나
-// bcrypt 네이티브 바인딩은 쓰지 않는다.
+// Workers와 Node.js에서 동일하게 동작하도록 Web Crypto(crypto.subtle)만 사용한다.
 
-/** Cloudflare Workers의 Web Crypto PBKDF2 반복 횟수 상한이 100,000이라 그대로 쓴다. */
+/** Workers Web Crypto의 PBKDF2 반복 횟수 상한 */
 const PBKDF2_ITERATIONS = 100_000;
-const SESSION_COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7일
+const SESSION_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
 export type SessionPayload = {
   sub: number;

@@ -2,7 +2,7 @@ import sanitizeHtml from "sanitize-html";
 
 import { STORAGE_BUCKET } from "@/lib/supabase";
 
-// 브라우저가 인라인 style을 직렬화할 때 hex 값을 rgb()/rgba()로 정규화하므로 둘 다 허용해야 한다.
+// 브라우저가 hex 색상을 rgb()/rgba()로 직렬화하므로 모두 허용한다.
 const COLOR_VALUE = [
   /^#[0-9a-f]{3,8}$/i,
   /^rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\)$/,
@@ -11,13 +11,13 @@ const COLOR_VALUE = [
 ];
 const TEXT_ALIGN = [/^(left|center|right)$/];
 const FONT_SIZE = [/^\d{1,3}px$/];
-// 에디터 폰트 목록(기본/명조체/고정폭)에서 나오는 값만 허용한다.
+// 에디터 폰트 목록에 있는 값만 허용
 const FONT_FAMILY = [
   /^serif$/,
   /^var\(--font-geist-mono\),\s*monospace$/,
 ];
 
-/** 에디터에 삽입되는 이미지는 우리 Supabase Storage 버킷에서 온 것만 허용한다 (임의 URL 임베드/추적픽셀 방지). */
+/** 프로젝트 Supabase Storage 버킷의 이미지만 허용 (외부 임베드/추적 픽셀 차단) */
 function isAllowedImageSrc(src: string): boolean {
   const supabaseUrl = process.env.SUPABASE_URL;
   if (!supabaseUrl) return false;

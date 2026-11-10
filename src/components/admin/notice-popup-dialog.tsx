@@ -202,8 +202,7 @@ export function NoticePopupDialog({
           <div className="flex flex-col gap-4">
             <FieldGroup label="이미지">
               {imageUrl ? (
-                // Supabase 공개 URL 이미지 — next.config에 remotePatterns가 없어 next/image 대신
-                // 프로젝트 전반의 관례(공지 첨부/본문 이미지)와 동일하게 일반 img 태그를 사용한다.
+                // Supabase Storage 이미지는 remotePatterns 미설정으로 img 태그 사용
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={imageUrl}

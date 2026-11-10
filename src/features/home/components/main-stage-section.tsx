@@ -13,7 +13,7 @@ import { SectionHead } from "./section-head";
 
 const SPECIAL_TONES: ArchTone[] = ["indigo", "vermillion", "jade"];
 
-/** 메인 무대 카드용 인물 누끼 이미지 — 아치 패널 하단 기준으로 채워진다 */
+/** 메인 무대 카드용 인물 컷아웃 이미지 */
 const SPECIAL_IMAGES: Record<string, string> = {
   김태우: "/assets/images/main/김태우-메인.png",
   CLASSy: "/assets/images/main/클라씨-메인.png",
@@ -68,7 +68,7 @@ export function MainStageSection() {
                 key={item.name}
                 className="group relative overflow-hidden transition-all duration-200 hover:z-10 hover:-translate-y-1 hover:scale-[1.03]"
               >
-                {/* 유리 반사 효과 — 호버 시 대각선으로 슥 지나감 */}
+                {/* 호버 시 유리 반사 효과 */}
                 <span
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0 z-20 translate-x-[-150%] skew-x-[-20deg] bg-linear-to-r from-transparent via-white/50 to-transparent group-hover:translate-x-[150%] group-hover:transition-transform group-hover:duration-700 group-hover:ease-out"

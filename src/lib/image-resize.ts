@@ -1,8 +1,4 @@
-/**
- * 업로드 전 브라우저에서 이미지를 축소한다. 원본이 maxDimension(긴 변 기준) 이하면
- * 그대로 반환한다. GIF는 리사이징 시 애니메이션이 깨지므로(캔버스가 첫 프레임만
- * 그림) 건드리지 않고 그대로 반환한다.
- */
+/** 긴 변이 maxDimension을 넘으면 축소한다. GIF는 애니메이션 보존을 위해 그대로 반환한다. */
 export async function resizeImageIfNeeded(
   file: File,
   maxDimension: number,
@@ -48,11 +44,7 @@ export async function resizeImageIfNeeded(
 
 const TRIM_ALPHA_THRESHOLD = 10;
 
-/**
- * 이미지 가장자리의 투명(alpha) 여백을 실제 콘텐츠 경계까지 자동으로 잘라낸다.
- * 디자인 툴에서 그림자/여백을 남기고 내보낸 PNG(투명 캔버스 안에 작은 카드가 떠 있는
- * 형태)를 그대로 업로드하면 팝업에 원치 않는 여백이 보이는 문제를 업로드 시점에 해결한다.
- */
+/** 이미지 가장자리의 투명 여백을 콘텐츠 경계까지 잘라낸다. */
 export async function trimTransparentPadding(file: File): Promise<File> {
   if (file.type === "image/gif" || file.type === "image/jpeg") return file;
   if (typeof createImageBitmap === "undefined") return file;
@@ -111,7 +103,6 @@ export async function trimTransparentPadding(file: File): Promise<File> {
   const trimmedWidth = right - left + 1;
   const trimmedHeight = bottom - top + 1;
 
-  // 잘라낼 여백이 거의 없으면(1% 미만) 그대로 둔다.
   if (trimmedWidth >= width * 0.99 && trimmedHeight >= height * 0.99) {
     return file;
   }

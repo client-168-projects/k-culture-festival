@@ -13,7 +13,7 @@ const TONE_GRADIENTS = {
 
 export type ArchTone = keyof typeof TONE_GRADIENTS;
 
-/** 포스터의 4분할 아치 그래픽을 재해석한 시그니처 장식 패널. 히어로/무대/체험/K-푸드 섹션에서 공용으로 사용. */
+/** 포스터의 아치 그래픽을 모티브로 한 장식 패널 */
 export function ArchPanel({
   tone,
   square = false,
@@ -25,11 +25,11 @@ export function ArchPanel({
 }: {
   tone: ArchTone;
   square?: boolean;
-  /** 아치를 위아래로 뒤집어 반원이 아래쪽에 오도록 함 (내용물은 그대로) */
+  /** 아치를 상하 반전 (내용물은 유지) */
   flip?: boolean;
-  /** 아치의 둥근 모서리를 모두 없애고 각지게 함 */
+  /** 모든 모서리를 각지게 */
   sharp?: boolean;
-  /** 반원(아치)이 아닌 쪽 모서리만 완전히 각지게 함 (반원 쪽은 그대로 유지) */
+  /** 반원이 아닌 쪽 모서리만 각지게 */
   flatCorner?: "top" | "bottom";
   className?: string;
   children?: ReactNode;

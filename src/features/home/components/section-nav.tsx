@@ -13,7 +13,7 @@ const SECTIONS = [
   { id: "extra-program", label: "부대 프로그램" },
 ] as const;
 
-/** 파란 정보 바를 재활용한 섹션 이동 네브바. 클릭 시 부드럽게 스크롤하고, 현재 보이는 섹션의 라벨을 강조한다. */
+/** 홈 섹션 이동 네브바. 현재 보이는 섹션을 강조한다. */
 export function SectionNav() {
   const navHidden = useNavHidden();
   const [activeId, setActiveId] = useState<string>(SECTIONS[0].id);

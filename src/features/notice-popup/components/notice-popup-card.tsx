@@ -12,14 +12,11 @@ const ANIMATION_MS = 200;
 type Props = {
   popup: NoticePopup;
   onClose: (hideDays: number | null) => void;
-  /** false면 이동 URL 클릭과 "N일간 보지 않기" 체크가 비활성화된다. 어드민 미리보기 전용. */
+  /** false면 링크 이동과 "N일간 보지 않기"를 비활성화한다 (어드민 미리보기용). */
   interactive?: boolean;
 };
 
-/**
- * 위치(fixed 좌표)는 부모(NoticePopupManager)의 스택 컨테이너가 담당한다 — 이 컴포넌트는
- * 그 안에 놓이는 한 장의 카드일 뿐이라 relative 포지셔닝만 갖는다.
- */
+/** 팝업 카드 한 장. 화면 위치는 상위 NoticePopupManager가 담당한다. */
 export function NoticePopupCard({ popup, onClose, interactive = true }: Props) {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -52,10 +49,7 @@ export function NoticePopupCard({ popup, onClose, interactive = true }: Props) {
   }
 
   const image = (
-    // 잘리거나 다른 색으로 채워지지 않도록 원본 비율 그대로 너비에 맞춰 높이가 자동으로 정해진다.
-    // (업로드 시 투명 여백은 trimTransparentPadding으로 이미 제거됨 — bg-white는 안티앨리어싱
-    // 경계의 미세한 반투명 픽셀만을 위한 안전망.)
-    // Supabase 공개 URL — next.config에 remotePatterns가 없어 프로젝트 관례대로 일반 img 사용.
+    // Supabase Storage 이미지는 remotePatterns 미설정으로 img 태그 사용
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={popup.image_url}

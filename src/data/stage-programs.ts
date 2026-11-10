@@ -3,12 +3,12 @@ export type StageProgram = {
   genre: string;
   name: string;
   image: string;
-  /** 이미지 원본 픽셀 크기 — 모달 확대에 사용 */
+  /** 원본 이미지 크기(px), 확대 모달에 사용 */
   imageWidth: number;
   imageHeight: number;
-  /** 카드에 추가로 노출되는 한 줄 안내 (선택) */
+  /** 카드 하단 안내 문구 */
   note?: string;
-  /** 카드 하나에 여러 명이 묶여 있을 때(예: "릴재우 & 오투") 실제 인원 수. 기본값 1 */
+  /** 한 카드에 묶인 출연자 수 (기본값 1) */
   memberCount?: number;
 };
 
