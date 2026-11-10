@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import { ArchPanel } from "@/components/arch-panel";
 
-export const ASSETS = {
+const ASSETS = {
   bibimbap: "/assets/main/left-top/bibimbap.png",
   norigae: "/assets/main/left-top/norigae.png",
   hat: "/assets/main/left-bottom/assets.png",
@@ -21,30 +21,17 @@ export const ASSETS = {
   mountain: "/assets/main/right-bottom/mountain.png",
 } as const;
 
-// 좌/우 모두 너비는 동일. 우측 두 도형만 길이를 더 길게 키움(겹치지 않도록 바깥으로 밀어서 배치).
-export const PANEL_SIZE = "w-[40%] h-[47%]";
-export const PANEL_SIZE_RIGHT = "w-[40%] h-[75%]";
+const PANEL_SIZE = "w-[40%] h-[47%]";
+const PANEL_SIZE_RIGHT = "w-[40%] h-[75%]";
 
-/** clip-path: inset(top right bottom left) 4개 값(%) — /dev/k-intro-tuner에서 조절 */
-export type MaskInset = { top: number; right: number; bottom: number; left: number };
+// 날아 들어오는 도형이 이 영역 밖에서는 보이지 않도록 가리는 clip-path inset(%)
+const MASK_INSET = "inset(1% -36% -7% -14%)";
 
-// 마스킹 박스 — /dev/k-intro-tuner에서 실측/조정한 값 (박스 너비 150%, 높이 106%, 위치 X 11%, Y 4%)
-export const DEFAULT_MASK_INSET: MaskInset = {
-  top: 1,
-  right: -36,
-  bottom: -7,
-  left: -14,
-};
-
-// 페이지 로드 시 4개 도형이 날아와 K 모형으로 모이는 인트로. /dev/k-intro-tuner에서 값을 잡았다.
-// 도착(최종) 위치·각도는 항상 "지금 코드의 실제 배치"(translate 0, rotate 0)이고,
-// 아래는 거기서부터의 시작 오프셋 — dx/dy는 이 캔버스 너비/높이 대비 %(cqw/cqh), rotate는 deg.
-// power=4, duration 1800ms — duration을 넉넉히 확보한 상태라 초반 속도(power)를
-// 다시 올려도 도착 직전 감속 구간의 절대 시간이 충분해 감속이 잘 느껴진다.
 const INTRO_DURATION_MS = 1800;
 const INTRO_EASING =
   "linear(0.0000, 0.1193, 0.2275, 0.3255, 0.4138, 0.4932, 0.5642, 0.6275, 0.6836, 0.7331, 0.7766, 0.8145, 0.8474, 0.8757, 0.8999, 0.9203, 0.9375, 0.9517, 0.9634, 0.9728, 0.9802, 0.9860, 0.9905, 0.9937, 0.9961, 0.9977, 0.9988, 0.9994, 0.9998, 0.9999, 1.0000, 1.0000, 1.0000)";
 
+// 인트로 시작 오프셋 (최종 위치 기준). dx/dy: cqw/cqh, rotate: deg, delay: ms
 const INTRO_PANELS = {
   topLeft: { dx: 2, dy: -60, rotate: -35, delay: 0 },
   topRight: { dx: 75, dy: -60, rotate: 35, delay: 90 },
@@ -52,9 +39,7 @@ const INTRO_PANELS = {
   bottomRight: { dx: 75, dy: 60, rotate: -35, delay: 270 },
 } as const;
 
-// 호버 시 각 패널이 K 모형 중심에서 바깥쪽(자기 사분면 방향)으로만 살짝
-// 밀려나도록 방향을 잡는다 — 서로 반대쪽으로 갈라지므로 다른 패널과
-// 겹칠 일이 없다. 단위는 인트로와 동일하게 cqw/cqh, deg.
+// 호버 시 각 패널이 자기 사분면 바깥쪽으로 밀려나는 오프셋
 const HOVER_OFFSETS = {
   topLeft: { dx: -4, dy: -2.5, rotate: -4 },
   topRight: { dx: 4.5, dy: -2.5, rotate: 4 },
@@ -62,9 +47,7 @@ const HOVER_OFFSETS = {
   bottomRight: { dx: 4.5, dy: 2.5, rotate: 4 },
 } as const;
 const HOVER_TRANSITION_MS = 450;
-// 히어로 배경 슬라이드인(globals.css --animate-hero-slide-*)과 동일한 감속
-// 곡선 — 빠르게 출발해 도착 직전 확실히 감속하는 모양이라 호버로 살짝
-// 밀려났다 돌아오는 움직임에도 그대로 어울린다.
+// 히어로 배경 슬라이드인(--animate-hero-slide-*)과 동일한 곡선
 const HOVER_EASING = "cubic-bezier(0.16, 1, 0.3, 1)";
 
 function panelStyle(
@@ -81,8 +64,7 @@ function panelStyle(
       transform: played
         ? "translate(0%, 0%) rotate(0deg)"
         : `translate(${p.dx}cqw, ${p.dy}cqh) rotate(${p.rotate}deg)`,
-      // 트랜지션 종료 시 컴포지팅 레이어가 승격→해제되면서 생기는 서브픽셀 스냅(도착
-      // 직후 미세하게 크기가 변해 보이는 현상) 방지 — 레이어를 계속 유지시킨다.
+      // 트랜지션 종료 후 레이어 해제로 인한 서브픽셀 스냅 방지
       willChange: "transform",
       transitionProperty: "transform",
       transitionDuration: `${INTRO_DURATION_MS}ms`,
@@ -101,27 +83,22 @@ function panelStyle(
   };
 }
 
-/** 4개 아치 패널을 동일한 크기로 맞춰 겹치지 않게 자유 배치한 히어로 시그니처 그래픽 */
+/** 4개의 아치 패널이 모여 K 모양을 이루는 히어로 그래픽 */
 export function KMarkGraphic({
-  maskInset = DEFAULT_MASK_INSET,
   startDelayMs = 0,
 }: {
-  /** 마스킹 박스 조절용(/dev/k-intro-tuner). 프로덕션에서는 생략 — 기본값 사용 */
-  maskInset?: MaskInset;
-  /** 히어로 섹션의 다른 요소(배경/타이틀/버튼)가 먼저 등장한 뒤에 조립이 시작되도록 미루는 시간 */
+  /** 히어로의 다른 요소가 등장한 뒤 조립을 시작하기까지의 지연(ms) */
   startDelayMs?: number;
 } = {}) {
   const [played, setPlayed] = useState(false);
-  // 인트로 트랜지션이 실제로 끝난 뒤에만 호버 인터랙션을 켠다 — 그 전에 켜두면
-  // 인트로용(1800ms) 트랜지션 타이밍과 호버용(220ms) 타이밍이 같은 렌더에서
-  // 뒤섞여 도착 애니메이션이 순간이동하듯 끊겨 보인다.
+  // 인트로와 호버 트랜지션이 섞이지 않도록 인트로 종료 후에만 호버를 활성화한다.
   const [introDone, setIntroDone] = useState(false);
   const [hoveredPanel, setHoveredPanel] = useState<
     keyof typeof INTRO_PANELS | null
   >(null);
 
   useEffect(() => {
-    // 시작 위치가 먼저 페인트된 뒤에 전환이 걸리도록 rAF를 두 번 거친다.
+    // 시작 위치가 페인트된 후 전환되도록 두 프레임 대기
     let raf2 = 0;
     const raf1 = requestAnimationFrame(() => {
       raf2 = requestAnimationFrame(() => setPlayed(true));
@@ -140,13 +117,9 @@ export function KMarkGraphic({
     <div
       aria-hidden="true"
       className="relative mr-auto -ml-2 aspect-3/4 w-full max-w-120 drop-shadow-[4px_6px_4px_rgba(33,27,18,0.4)] lg:-ml-6 lg:max-w-165 xl:max-w-190 @container-size"
-      style={{
-        // 마스킹 박스: 밖에서 날아 들어오는 도형이 이 영역 밖에서는 보이지 않도록
-        // 가린다. 값은 DEFAULT_MASK_INSET 참고(/dev/k-intro-tuner에서 조절).
-        clipPath: `inset(${maskInset.top}% ${maskInset.right}% ${maskInset.bottom}% ${maskInset.left}%)`,
-      }}
+      style={{ clipPath: MASK_INSET }}
     >
-      {/* 좌상단 — 비빔밥 + 노리개 */}
+      {/* 좌상단: 비빔밥, 노리개 */}
       <div
         className={`absolute top-[6%] left-0 ${PANEL_SIZE}`}
         style={panelStyle("topLeft", played, introDone, hoveredPanel === "topLeft", startDelayMs)}
@@ -183,7 +156,7 @@ export function KMarkGraphic({
         </ArchPanel>
       </div>
 
-      {/* 우상단 — 홍 물결: 가상의 수평 박스로 윗부분을 잘라냄 */}
+      {/* 우상단: 물결 (윗부분 잘림) */}
       <div
         className={`absolute top-[-15.8%] -right-1.5 ${PANEL_SIZE_RIGHT}`}
         style={{
@@ -195,7 +168,7 @@ export function KMarkGraphic({
         onMouseLeave={() => setHoveredPanel(null)}
       >
         <ArchPanel tone="vermillion" flip className="h-full w-full rotate-45">
-          {/* 이미지 콘텐츠만 반대로 되돌려 회전 전 방향 유지 */}
+          {/* 패널 회전을 상쇄해 이미지 방향 유지 */}
           <div className="absolute inset-0 -rotate-45">
             <div className="absolute top-[42%] left-[-65%] h-full w-[168%]">
               <svg
@@ -250,7 +223,7 @@ export function KMarkGraphic({
         </ArchPanel>
       </div>
 
-      {/* 좌하단 — 갓 + 구름 문양 */}
+      {/* 좌하단: 갓, 구름 문양 */}
       <div
         className={`absolute bottom-0 left-0 ${PANEL_SIZE}`}
         style={panelStyle("bottomLeft", played, introDone, hoveredPanel === "bottomLeft", startDelayMs)}
@@ -261,7 +234,7 @@ export function KMarkGraphic({
         <ArchPanel
           tone="jade"
           flatCorner="bottom"
-          className="h-full w-full [container-type:inline-size]"
+          className="h-full w-full @container"
         >
           <Image
             src={ASSETS.patternedBg}
@@ -317,7 +290,7 @@ export function KMarkGraphic({
         </ArchPanel>
       </div>
 
-      {/* 우하단 — 궁궐 + 산: 가상의 수평 박스로 아랫부분을 잘라냄 */}
+      {/* 우하단: 궁궐, 산 (아랫부분 잘림) */}
       <div
         className={`absolute -right-1.5 bottom-[-21%] ${PANEL_SIZE_RIGHT}`}
         style={{
@@ -329,7 +302,7 @@ export function KMarkGraphic({
         onMouseLeave={() => setHoveredPanel(null)}
       >
         <ArchPanel tone="indigo-deep" className="h-full w-full -rotate-45">
-          {/* 이미지 콘텐츠만 반대로 되돌려 회전 전 방향 유지 */}
+          {/* 패널 회전을 상쇄해 이미지 방향 유지 */}
           <div className="absolute inset-0 rotate-45">
             <div className="absolute top-[14%] left-[-86%] h-[46%] w-[124%]">
               <Image
