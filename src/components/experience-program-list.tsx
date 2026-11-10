@@ -30,8 +30,7 @@ const SORT_LABELS: Record<SortOrder, string> = {
 };
 
 function parseSessionCount(sessions: string): number | null {
-  // "총 N회" 형태만 실제 회차 수로 인정한다 — "상시 운영 (선착순 100통)"처럼
-  // 다른 숫자가 문자열 어딘가에 섞여 있는 경우까지 잘못 집어내지 않기 위함.
+  // "총 N회"로 시작하는 경우만 회차 수로 인정한다.
   const match = sessions.match(/^총\s*(\d+)회/);
   return match ? Number(match[1]) : null;
 }
@@ -49,9 +48,7 @@ function ApplicationSection({
   applicationOpensAt?: string;
   applicationClosed?: boolean;
 }) {
-  // 정적 생성(SSG) 페이지라 서버 렌더 시점의 시각을 알 수 없다 — 항상 "닫힘"으로
-  // 시작해 서버/클라이언트 첫 렌더를 일치시키고, mount 직후 useEffect에서 실제
-  // 시각으로 보정한다(hydration mismatch 방지).
+  // 정적 페이지이므로 hydration 불일치를 피하기 위해 닫힘 상태로 시작해 마운트 후 보정한다.
   const [isOpen, setIsOpen] = useState(!applicationOpensAt);
 
   useEffect(() => {
@@ -65,7 +62,7 @@ function ApplicationSection({
       const timer = setTimeout(check, delay);
       return () => clearTimeout(timer);
     }
-  }, [applicationOpensAt]);
+  }, [applicationOpensAt, applicationClosed]);
 
   return (
     <>
